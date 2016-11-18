@@ -1,0 +1,28 @@
+language: java
+
+before_install:
+  - chmod +x ./heroku_deploy.sh
+
+# build safelist
+branches:
+  only:
+  - master
+  - dev
+
+# deployment
+before_deploy:
+  - ./heroku_deploy.sh
+  - git config user.email "d.romenskyi@gmail.com"
+  - git config user.name "HobbyDev"
+  - git commit -a -m "adding heroku environment definition"
+
+deploy:
+  provider: heroku
+  api_key: 7a9136c5-e6b1-41e1-95a0-274dc570d283
+  app:
+    master: <>
+    dev: <>-dev
+
+# notifications
+#notifications:
+  #slack: hobbydev:7tCTaiIZ7bAh4HqQZGy8yl0C

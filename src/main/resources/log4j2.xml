@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration>
+<Configuration>
+               
+	<Properties>
+		<!-- <Property name="log-path">D:\</Property> -->
+	</Properties>
+  	<Appenders>
+		<!--<JDBC name="jdbc_appender" tableName="app_log_events">
+			<ConnectionFactory class="ua.hobbydev.webapp.erp.logging.JdbcLogAppenderConnectionFactory" method="getConnection" />
+			<Column name="event_date" isEventTimestamp="true" />
+			<Column name="class" pattern="%c" />
+			<Column name="level" pattern="%p" />
+			<Column name="message" pattern="%m" />
+			<Column name="context" pattern="%X" />
+			<Column name="stacktrace" pattern="%ex{full}" />
+		</JDBC>
+		 <RollingFile 	name="security"
+        				fileName="${log-path}/security-log.log" 
+        				filePattern="${log-path}/security-log-%i.log" 
+        				append="true">
+      		<PatternLayout 	pattern="%d{ISO8601} %-30.-30t %-35.35c %5p - %m %X%n" 
+          					charset="UTF-8"/>
+      		<Policies>
+        		<SizeBasedTriggeringPolicy size="100 MB"/>
+      		</Policies>
+      		<DefaultRolloverStrategy max="10"/>
+    	</RollingFile>
+  	    <RollingFile 	name="appender" 
+        				fileName="${log-path}/log.log" 
+        				filePattern="${log-path}/log-%i.log" 
+        				append="true">
+      		<PatternLayout 	pattern="%d{ISO8601} %-30.-30t %-35.35c %5p - %m %X%n" 
+          					charset="UTF-8"/>
+      		<Policies>
+        		<SizeBasedTriggeringPolicy size="100 MB"/>
+      		</Policies>
+      		<DefaultRolloverStrategy max="10"/>
+    	</RollingFile> -->
+  	</Appenders>
+  	<Loggers>
+  		<!-- <Logger name="org.springframework.security" level="trace">
+	      <AppenderRef ref="security"/>
+	    </Logger>
+    	<Root level="trace">
+      		<AppenderRef ref="jdbc_appender"/>
+    	</Root>-->
+  	</Loggers>
+</Configuration>
