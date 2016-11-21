@@ -23,7 +23,7 @@
 			<c:import url="/imports/mainFooter"></c:import>
 		</div>
 
-		<div class="erp-modals"></div>
+		<div class="c-modals"></div>
 
 		<c:import url="/imports/scripts"></c:import>
 

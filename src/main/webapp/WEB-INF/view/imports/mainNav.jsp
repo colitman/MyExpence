@@ -29,10 +29,12 @@
 				<ul class="nav navbar-nav navbar-right">
 					<li class="dropdown">
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown">
-							<i class="fa fa-folder-o"></i>
+							<i class="fa fa-cog"></i>
 							<span class="caret"></span>
 						</a>
-						<ul class="dropdown-menu"></ul>
+						<ul class="dropdown-menu">
+							<li><a href="${app}/settings/currencies">Currencies</a></li>
+						</ul>
 					</li>
 					<li class="dropdown">
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown">

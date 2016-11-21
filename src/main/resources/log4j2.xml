@@ -7,7 +7,7 @@
 	</Properties>
   	<Appenders>
 		<!--<JDBC name="jdbc_appender" tableName="app_log_events">
-			<ConnectionFactory class="ua.hobbydev.webapp.erp.logging.JdbcLogAppenderConnectionFactory" method="getConnection" />
+			<ConnectionFactory class="ua.hobbydev.webapp.expenseense.logging.JdbcLogAppenderConnectionFactory" method="getConnection" />
 			<Column name="event_date" isEventTimestamp="true" />
 			<Column name="class" pattern="%c" />
 			<Column name="level" pattern="%p" />
