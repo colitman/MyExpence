@@ -3,7 +3,6 @@
 $(function() {
 	onCurrencyCreate();
 	updateCurrenciesTable();
-
 });
 
 function updateCurrenciesTable() {
@@ -48,6 +47,7 @@ function onCurrencyCreate() {
 		
 		var url = $(this).attr('action');
 		var data = $(this).serialize();
+		var form = $(this);
 		
 		$.ajax({
 			url: url,
@@ -55,6 +55,7 @@ function onCurrencyCreate() {
 			data: data,
 			dataType: 'json'
 		}).done(function(newId) {
+			$('button[type="reset"]', form).click()
 			updateCurrenciesTable();
 		}).fail(function() {
 			alert('fail');
