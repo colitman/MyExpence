@@ -5,6 +5,7 @@
 package ua.hobbydev.webapp.expense.domain.currency;
 
 import ua.hobbydev.webapp.expense.domain.IdentifiedEntityInterface;
+import ua.hobbydev.webapp.expense.domain.user.User;
 
 import javax.persistence.*;
 
@@ -28,6 +29,9 @@ public class Currency implements IdentifiedEntityInterface {
 
     @Column(name = "defaultCurrency")
     private String defaultCurrency;
+
+    @ManyToOne
+    private User user;
 
     @Override
     public Long getId() {
@@ -69,6 +73,14 @@ public class Currency implements IdentifiedEntityInterface {
 
     public void setDefaultCurrency(String defaultCurrency) {
         this.defaultCurrency = defaultCurrency;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
     // ~ ======== Hashcode and equals

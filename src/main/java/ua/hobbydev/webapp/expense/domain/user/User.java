@@ -7,6 +7,7 @@ package ua.hobbydev.webapp.expense.domain.user;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import ua.hobbydev.webapp.expense.domain.IdentifiedEntityInterface;
+import ua.hobbydev.webapp.expense.domain.currency.Currency;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -29,6 +30,9 @@ public class User implements IdentifiedEntityInterface, UserDetails {
 
     @Column(name = "password")
     private String password;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Currency> currencies = new ArrayList<Currency>();
 
     @Override
     public Long getId() {
@@ -64,6 +68,24 @@ public class User implements IdentifiedEntityInterface, UserDetails {
     @Override
     public String getPassword() {
         return password;
+    }
+
+    public List<Currency> getCurrencies() {
+        return currencies;
+    }
+
+    public void setCurrencies(List<Currency> currencies) {
+        this.currencies = currencies;
+    }
+
+    public void addCurrency(Currency currency) {
+        currencies.add(currency);
+        currency.setUser(this);
+    }
+
+    public void  removeCurrency(Currency currency) {
+        currencies.remove(currency);
+        currency.setUser(null);
     }
 
     @Override

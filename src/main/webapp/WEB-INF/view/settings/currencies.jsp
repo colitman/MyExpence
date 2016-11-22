@@ -73,6 +73,7 @@
 
 		<c:import url="/imports/scripts"></c:import>
 		<script src="${app}/res/app/js/pages/currencies.js"></script>
+		<script src="${app}/res/app/js/services/currencyServices.js"></script>
 
 	</body>
 </html>

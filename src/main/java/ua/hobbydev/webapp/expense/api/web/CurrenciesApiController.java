@@ -11,10 +11,15 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import ua.hobbydev.webapp.expense.api.model.CurrencyViewModel;
 import ua.hobbydev.webapp.expense.business.DefaultServiceInterface;
+import ua.hobbydev.webapp.expense.config.CurrentUser;
 import ua.hobbydev.webapp.expense.domain.currency.Currency;
+import ua.hobbydev.webapp.expense.domain.user.User;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(path = "/currencies")
@@ -24,14 +29,30 @@ public class CurrenciesApiController {
     private DefaultServiceInterface defaultService;
 
     @RequestMapping(path="", method = RequestMethod.POST)
-    public ResponseEntity<String> createCurrency(@ModelAttribute Currency newCurrency) {
-        Long newId = defaultService.add(newCurrency);
+    public ResponseEntity<String> createCurrency(@ModelAttribute CurrencyViewModel newCurrency, @CurrentUser User currentUser) {
+
+        Currency currency = newCurrency.toDomain();
+        currency.setUser(currentUser);
+
+        Long newId = defaultService.add(currency);
         return new ResponseEntity<String>(String.valueOf(newId), HttpStatus.CREATED);
     }
 
     @RequestMapping(path="", method = RequestMethod.GET)
-    public ResponseEntity<List<Currency>> getCurrencyList() {
+    public ResponseEntity<List<CurrencyViewModel>> getCurrencyList(@CurrentUser User currentUser) {
         List<Currency> currencies = defaultService.list(Currency.class);
-        return new ResponseEntity<List<Currency>>(currencies, HttpStatus.OK);
+
+        List<Currency> userCurrencies = currencies.stream()
+                .filter(
+                        (currency) -> currency.getUser().equals(currentUser)
+                ).collect(Collectors.toList());
+
+        List<CurrencyViewModel> viewModels = new ArrayList<CurrencyViewModel>();
+
+        for(Currency c:userCurrencies) {
+            viewModels.add(new CurrencyViewModel(c));
+        }
+
+        return new ResponseEntity<List<CurrencyViewModel>>(viewModels, HttpStatus.OK);
     }
 }
