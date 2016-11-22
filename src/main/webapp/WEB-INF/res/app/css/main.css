@@ -4,6 +4,11 @@ body {
     padding: 70px 0 50px;
 }
 
+section {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
 .asterisk-required {
     color: #ff0000;
 }
@@ -15,6 +20,10 @@ body {
 
 .c-auth-form .alert {
     margin: 15px 0;
+}
+
+td .fa {
+    margin: 3px;
 }
 
 /*
@@ -88,10 +97,6 @@ header.modal-header {
 
 .hd-user-image-large {
 	max-width: 90%;
-}
-
-td .fa {
-	margin: 3px;
 }
 */
 

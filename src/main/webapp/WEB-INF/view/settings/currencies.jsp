@@ -42,6 +42,20 @@
 					</form>
 				</section>
 				
+				<section id="c-choose-default-currency-form">
+					<form action="${app}/currencies/default" method="post" class="form-inline" role="form">
+						<sec:csrfInput/>
+						<div class="form-group">
+							<label class="sr-only" for="id">Currency</label>
+							<select class="form-control" name="id" id="id">
+								
+							</select>
+						</div>
+					
+						<button type="submit" class="btn btn-success">Set Default</button>
+					</form>
+				</section>
+				
 				<section id="c-added-currencies-table">
 					<div class="table-responsive">
 						<table class="table table-hover">

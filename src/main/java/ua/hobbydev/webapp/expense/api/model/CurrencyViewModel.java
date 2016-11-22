@@ -12,7 +12,7 @@ public class CurrencyViewModel implements ViewModelInterface<Currency> {
     private String name;
     private String code;
     private String symbol;
-    private String defaultCurrency;
+    private boolean defaultCurrency;
 
     public CurrencyViewModel() {}
 
@@ -21,7 +21,7 @@ public class CurrencyViewModel implements ViewModelInterface<Currency> {
         this.name = domain.getName();
         this.code = domain.getCode();
         this.symbol = domain.getSymbol();
-        this.defaultCurrency = domain.getDefaultCurrency();
+        this.defaultCurrency = domain.isDefaultCurrency();
     }
 
     @Override
@@ -69,11 +69,11 @@ public class CurrencyViewModel implements ViewModelInterface<Currency> {
         this.symbol = symbol;
     }
 
-    public String getDefaultCurrency() {
+    public boolean isDefaultCurrency() {
         return defaultCurrency;
     }
 
-    public void setDefaultCurrency(String defaultCurrency) {
+    public void setDefaultCurrency(boolean defaultCurrency) {
         this.defaultCurrency = defaultCurrency;
     }
 }

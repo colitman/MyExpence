@@ -37,7 +37,7 @@ public class SwaggerConfig {
 				.groupName("web")
 			.select()
 				.apis(RequestHandlerSelectors.basePackage(apiBasePackage))
-				.paths(PathSelectors.ant("/api/web/**"))
+				//.paths(PathSelectors.ant("/api/web/**"))
 				.build()
 			.apiInfo(apiInfo())
 			.ignoredParameterTypes(CurrentUser.class,

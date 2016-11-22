@@ -28,7 +28,7 @@ public class Currency implements IdentifiedEntityInterface {
     private String symbol;
 
     @Column(name = "defaultCurrency")
-    private String defaultCurrency;
+    private boolean defaultCurrency;
 
     @ManyToOne
     private User user;
@@ -67,11 +67,11 @@ public class Currency implements IdentifiedEntityInterface {
         this.symbol = symbol;
     }
 
-    public String getDefaultCurrency() {
+    public boolean isDefaultCurrency() {
         return defaultCurrency;
     }
 
-    public void setDefaultCurrency(String defaultCurrency) {
+    public void setDefaultCurrency(boolean defaultCurrency) {
         this.defaultCurrency = defaultCurrency;
     }
 

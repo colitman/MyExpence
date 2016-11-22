@@ -5,6 +5,7 @@
 package ua.hobbydev.webapp.expense.business.users;
 
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import ua.hobbydev.webapp.expense.business.DefaultServiceInterface;
 import ua.hobbydev.webapp.expense.business.ResourceNotFoundException;
 import ua.hobbydev.webapp.expense.domain.user.User;
@@ -12,6 +13,9 @@ import ua.hobbydev.webapp.expense.domain.user.User;
 import java.util.List;
 
 public interface UserServiceInterface extends DefaultServiceInterface, UserDetailsService {
+
+	@Override
+	User loadUserByUsername(String username) throws UsernameNotFoundException;
 
 	/**
 	 * Checks whether the user with provided id exists
