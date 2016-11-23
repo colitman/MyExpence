@@ -19,6 +19,7 @@
 			<footer class="modal-footer">
 				
 				<form action="" method="post" id="c-modal-delete-form">
+					<sec:csrfInput/>
 					<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
 					<button type="submit" class="btn btn-danger">Delete</button>
 				</form>

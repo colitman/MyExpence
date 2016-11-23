@@ -21,7 +21,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping(path = "/currencies")
+@RequestMapping(path = "/api/web/currencies")
 public class CurrenciesApiController {
 
     @Autowired
@@ -77,6 +77,27 @@ public class CurrenciesApiController {
 
         Long newId = defaultService.add(currency);
         return new ResponseEntity<String>(String.valueOf(newId), HttpStatus.CREATED);
+    }
+
+    @RequestMapping(path="{id}", method = RequestMethod.GET)
+    public ResponseEntity<CurrencyViewModel> getCurrencyById(@PathVariable Long id, @CurrentUser User currentUser) {
+        Currency currency = null;
+        CurrencyViewModel currencyVm = null;
+
+        try {
+            currency = defaultService.get(Currency.class, id);
+            currencyVm = new CurrencyViewModel(currency);
+        } catch (ResourceNotFoundException e) {
+            return new ResponseEntity<CurrencyViewModel>(HttpStatus.NOT_FOUND);
+        }
+
+        return new ResponseEntity<CurrencyViewModel>(currencyVm, HttpStatus.OK);
+    }
+
+    @RequestMapping(path="{id}/delete", method = RequestMethod.POST)
+    public ResponseEntity<String> deleteCurrencyById(@PathVariable Long id, @CurrentUser User currentUser) {
+        defaultService.delete(Currency.class, id);
+        return new ResponseEntity<String>("Deleted", HttpStatus.OK);
     }
 
     @RequestMapping(path="", method = RequestMethod.GET)

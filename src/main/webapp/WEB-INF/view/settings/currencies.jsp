@@ -4,6 +4,7 @@
 <%@ taglib uri="http://www.springframework.org/security/tags" prefix="sec" %>
 
 <c:set var="app" value="${pageContext.servletContext.contextPath}" />
+<c:set var="webApi" value="${app += '/api/web'}" />
 <sec:authentication property="name" var="username" />
 
 <!DOCTYPE html>
@@ -20,7 +21,7 @@
 				<header class="page-header"><h2>Currencies</h2></header>
 				
 				<section id="c-add-currency-form">
-					<form action="${app}/currencies" method="post" class="form-inline">
+					<form action="${webApi}/currencies" method="post" class="form-inline">
 						<sec:csrfInput/>
 						<div class="form-group">
 							<label class="sr-only" for="name">Name</label>
@@ -43,7 +44,7 @@
 				</section>
 				
 				<section id="c-choose-default-currency-form">
-					<form action="${app}/currencies/default" method="post" class="form-inline" role="form">
+					<form action="${webApi}/currencies/default" method="post" class="form-inline" role="form">
 						<sec:csrfInput/>
 						<div class="form-group">
 							<label class="sr-only" for="id">Currency</label>
@@ -83,7 +84,9 @@
 			<c:import url="/imports/mainFooter"></c:import>
 		</div>
 
-		<div class="c-modals"></div>
+		<div class="c-modals">
+			<c:import url="/imports/modals/deleteConfirmationModal"></c:import>
+		</div>
 
 		<c:import url="/imports/scripts"></c:import>
 		<script src="${app}/res/app/js/pages/currencies.js"></script>

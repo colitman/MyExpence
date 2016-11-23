@@ -16,6 +16,12 @@ import org.springframework.web.servlet.ModelAndView;
 @RequestMapping(method = RequestMethod.GET)
 public class WebController {
 
+    @RequestMapping(path = "/swagger")
+    public ModelAndView swagger(ModelAndView mv) {
+        mv.setViewName("swagger");
+        return mv;
+    }
+
     @PreAuthorize("isAuthenticated()")
     @RequestMapping(path = "/")
     public ModelAndView root(ModelAndView mv) {
@@ -65,6 +71,12 @@ public class WebController {
     @RequestMapping(path = "/imports/scripts")
     public ModelAndView scripts(ModelAndView mv) {
         mv.setViewName("imports/scripts");
+        return mv;
+    }
+
+    @RequestMapping(path = "/imports/modals/deleteConfirmationModal")
+    public ModelAndView deleteConfirmationModal(ModelAndView mv) {
+        mv.setViewName("imports/modals/deleteConfirmationModal");
         return mv;
     }
 }

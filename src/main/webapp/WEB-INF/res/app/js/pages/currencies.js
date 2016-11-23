@@ -3,9 +3,19 @@
 $(function() {
 	onCurrencyCreate();
 	onDefaultCurrencyUpdate();
-	buildDefaultCurrencySelect();
-	buildCurrenciesTable();
+	reloadPageData();
 });
+
+function reloadPageData() {
+	getCurrencies()
+		.done(function(data) {
+			updateDefaultCurrencySelect(data);
+			updateCurrenciesTable(data);
+		})
+		.fail(function() {
+			alert('fail to get currencies');
+		});
+}
 
 function onCurrencyCreate() {
 	$('#c-add-currency-form form').submit(function(submitEvent) {
@@ -22,8 +32,7 @@ function onCurrencyCreate() {
 			dataType: 'json'
 		}).done(function(data) {
 			$('button[type="reset"]', form).click();
-			buildCurrenciesTable();
-			buildDefaultCurrencySelect();
+			reloadPageData();
 		}).fail(function() {
 			alert('fail to post currency');
 		});
@@ -43,22 +52,11 @@ function onDefaultCurrencyUpdate() {
 			method: 'POST',
 			data: data
 		}).done(function(data) {
-			buildCurrenciesTable();
-			buildDefaultCurrencySelect();
+			reloadPageData();
 		}).fail(function() {
 			alert('fail to post default currency');
 		});
 	});
-}
-
-function buildDefaultCurrencySelect() {
-	getCurrencies()
-		.done(function(data) {
-			updateDefaultCurrencySelect(data);
-		})
-		.fail(function() {
-			alert('fail to get currencies');
-		});
 }
 
 function updateDefaultCurrencySelect(data) {
@@ -76,16 +74,6 @@ function updateDefaultCurrencySelect(data) {
 		
 		$(select).append(option);
 	}
-}
-
-function buildCurrenciesTable() {
-	getCurrencies()
-		.done(function(data) {
-			updateCurrenciesTable(data);
-		})
-		.fail(function() {
-			alert('fail to get currencies');
-		});
 }
 
 function updateCurrenciesTable(data) {
@@ -124,8 +112,40 @@ function buildCurrencyActions(currencyData) {
 		var deleteAction = document.createElement('a');
 		$(deleteAction).attr('href', '#');
 		$(deleteAction).html('<i class="fa fa-remove"></i>');
+		$(deleteAction).data('target', currencyData.id);
 		$(tdActions).append(deleteAction);
+		
+		$(deleteAction).click(function(event) {
+			event.preventDefault();
+			onCurrencyDeleteAttempt(deleteAction);
+		});
 	}
 	
 	return tdActions;
+}
+
+function onCurrencyDeleteAttempt(control) {
+	var deleteModal = $('#c-delete-confirmation-modal');
+	
+	getCurrencyById($(control).data('target'))
+		.done(function(data) {
+			$('#c-delete-subject', deleteModal).html('<b>' + data.symbol + ' ' + data.name + ' (' + data.code + ')</b> currency.');
+			
+			$('#c-modal-delete-form').submit(function(event) {
+				event.preventDefault();
+				deleteCurrency($(control).data('target'))
+					.done(function(data) {
+						$(deleteModal).modal('hide');
+						reloadPageData();
+					})
+					.fail(function() {
+						alert('failed to delete currency with id=' + $(control).data('target'))
+					});
+			});
+			
+			$(deleteModal).modal('show');
+		})
+		.fail(function() {
+			alert('failed to get currency with id=' + $(control).data('target'));
+		});
 }
