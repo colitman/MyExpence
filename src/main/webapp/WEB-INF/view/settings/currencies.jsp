@@ -57,6 +57,29 @@
 					</form>
 				</section>
 				
+				<section id="c-edit-currency-form" class="hidden">
+					<form action="" method="post" class="form-inline">
+						<sec:csrfInput/>
+						<div class="form-group">
+							<label class="sr-only" for="name">Name</label>
+							<input type="text" class="form-control" name="name" id="name" placeholder="Name" required="required">
+						</div>
+						
+						<div class="form-group">
+							<label class="sr-only" for="code">Code</label>
+							<input type="text" class="form-control" name="code" id="code" placeholder="Code" required="required">
+						</div>
+						
+						<div class="form-group">
+							<label class="sr-only" for="symbol">Symbol</label>
+							<input type="text" class="form-control" name="symbol" id="symbol" placeholder="Symbol" required="required">
+						</div>
+						
+						<button type="submit" class="btn btn-primary">Save changes</button>
+						<button type="reset" class="btn btn-danger">Cancel</button>
+					</form>
+				</section>
+				
 				<section id="c-added-currencies-table">
 					<div class="table-responsive">
 						<table class="table table-hover">

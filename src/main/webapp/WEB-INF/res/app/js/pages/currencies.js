@@ -108,6 +108,17 @@ function updateCurrenciesTable(data) {
 function buildCurrencyActions(currencyData) {
 	var tdActions = document.createElement('td');
 	
+	var editAction = document.createElement('a');
+	$(editAction).attr('href', '#');
+	$(editAction).html('<i class="fa fa-pencil"></i>');
+	$(editAction).data('target', currencyData.id);
+	$(tdActions).append(editAction);
+	
+	$(editAction).click(function(event) {
+		event.preventDefault();
+		onCurrencyEditAttempt(editAction);
+	});
+	
 	if(!currencyData.defaultCurrency) {
 		var deleteAction = document.createElement('a');
 		$(deleteAction).attr('href', '#');
@@ -122,6 +133,38 @@ function buildCurrencyActions(currencyData) {
 	}
 	
 	return tdActions;
+}
+
+function onCurrencyEditAttempt(control) {
+	var editForm = $('#c-edit-currency-form');
+	
+	getCurrencyById($(control).data('target'))
+		.done(function(data) {
+			$('#name', editForm).val(data.name);
+			$('#code', editForm).val(data.code);
+			$('#symbol', editForm).val(data.symbol);
+			
+			$(editForm).submit(function(event) {
+				event.preventDefault();
+				updateCurrency($(control).data('target'))
+					.done(function(data) {
+						$(editForm).addClass('hidden');
+						reloadPageData();
+					})
+					.fail(function() {
+						alert('failed to update currency with id=' + $(control).data('target'));
+					});
+			});
+			
+			$('button[type="reset"]', editForm).click(function(event) {
+				$(editForm).addClass('hidden');
+			});
+			
+			$(editForm).removeClass('hidden');
+		})
+		.fail(function() {
+			alert('failed to get currency with id=' + $(control).data('target'));
+		});
 }
 
 function onCurrencyDeleteAttempt(control) {

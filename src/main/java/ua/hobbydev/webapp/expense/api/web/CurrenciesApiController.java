@@ -100,6 +100,23 @@ public class CurrenciesApiController {
         return new ResponseEntity<String>("Deleted", HttpStatus.OK);
     }
 
+    @RequestMapping(path="{id}/update", method = RequestMethod.POST)
+    public ResponseEntity<String> updateCurrencyById(@PathVariable Long id, @ModelAttribute CurrencyViewModel currencyVm, @CurrentUser User currentUser) {
+        Currency currency = null;
+
+        try {
+            currency = defaultService.get(Currency.class, id);
+            Currency updated = currencyVm.toDomain();
+            updated.setId(currency.getId());
+            updated.setUser(currency.getUser());
+            updated.setDefaultCurrency(currency.isDefaultCurrency());
+            defaultService.update(updated);
+        } catch (ResourceNotFoundException e) {
+            return new ResponseEntity<String>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<String>("Updated", HttpStatus.OK);
+    }
+
     @RequestMapping(path="", method = RequestMethod.GET)
     public ResponseEntity<List<CurrencyViewModel>> getCurrencyList(@CurrentUser User currentUser) {
         List<Currency> currencies = defaultService.list(Currency.class);

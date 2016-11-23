@@ -26,3 +26,14 @@ function deleteCurrency(id) {
 		data:csrf
 	});
 }
+
+function updateCurrency(id) {
+	
+	var data = $('#c-edit-currency-form form').serialize();
+	
+	return $.ajax({
+		url: WEB_API_ROOT + '/currencies/' + id + '/update',
+		method: 'POST',
+		data:data
+	});
+}
