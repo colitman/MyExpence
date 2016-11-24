@@ -3,6 +3,7 @@
 $(function() {
 	onCurrencyCreate();
 	onDefaultCurrencyUpdate();
+	onCurrencyUpdate();
 	reloadPageData();
 });
 
@@ -15,6 +16,26 @@ function reloadPageData() {
 		.fail(function() {
 			alert('fail to get currencies');
 		});
+}
+
+function onCurrencyUpdate() {
+	var editForm = $('#c-edit-currency-form');
+	
+	$(editForm).submit(function(event) {
+		event.preventDefault();
+		updateCurrency($('#id', editForm).val())
+			.done(function(data) {
+				$(editForm).addClass('hidden');
+				reloadPageData();
+			})
+			.fail(function() {
+				alert('failed to update currency with id=' + $(control).data('target'));
+			});
+	});
+	
+	$('button[type="reset"]', editForm).click(function(event) {
+		$(editForm).addClass('hidden');
+	});
 }
 
 function onCurrencyCreate() {
@@ -144,22 +165,6 @@ function onCurrencyEditAttempt(control) {
 			$('#code', editForm).val(data.code);
 			$('#symbol', editForm).val(data.symbol);
 			$('#id', editForm).val(data.id);
-			
-			$(editForm).submit(function(event) {
-				event.preventDefault();
-				updateCurrency($('#id', editForm).val())
-					.done(function(data) {
-						$(editForm).addClass('hidden');
-						reloadPageData();
-					})
-					.fail(function() {
-						alert('failed to update currency with id=' + $(control).data('target'));
-					});
-			});
-			
-			$('button[type="reset"]', editForm).click(function(event) {
-				$(editForm).addClass('hidden');
-			});
 			
 			$(editForm).removeClass('hidden');
 		})
