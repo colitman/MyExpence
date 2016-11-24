@@ -60,6 +60,7 @@
 				<section id="c-edit-currency-form" class="hidden">
 					<form action="" method="post" class="form-inline">
 						<sec:csrfInput/>
+						<input type="hidden" value="" name="id" id="id">
 						<div class="form-group">
 							<label class="sr-only" for="name">Name</label>
 							<input type="text" class="form-control" name="name" id="name" placeholder="Name" required="required">

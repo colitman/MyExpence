@@ -143,10 +143,11 @@ function onCurrencyEditAttempt(control) {
 			$('#name', editForm).val(data.name);
 			$('#code', editForm).val(data.code);
 			$('#symbol', editForm).val(data.symbol);
+			$('#id', editForm).val(data.id);
 			
 			$(editForm).submit(function(event) {
 				event.preventDefault();
-				updateCurrency($(control).data('target'))
+				updateCurrency($('#id', editForm).val())
 					.done(function(data) {
 						$(editForm).addClass('hidden');
 						reloadPageData();
