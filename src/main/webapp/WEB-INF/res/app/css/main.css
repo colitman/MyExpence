@@ -26,6 +26,13 @@ td .fa {
     margin: 3px;
 }
 
+select:required:invalid {
+    color: #999999;
+}
+option[value=""][disabled] {
+    display: none;
+}
+
 /*
 body {
 	background-color: #eee;

@@ -3,10 +3,10 @@
 $(function() {
 	onAssetCreate();
 	onAssetUpdate();
-	reloadPageData();
+	reloadAssetsPageData();
 });
 
-function reloadPageData() {
+function reloadAssetsPageData() {
 	getCurrencies()
 		.done(function(data) {
 			updateCurrencySelect(data);
@@ -53,22 +53,22 @@ function onAssetUpdate() {
 }
 
 function onAssetCreate() {
-	/*$('#c-add-currency-form form').submit(function(submitEvent) {
+	$('#c-add-asset-form form').submit(function(submitEvent) {
 		submitEvent.preventDefault();
 		var form = $(this);
-		createCurrency()
+		createAsset()
 			.done(function(data) {
 				$('button[type="reset"]', form).click();
-				reloadPageData();
+				reloadAssetsPageData();
 			})
 			.fail(function() {
-				alert('fail to post currency');
+				alert('fail to post asset');
 			});
-	});*/
+	});
 }
 
 function updateCurrencySelect(data) {
-	/*var select = $('#c-choose-default-currency-form #id');
+	var select = $('#c-add-asset-form #currency');
 	$(select).html('');
 	
 	for(var i = 0; i < data.length; i++) {
@@ -76,33 +76,27 @@ function updateCurrencySelect(data) {
 		
 		$(option).attr('value', data[i].id);
 		$(option).text(data[i].symbol + ' ' + data[i].name + ' (' + data[i].code + ')');
-		if(data[i].defaultCurrency) {
-			$(option).prop('selected', 'selected');
-		}
-		
+				
 		$(select).append(option);
-	}*/
+	}
 }
 
 function updateAssetTypeSelect(data) {
-	/*var select = $('#c-choose-default-currency-form #id');
+	var select = $('#c-add-asset-form #type');
 	 $(select).html('');
 	 
 	 for(var i = 0; i < data.length; i++) {
-	 var option = document.createElement('option');
-	 
-	 $(option).attr('value', data[i].id);
-	 $(option).text(data[i].symbol + ' ' + data[i].name + ' (' + data[i].code + ')');
-	 if(data[i].defaultCurrency) {
-	 $(option).prop('selected', 'selected');
+		 var option = document.createElement('option');
+		 
+		 $(option).attr('value', data[i].name);
+		 $(option).text(data[i].label);
+		 
+		 $(select).append(option);
 	 }
-	 
-	 $(select).append(option);
-	 }*/
 }
 
 function updateAssetsTable(data) {
-	/*var table = $('#c-added-currencies-table');
+	/*var table = $('#c-added-assets-table');
 	var oldTbody = $('tbody', table);
 	var body = document.createElement('tbody');
 	

@@ -4,10 +4,10 @@ $(function() {
 	onCurrencyCreate();
 	onDefaultCurrencyUpdate();
 	onCurrencyUpdate();
-	reloadPageData();
+	reloadCurrenciesPageData();
 });
 
-function reloadPageData() {
+function reloadCurrenciesPageData() {
 	getCurrencies()
 		.done(function(data) {
 			updateDefaultCurrencySelect(data);
@@ -24,16 +24,16 @@ function onCurrencyUpdate() {
 	$(editForm).submit(function(event) {
 		event.preventDefault();
 		updateCurrency($('#id', editForm).val())
-			.done(function(data) {
+			.done(function() {
 				$(editForm).addClass('hidden');
-				reloadPageData();
+				reloadCurrenciesPageData();
 			})
 			.fail(function() {
-				alert('failed to update currency with id=' + $(control).data('target'));
+				alert('failed to update currency with id=' + $('#id', editForm).val());
 			});
 	});
 	
-	$('button[type="reset"]', editForm).click(function(event) {
+	$('button[type="reset"]', editForm).click(function() {
 		$(editForm).addClass('hidden');
 	});
 }
@@ -43,9 +43,9 @@ function onCurrencyCreate() {
 		submitEvent.preventDefault();
 		var form = $(this);
 		createCurrency()
-			.done(function(data) {
+			.done(function() {
 				$('button[type="reset"]', form).click();
-				reloadPageData();
+				reloadCurrenciesPageData();
 			})
 			.fail(function() {
 				alert('fail to post currency');
@@ -56,10 +56,9 @@ function onCurrencyCreate() {
 function onDefaultCurrencyUpdate() {
 	$('#c-choose-default-currency-form form').submit(function(submitEvent) {
 		submitEvent.preventDefault();
-		var form = $(this);
 		setDefaultCurrency()
-			.done(function(data) {
-				reloadPageData();
+			.done(function() {
+				reloadCurrenciesPageData();
 			}).fail(function() {
 				alert('fail to post default currency');
 			});
@@ -174,9 +173,9 @@ function onCurrencyDeleteAttempt(control) {
 			$('#c-modal-delete-form').submit(function(event) {
 				event.preventDefault();
 				deleteCurrency($(control).data('target'))
-					.done(function(data) {
+					.done(function() {
 						$(deleteModal).modal('hide');
-						reloadPageData();
+						reloadCurrenciesPageData();
 					})
 					.fail(function() {
 						alert('failed to delete currency with id=' + $(control).data('target'))
