@@ -51,8 +51,8 @@
 							<thead>
 								<tr>
 									<th class="col-sm-8">Name</th>
-									<th class="col-sm-1">Symbol</th>
-									<th class="col-sm-2">Code</th>
+									<th class="col-sm-1">Type</th>
+									<th class="col-sm-2">Currency</th>
 									<th class="col-sm-1">Actions</th>
 								</tr>
 							</thead>

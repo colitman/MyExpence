@@ -4,13 +4,16 @@
  */
 package ua.hobbydev.webapp.expense.api.web;
 
+import org.reflections.Reflections;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.ClassUtils;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import ua.hobbydev.webapp.expense.Application;
 import ua.hobbydev.webapp.expense.EnumUtils.AssetEnums.AssetType;
 import ua.hobbydev.webapp.expense.api.model.AssetTypeViewModel;
 import ua.hobbydev.webapp.expense.api.model.AssetViewModel;
@@ -18,12 +21,15 @@ import ua.hobbydev.webapp.expense.business.DefaultServiceInterface;
 import ua.hobbydev.webapp.expense.business.ResourceNotFoundException;
 import ua.hobbydev.webapp.expense.business.users.UserServiceInterface;
 import ua.hobbydev.webapp.expense.config.CurrentUser;
-import ua.hobbydev.webapp.expense.domain.asset.Cash;
+import ua.hobbydev.webapp.expense.domain.asset.Asset;
+import ua.hobbydev.webapp.expense.domain.asset.AssetFactory;
 import ua.hobbydev.webapp.expense.domain.currency.Currency;
 import ua.hobbydev.webapp.expense.domain.user.User;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(path = "/api/web/assets")
@@ -43,16 +49,15 @@ public class AssetsApiController {
             currency = defaultService.get(Currency.class, newAsset.getCurrency());
             String assetType = newAsset.getType();
             AssetType enumType = AssetType.valueOf(assetType);
-            //Asset asset = AssetFactory.getAssetOfType(enumType);
-            Cash asset = new Cash();
+            Asset asset = AssetFactory.getAssetOfType(enumType);
             asset.setName(newAsset.getName());
-            asset.setUser(currentUser);
+            asset.setUser(userService.loadUserByUsername(currentUser.getUsername()));
             asset.setType(enumType);
             asset.setCurrency(currency);
             Long newId = defaultService.add(asset);
             return new ResponseEntity<String>(String.valueOf(newId), HttpStatus.CREATED);
         } catch (ResourceNotFoundException e) {
-            return new ResponseEntity<String>(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<String>(e.getMessage(), HttpStatus.NOT_FOUND);
         }
     }
 
@@ -66,5 +71,31 @@ public class AssetsApiController {
         }
 
         return new ResponseEntity<List<AssetTypeViewModel>>(types, HttpStatus.OK);
+    }
+
+    @RequestMapping(path="", method = RequestMethod.GET)
+    public ResponseEntity<List<AssetViewModel>> getAssetList(@CurrentUser User currentUser) {
+
+        Reflections refs = new Reflections(ClassUtils.getPackageName(Application.class) + ".domain.asset");
+        Set<Class<? extends Asset>> assetSet = refs.getSubTypesOf(Asset.class);
+
+        List<Asset> assets = new ArrayList<Asset>();
+
+        for(Class<? extends Asset> a:assetSet) {
+            assets.addAll(defaultService.list(a));
+        }
+
+        List<Asset> userAssets = assets.stream()
+                .filter(
+                        (asset) -> asset.getUser().equals(currentUser)
+                ).collect(Collectors.toList());
+
+        List<AssetViewModel> viewModels = new ArrayList<AssetViewModel>();
+
+        for(Asset a:userAssets) {
+            viewModels.add(new AssetViewModel(a));
+        }
+
+        return new ResponseEntity<List<AssetViewModel>>(viewModels, HttpStatus.OK);
     }
 }

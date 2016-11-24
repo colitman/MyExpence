@@ -14,7 +14,7 @@ import java.math.BigDecimal;
 
 @Entity
 @Table(name = "cash_assets")
-public class Cash extends AbstractAsset {
+public class Cash implements Asset {
 
     @Id
     @Column(name = "id")
@@ -37,7 +37,7 @@ public class Cash extends AbstractAsset {
     @ManyToOne
     private User user;
 
-    /*@Override
+    @Override
     public Long getId() {
         return id;
     }
@@ -105,7 +105,7 @@ public class Cash extends AbstractAsset {
     @Override
     public void setUser(User user) {
         this.user = user;
-    }*/
+    }
 
     // ~ ======== Hashcode and equals
 

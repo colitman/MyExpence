@@ -8,8 +8,16 @@ $(function() {
 
 function reloadAssetsPageData() {
 	getCurrencies()
-		.done(function(data) {
-			updateCurrencySelect(data);
+		.done(function(currencyData) {
+			updateCurrencySelect(currencyData);
+			
+			getAssets()
+				.done(function(assetData) {
+					updateAssetsTable(assetData, currencyData);
+				})
+				.fail(function() {
+					alert('fail to get assets');
+				});
 		})
 		.fail(function() {
 			alert('fail to get currencies');
@@ -23,13 +31,13 @@ function reloadAssetsPageData() {
 			alert('fail to get asset types');
 		});
 	
-	getAssets()
+	/*getAssets()
 		.done(function(data) {
 			updateAssetsTable(data);
 		})
 		.fail(function() {
 			alert('fail to get assets');
-		});
+		});*/
 }
 
 function onAssetUpdate() {
@@ -95,43 +103,45 @@ function updateAssetTypeSelect(data) {
 	 }
 }
 
-function updateAssetsTable(data) {
-	/*var table = $('#c-added-assets-table');
+function updateAssetsTable(assetData, currencyData) {
+	var table = $('#c-added-assets-table');
 	var oldTbody = $('tbody', table);
 	var body = document.createElement('tbody');
 	
-	for(var i = 0; i < data.length; i++) {
+	for(var i = 0; i < assetData.length; i++) {
 		var row = document.createElement('tr');
 		
 		var tdName = document.createElement('td');
-		var tdSymbol = document.createElement('td');
-		var tdCode = document.createElement('td');
+		var tdType = document.createElement('td');
+		var tdCurrency = document.createElement('td');
 		
-		$(tdName).text(data[i].name);
-		$(tdSymbol).text(data[i].symbol);
-		$(tdCode).text(data[i].code);
+		$(tdName).text(assetData[i].name);
+		$(tdType).text(assetData[i].label);
+		
+		for(var j = 0; j < currencyData.length; j++) {
+			var currency = currencyData[j];
+			if(currency.id === assetData[i].currency) {
+				$(tdCurrency).text(currency.symbol + ' ' + currency.name + ' (' + currency.code + ')');
+				break;
+			}
+		}
 		
 		$(row).append(tdName);
-		$(row).append(tdSymbol);
-		$(row).append(tdCode);
-		$(row).append(buildCurrencyActions(data[i]));
+		$(row).append(tdType);
+		$(row).append(tdCurrency);
+		$(row).append(buildAssetActions(assetData[i]));
 		
-		if(data[i].defaultCurrency) {
-			$(row).addClass('success');
-			$(body).prepend(row);
-		} else {
-			$(body).append(row);
-		}
+		$(body).append(row);
 	}
 	
 	
 	$(oldTbody).remove();
-	$('thead', table).after(body)*/
+	$('thead', table).after(body)
 }
 
 function buildAssetActions(assetData) {
-	/*var tdActions = document.createElement('td');
-	
+	var tdActions = document.createElement('td');
+	/*
 	var editAction = document.createElement('a');
 	$(editAction).attr('href', '#');
 	$(editAction).html('<i class="fa fa-pencil"></i>');
@@ -155,8 +165,8 @@ function buildAssetActions(assetData) {
 			onCurrencyDeleteAttempt(deleteAction);
 		});
 	}
-	
-	return tdActions;*/
+	 */
+	return tdActions;
 }
 
 function onAssetEditAttempt(control) {
