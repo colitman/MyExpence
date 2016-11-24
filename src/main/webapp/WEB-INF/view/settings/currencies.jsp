@@ -21,7 +21,7 @@
 				<header class="page-header"><h2>Currencies</h2></header>
 				
 				<section id="c-add-currency-form">
-					<form action="${webApi}/currencies" method="post" class="form-inline">
+					<form action="" method="post" class="form-inline">
 						<sec:csrfInput/>
 						<div class="form-group">
 							<label class="sr-only" for="name">Name</label>
@@ -44,7 +44,7 @@
 				</section>
 				
 				<section id="c-choose-default-currency-form">
-					<form action="${webApi}/currencies/default" method="post" class="form-inline" role="form">
+					<form action="" method="post" class="form-inline" role="form">
 						<sec:csrfInput/>
 						<div class="form-group">
 							<label class="sr-only" for="id">Currency</label>

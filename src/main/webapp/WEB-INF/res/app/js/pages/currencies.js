@@ -41,42 +41,28 @@ function onCurrencyUpdate() {
 function onCurrencyCreate() {
 	$('#c-add-currency-form form').submit(function(submitEvent) {
 		submitEvent.preventDefault();
-		
-		var url = $(this).attr('action');
-		var data = $(this).serialize();
 		var form = $(this);
-		
-		$.ajax({
-			url: url,
-			method: 'POST',
-			data: data,
-			dataType: 'json'
-		}).done(function(data) {
-			$('button[type="reset"]', form).click();
-			reloadPageData();
-		}).fail(function() {
-			alert('fail to post currency');
-		});
+		createCurrency()
+			.done(function(data) {
+				$('button[type="reset"]', form).click();
+				reloadPageData();
+			})
+			.fail(function() {
+				alert('fail to post currency');
+			});
 	});
 }
 
 function onDefaultCurrencyUpdate() {
 	$('#c-choose-default-currency-form form').submit(function(submitEvent) {
 		submitEvent.preventDefault();
-		
-		var url = $(this).attr('action');
-		var data = $(this).serialize();
 		var form = $(this);
-		
-		$.ajax({
-			url: url,
-			method: 'POST',
-			data: data
-		}).done(function(data) {
-			reloadPageData();
-		}).fail(function() {
-			alert('fail to post default currency');
-		});
+		setDefaultCurrency()
+			.done(function(data) {
+				reloadPageData();
+			}).fail(function() {
+				alert('fail to post default currency');
+			});
 	});
 }
 
@@ -118,7 +104,12 @@ function updateCurrenciesTable(data) {
 		$(row).append(tdCode);
 		$(row).append(buildCurrencyActions(data[i]));
 		
-		$(body).append(row);
+		if(data[i].defaultCurrency) {
+			$(row).addClass('success');
+			$(body).prepend(row);
+		} else {
+			$(body).append(row);
+		}
 	}
 	
 	
