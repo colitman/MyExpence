@@ -11,13 +11,20 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
-@RequestMapping(path = "/settings/currencies")
-public class CurrenciesController {
+@RequestMapping(path = "/settings")
+public class SettingsController {
 
     @PreAuthorize("isAuthenticated()")
-    @RequestMapping(path = "", method = RequestMethod.GET)
+    @RequestMapping(path = "currencies", method = RequestMethod.GET)
     public ModelAndView currenciesConfigPage(ModelAndView mv) {
         mv.setViewName("settings/currencies");
+        return mv;
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @RequestMapping(path = "assets", method = RequestMethod.GET)
+    public ModelAndView assetsConfigPage(ModelAndView mv) {
+        mv.setViewName("settings/assets");
         return mv;
     }
 }

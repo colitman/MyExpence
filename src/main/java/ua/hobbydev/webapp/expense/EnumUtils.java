@@ -14,4 +14,14 @@ public class EnumUtils {
             VIEW_MENU_ADMIN
         }
     }
+
+    public static class AssetEnums {
+        public enum AssetType {
+            CASH("Cash");
+
+            private final String label;
+            private AssetType(String label) {this.label = label;}
+            public String label(){return label;}
+        }
+    }
 }
