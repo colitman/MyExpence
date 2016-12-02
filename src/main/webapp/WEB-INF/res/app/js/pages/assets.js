@@ -1,12 +1,5 @@
 'use strict';
 
-/*$(function() {
-	onAssetCreate();
-	onAssetUpdate();
-	onAssetDelete();
-	reloadAssetsPageData();
-});*/
-
 function reloadAssetsPageData() {
 	getCurrencies()
 		.done(function(currencyData) {
@@ -50,26 +43,6 @@ function onAssetDelete() {
 	});
 }
 
-function onAssetUpdate() {
-	/*var editForm = $('#c-edit-currency-form');
-	
-	$(editForm).submit(function(event) {
-		event.preventDefault();
-		updateCurrency($('#id', editForm).val())
-			.done(function(data) {
-				$(editForm).addClass('hidden');
-				reloadPageData();
-			})
-			.fail(function() {
-				alert('failed to update currency with id=' + $(control).data('target'));
-			});
-	});
-	
-	$('button[type="reset"]', editForm).click(function(event) {
-		$(editForm).addClass('hidden');
-	});*/
-}
-
 function onAssetCreate() {
 	$('#c-add-asset-form form').submit(function(submitEvent) {
 		submitEvent.preventDefault();
@@ -79,7 +52,7 @@ function onAssetCreate() {
 				$('button[type="reset"]', form).click();
 				reloadAssetsPageData();
 			})
-			.fail(function() {
+			.fail(function(jqXHR, textStatus, errorThrown) {
 				alert('fail to post asset');
 			});
 	});
@@ -153,17 +126,9 @@ function buildAssetActions(assetData) {
 	var tdActions = document.createElement('td');
 
 	var editAction = document.createElement('a');
-	$(editAction).attr('href', '#');
-	$(editAction).html('<i class="fa fa-pencil"></i>');
-	$(editAction).data('target', assetData.id);
-	$(editAction).data('type', assetData.type);
+	$(editAction).attr('href', APP_ROOT + '/settings/assets/' + assetData.id + '/configure');
+	$(editAction).html('<i class="fa fa-cog"></i>');
 	$(tdActions).append(editAction);
-	
-	$(editAction).click(function(event) {
-		event.preventDefault();
-		onAssetEditAttempt(editAction);
-	});
-	
 
 	var deleteAction = document.createElement('a');
 	$(deleteAction).attr('href', '#');
@@ -178,23 +143,6 @@ function buildAssetActions(assetData) {
 	});
 
 	return tdActions;
-}
-
-function onAssetEditAttempt(control) {
-	/*var editForm = $('#c-edit-currency-form');
-	
-	getCurrencyById($(control).data('target'))
-		.done(function(data) {
-			$('#name', editForm).val(data.name);
-			$('#code', editForm).val(data.code);
-			$('#symbol', editForm).val(data.symbol);
-			$('#id', editForm).val(data.id);
-			
-			$(editForm).removeClass('hidden');
-		})
-		.fail(function() {
-			alert('failed to get currency with id=' + $(control).data('target'));
-		});*/
 }
 
 function onAssetDeleteAttempt(control) {

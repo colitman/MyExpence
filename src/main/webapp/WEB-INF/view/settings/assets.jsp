@@ -18,7 +18,15 @@
 			<c:import url="/imports/mainNav"></c:import>
 			
 			<main>
-				<header class="page-header"><h2>Assets</h2></header>
+				<header class="page-header">
+					<h2>Assets</h2>
+					<ol class="breadcrumb">
+						<li>
+							<a href="#">Settings</a>
+						</li>
+						<li class="active">Assets</li>
+					</ol>
+				</header>
 				
 				<section id="c-add-asset-form">
 					<form action="" method="post" class="form-inline">

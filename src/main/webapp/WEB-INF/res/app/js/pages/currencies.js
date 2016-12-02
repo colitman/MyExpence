@@ -1,13 +1,5 @@
 'use strict';
 
-/*$(function() {
-	onCurrencyCreate();
-	onDefaultCurrencyUpdate();
-	onCurrencyUpdate();
-	onCurrencyDelete();
-	reloadCurrenciesPageData();
-});*/
-
 function reloadCurrenciesPageData() {
 	getCurrencies()
 		.done(function(data) {
@@ -33,7 +25,6 @@ function onCurrencyDelete() {
 			.fail(function(jqXHR, textStatus, errorThrown) {
 				$('#c-delete-failure-message', deleteModal).text(jqXHR.responseText);
 				$('#c-delete-failure-alert', deleteModal).removeClass('hidden');
-				//alert(jqXHR.responseText);
 			});
 	});
 }

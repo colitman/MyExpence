@@ -2,7 +2,6 @@
 
 $(function() {
 	onAssetCreate();
-	onAssetUpdate();
 	onAssetDelete();
 	reloadAssetsPageData();
 });
