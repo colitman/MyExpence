@@ -1,10 +1,11 @@
 'use strict';
 
-$(function() {
+/*$(function() {
 	onAssetCreate();
 	onAssetUpdate();
+	onAssetDelete();
 	reloadAssetsPageData();
-});
+});*/
 
 function reloadAssetsPageData() {
 	getCurrencies()
@@ -30,14 +31,23 @@ function reloadAssetsPageData() {
 		.fail(function() {
 			alert('fail to get asset types');
 		});
+}
+
+function onAssetDelete() {
+	var deleteModal = $('#c-delete-confirmation-modal');
+	var deleteForm = $('#c-modal-delete-form');
 	
-	/*getAssets()
-		.done(function(data) {
-			updateAssetsTable(data);
-		})
-		.fail(function() {
-			alert('fail to get assets');
-		});*/
+	$(deleteForm).submit(function(event) {
+		event.preventDefault();
+		deleteAsset($('#id', deleteForm).val(), $('#type', deleteForm).val())
+			.done(function(data) {
+				$(deleteModal).modal('hide');
+				reloadAssetsPageData();
+			})
+			.fail(function() {
+				alert('failed to delete asset with id=' + $(control).data('target'))
+			});
+	});
 }
 
 function onAssetUpdate() {
@@ -141,31 +151,32 @@ function updateAssetsTable(assetData, currencyData) {
 
 function buildAssetActions(assetData) {
 	var tdActions = document.createElement('td');
-	/*
+
 	var editAction = document.createElement('a');
 	$(editAction).attr('href', '#');
 	$(editAction).html('<i class="fa fa-pencil"></i>');
-	$(editAction).data('target', currencyData.id);
+	$(editAction).data('target', assetData.id);
+	$(editAction).data('type', assetData.type);
 	$(tdActions).append(editAction);
 	
 	$(editAction).click(function(event) {
 		event.preventDefault();
-		onCurrencyEditAttempt(editAction);
+		onAssetEditAttempt(editAction);
 	});
 	
-	if(!currencyData.defaultCurrency) {
-		var deleteAction = document.createElement('a');
-		$(deleteAction).attr('href', '#');
-		$(deleteAction).html('<i class="fa fa-remove"></i>');
-		$(deleteAction).data('target', currencyData.id);
-		$(tdActions).append(deleteAction);
-		
-		$(deleteAction).click(function(event) {
-			event.preventDefault();
-			onCurrencyDeleteAttempt(deleteAction);
-		});
-	}
-	 */
+
+	var deleteAction = document.createElement('a');
+	$(deleteAction).attr('href', '#');
+	$(deleteAction).html('<i class="fa fa-remove"></i>');
+	$(deleteAction).data('target', assetData.id);
+	$(deleteAction).data('type', assetData.type);
+	$(tdActions).append(deleteAction);
+	
+	$(deleteAction).click(function(event) {
+		event.preventDefault();
+		onAssetDeleteAttempt(deleteAction);
+	});
+
 	return tdActions;
 }
 
@@ -187,27 +198,25 @@ function onAssetEditAttempt(control) {
 }
 
 function onAssetDeleteAttempt(control) {
-	/*var deleteModal = $('#c-delete-confirmation-modal');
+	var deleteModal = $('#c-delete-confirmation-modal');
 	
-	getCurrencyById($(control).data('target'))
+	getAssetById($(control).data('target'), $(control).data('type'))
 		.done(function(data) {
-			$('#c-delete-subject', deleteModal).html('<b>' + data.symbol + ' ' + data.name + ' (' + data.code + ')</b> currency.');
+			$('#c-delete-subject', deleteModal).html('<b>' + data.name + ' (' + data.label + ')</b> asset.');
 			
-			$('#c-modal-delete-form').submit(function(event) {
-				event.preventDefault();
-				deleteCurrency($(control).data('target'))
-					.done(function(data) {
-						$(deleteModal).modal('hide');
-						reloadPageData();
-					})
-					.fail(function() {
-						alert('failed to delete currency with id=' + $(control).data('target'))
-					});
-			});
+			$('#c-modal-delete-form #id', deleteModal).val(data.id);
+			
+			var typeInput = document.createElement('input');
+			$(typeInput).attr('type', 'hidden');
+			$(typeInput).attr('id', 'type');
+			$(typeInput).attr('name', 'type');
+			$(typeInput).val(data.type);
+			
+			$('#c-modal-delete-form #id', deleteModal).append(typeInput);
 			
 			$(deleteModal).modal('show');
 		})
 		.fail(function() {
-			alert('failed to get currency with id=' + $(control).data('target'));
-		});*/
+			alert('failed to get asset with id=' + $(control).data('target'));
+		});
 }

@@ -8,3 +8,10 @@ function markRequired () {
 	});
 }
 
+function closeDeleteFailureAlert() {
+	$('#c-delete-failure-alert button.close').click(function(event) {
+		event.preventDefault();
+		$('#c-delete-failure-alert').addClass('hidden');
+	});
+}
+

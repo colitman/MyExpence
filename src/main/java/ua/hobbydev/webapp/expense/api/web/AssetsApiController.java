@@ -9,10 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.ClassUtils;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import ua.hobbydev.webapp.expense.Application;
 import ua.hobbydev.webapp.expense.EnumUtils.AssetEnums.AssetType;
 import ua.hobbydev.webapp.expense.api.model.AssetTypeViewModel;
@@ -97,5 +94,32 @@ public class AssetsApiController {
         }
 
         return new ResponseEntity<List<AssetViewModel>>(viewModels, HttpStatus.OK);
+    }
+
+    @RequestMapping(path="{type}/{id}", method = RequestMethod.GET)
+    public ResponseEntity<AssetViewModel> getAssetById(@PathVariable Long id, @PathVariable String type, @CurrentUser User currentUser) {
+        Asset asset = null;
+        AssetViewModel assetVm = null;
+
+        AssetType enumType = AssetType.valueOf(type);
+        Class<? extends Asset> assetClass = AssetFactory.getAssetOfType(enumType).getClass();
+
+        try {
+            asset = defaultService.get(assetClass, id);
+            assetVm = new AssetViewModel(asset);
+        } catch (ResourceNotFoundException e) {
+            return new ResponseEntity<AssetViewModel>(HttpStatus.NOT_FOUND);
+        }
+
+        return new ResponseEntity<AssetViewModel>(assetVm, HttpStatus.OK);
+    }
+
+    @RequestMapping(path="{type}/{id}/delete", method = RequestMethod.POST)
+    public ResponseEntity<String> deleteAssetById(@PathVariable Long id, @PathVariable String type, @CurrentUser User currentUser) {
+        AssetType enumType = AssetType.valueOf(type);
+        Class<? extends Asset> assetClass = AssetFactory.getAssetOfType(enumType).getClass();
+
+        defaultService.delete(assetClass, id);
+        return new ResponseEntity<String>("Deleted", HttpStatus.OK);
     }
 }

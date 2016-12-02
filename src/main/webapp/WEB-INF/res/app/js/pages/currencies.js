@@ -1,11 +1,12 @@
 'use strict';
 
-$(function() {
+/*$(function() {
 	onCurrencyCreate();
 	onDefaultCurrencyUpdate();
 	onCurrencyUpdate();
+	onCurrencyDelete();
 	reloadCurrenciesPageData();
-});
+});*/
 
 function reloadCurrenciesPageData() {
 	getCurrencies()
@@ -16,6 +17,25 @@ function reloadCurrenciesPageData() {
 		.fail(function() {
 			alert('fail to get currencies');
 		});
+}
+
+function onCurrencyDelete() {
+	var deleteModal = $('#c-delete-confirmation-modal');
+	var deleteForm = $('#c-modal-delete-form');
+	
+	$(deleteForm).submit(function(event) {
+		event.preventDefault();
+		deleteCurrency($('#id', deleteForm).val())
+			.done(function() {
+				$(deleteModal).modal('hide');
+				reloadCurrenciesPageData();
+			})
+			.fail(function(jqXHR, textStatus, errorThrown) {
+				$('#c-delete-failure-message', deleteModal).text(jqXHR.responseText);
+				$('#c-delete-failure-alert', deleteModal).removeClass('hidden');
+				//alert(jqXHR.responseText);
+			});
+	});
 }
 
 function onCurrencyUpdate() {
@@ -170,21 +190,11 @@ function onCurrencyDeleteAttempt(control) {
 		.done(function(data) {
 			$('#c-delete-subject', deleteModal).html('<b>' + data.symbol + ' ' + data.name + ' (' + data.code + ')</b> currency.');
 			
-			$('#c-modal-delete-form').submit(function(event) {
-				event.preventDefault();
-				deleteCurrency($(control).data('target'))
-					.done(function() {
-						$(deleteModal).modal('hide');
-						reloadCurrenciesPageData();
-					})
-					.fail(function() {
-						alert('failed to delete currency with id=' + $(control).data('target'))
-					});
-			});
+			$('#c-modal-delete-form #id', deleteModal).val(data.id);
 			
 			$(deleteModal).modal('show');
 		})
-		.fail(function() {
+		.fail(function(jqXHR, textStatus, errorThrown) {
 			alert('failed to get currency with id=' + $(control).data('target'));
 		});
 }

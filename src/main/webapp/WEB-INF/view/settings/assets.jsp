@@ -81,6 +81,7 @@
 		<script src="${app}/res/app/js/services/currencyServices.js"></script>
 		<script src="${app}/res/app/js/pages/assets.js"></script>
 		<script src="${app}/res/app/js/services/assetServices.js"></script>
+		<script src="${app}/res/app/js/init/assets.js"></script>
 
 	</body>
 </html>

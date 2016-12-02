@@ -15,11 +15,17 @@
 			<div class="modal-body">
 				<p>You are about to DELETE the following:</p>
 				<p id="c-delete-subject" class="well well-sm"></p>
+				
+				<div id="c-delete-failure-alert" class="alert alert-danger hidden">
+					<button type="button" class="close">&times;</button>
+					<p id="c-delete-failure-message"></p>
+				</div>
 			</div>
 			<footer class="modal-footer">
 				
 				<form action="" method="post" id="c-modal-delete-form">
 					<sec:csrfInput/>
+					<input type="hidden" id="id" name="id">
 					<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
 					<button type="submit" class="btn btn-danger">Delete</button>
 				</form>

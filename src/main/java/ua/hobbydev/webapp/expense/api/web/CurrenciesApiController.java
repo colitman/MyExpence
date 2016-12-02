@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.*;
 import ua.hobbydev.webapp.expense.api.model.CurrencyViewModel;
 import ua.hobbydev.webapp.expense.business.DefaultServiceInterface;
 import ua.hobbydev.webapp.expense.business.ResourceNotFoundException;
+import ua.hobbydev.webapp.expense.business.ResourceOperationForbiddenException;
+import ua.hobbydev.webapp.expense.business.currencies.CurrencyServiceInterface;
 import ua.hobbydev.webapp.expense.business.users.UserServiceInterface;
 import ua.hobbydev.webapp.expense.config.CurrentUser;
 import ua.hobbydev.webapp.expense.domain.currency.Currency;
@@ -28,6 +30,8 @@ public class CurrenciesApiController {
     private DefaultServiceInterface defaultService;
     @Autowired
     private UserServiceInterface userService;
+    @Autowired
+    private CurrencyServiceInterface currencyService;
 
     @RequestMapping(path="default", method = RequestMethod.POST)
     public ResponseEntity<String> setDefaultCurrency(@RequestParam Long id, @CurrentUser User currentUser) {
@@ -96,7 +100,11 @@ public class CurrenciesApiController {
 
     @RequestMapping(path="{id}/delete", method = RequestMethod.POST)
     public ResponseEntity<String> deleteCurrencyById(@PathVariable Long id, @CurrentUser User currentUser) {
-        defaultService.delete(Currency.class, id);
+        try {
+            currencyService.delete(id);
+        } catch (ResourceOperationForbiddenException e) {
+            return new ResponseEntity<String>(e.getMessage(), HttpStatus.UNPROCESSABLE_ENTITY);
+        }
         return new ResponseEntity<String>("Deleted", HttpStatus.OK);
     }
 

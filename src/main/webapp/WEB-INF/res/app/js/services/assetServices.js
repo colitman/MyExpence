@@ -16,20 +16,20 @@ function getAssetTypes() {
 	});
 }
 
-function getAssetById(id) {
+function getAssetById(id, type) {
 	return $.ajax({
-		url: WEB_API_ROOT + '/assets/' + id,
+		url: WEB_API_ROOT + '/assets/' + type + '/' + id,
 		method: 'GET',
 		dataType: 'json'
 	});
 }
 
-function deleteAsset(id) {
+function deleteAsset(id, type) {
 	
 	var csrf = $('#c-modal-delete-form').serialize();
 	
 	return $.ajax({
-		url: WEB_API_ROOT + '/assets/' + id + '/delete',
+		url: WEB_API_ROOT + '/assets/' + type + '/' + id + '/delete',
 		method: 'POST',
 		data:csrf
 	});
