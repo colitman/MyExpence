@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+		xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      		http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+	
+	<changeSet id="add_limit_for_credit_card_assets_051220161918" author="romenskyi" dbms="postgresql">
+				
+		<addColumn tableName="credit_card_assets">
+			<column name="limit" afterColumn="paymentSystem" type="numeric" ></column>
+		</addColumn>
+		
+	</changeSet>
+</databaseChangeLog>

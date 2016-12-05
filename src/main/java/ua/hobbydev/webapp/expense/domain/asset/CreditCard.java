@@ -39,6 +39,9 @@ public class CreditCard implements Asset, Card {
     @Column(name = "paymentSystem")
     private PaymentSystemType paymentSystem;
 
+    @Column(name = "limit")
+    private BigDecimal limit;
+
     @ManyToOne
     private Currency currency;
 
@@ -113,6 +116,14 @@ public class CreditCard implements Asset, Card {
     @Override
     public void setPaymentSystem(PaymentSystemType paymentSystem) {
         this.paymentSystem = paymentSystem;
+    }
+
+    public BigDecimal getLimit() {
+        return limit;
+    }
+
+    public void setLimit(BigDecimal limit) {
+        this.limit = limit;
     }
 
     @Override
