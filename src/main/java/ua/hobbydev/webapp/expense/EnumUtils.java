@@ -18,7 +18,8 @@ public class EnumUtils {
     public static class AssetEnums {
         public enum AssetType {
             CASH("Cash"),
-            DEBIT_CARD("Debit Card");
+            DEBIT_CARD("Debit Card"),
+            CREDIT_CARD("Credit Card");
 
             private final String label;
             private AssetType(String label) {this.label = label;}

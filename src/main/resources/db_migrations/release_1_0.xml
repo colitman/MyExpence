@@ -7,6 +7,7 @@
 	
 	<include file="migration_files/base_tables_051220161327.xml" relativeToChangelogFile="true"/>
 	<include file="migration_files/debit_cards_table_051220161636.xml" relativeToChangelogFile="true" />
+	<include file="migration_files/credit_cards_table_051220161657.xml" relativeToChangelogFile="true" />
 	
 	<include file="data_init_files/seed_data_051220161332.xml" relativeToChangelogFile="true"></include>
 </databaseChangeLog>

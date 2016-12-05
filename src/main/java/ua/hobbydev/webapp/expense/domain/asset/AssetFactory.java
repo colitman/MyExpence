@@ -18,6 +18,10 @@ public class AssetFactory {
             return new DebitCard();
         }
 
+        if(AssetType.CREDIT_CARD.equals(type)) {
+            return new CreditCard();
+        }
+
         return null;
     }
 }
