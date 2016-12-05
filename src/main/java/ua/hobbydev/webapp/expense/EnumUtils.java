@@ -26,5 +26,16 @@ public class EnumUtils {
             private AssetType(String label) {this.label = label;}
             public String getLabel(){return label;}
         }
+
+        public enum PaymentSystemType {
+            VISA("Visa"),
+            MASTER_CARD("MasterCard"),
+            MAESTRO("Maestro"),
+            OTHER("Other");
+
+            private final String label;
+            private PaymentSystemType(String label) {this.label = label;}
+            public String getLabel(){return label;}
+        }
     }
 }

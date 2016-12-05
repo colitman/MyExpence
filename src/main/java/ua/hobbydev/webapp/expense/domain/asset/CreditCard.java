@@ -5,7 +5,8 @@
 package ua.hobbydev.webapp.expense.domain.asset;
 
 
-import ua.hobbydev.webapp.expense.EnumUtils.AssetEnums.AssetType;
+
+import ua.hobbydev.webapp.expense.EnumUtils.AssetEnums.*;
 import ua.hobbydev.webapp.expense.domain.currency.Currency;
 import ua.hobbydev.webapp.expense.domain.user.User;
 
@@ -14,7 +15,7 @@ import java.math.BigDecimal;
 
 @Entity
 @Table(name = "credit_card_assets")
-public class CreditCard implements Asset {
+public class CreditCard implements Asset, Card {
 
     @Id
     @Column(name = "id")
@@ -30,6 +31,13 @@ public class CreditCard implements Asset {
 
     @Column(name = "amount")
     private BigDecimal amount;
+
+    @Column(name = "bankName")
+    private String bankName;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "paymentSystem")
+    private PaymentSystemType paymentSystem;
 
     @ManyToOne
     private Currency currency;
@@ -85,6 +93,26 @@ public class CreditCard implements Asset {
     @Override
     public BigDecimal extractFromAmount(BigDecimal extractedAmount) {
         return getAmount().subtract(extractedAmount);
+    }
+
+    @Override
+    public String getBankName() {
+        return bankName;
+    }
+
+    @Override
+    public void setBankName(String name) {
+        this.bankName = name;
+    }
+
+    @Override
+    public PaymentSystemType getPaymentSystem() {
+        return paymentSystem;
+    }
+
+    @Override
+    public void setPaymentSystem(PaymentSystemType paymentSystem) {
+        this.paymentSystem = paymentSystem;
     }
 
     @Override

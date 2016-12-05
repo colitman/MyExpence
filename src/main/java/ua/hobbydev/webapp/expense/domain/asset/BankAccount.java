@@ -14,7 +14,7 @@ import java.math.BigDecimal;
 
 @Entity
 @Table(name = "bank_account_assets")
-public class BankAccount implements Asset {
+public class BankAccount implements Asset, BankRelatedAsset {
 
     @Id
     @Column(name = "id")
@@ -30,6 +30,9 @@ public class BankAccount implements Asset {
 
     @Column(name = "amount")
     private BigDecimal amount;
+
+    @Column(name = "bankName")
+    private String bankName;
 
     @ManyToOne
     private Currency currency;
@@ -85,6 +88,16 @@ public class BankAccount implements Asset {
     @Override
     public BigDecimal extractFromAmount(BigDecimal extractedAmount) {
         return getAmount().subtract(extractedAmount);
+    }
+
+    @Override
+    public String getBankName() {
+        return bankName;
+    }
+
+    @Override
+    public void setBankName(String name) {
+        this.bankName = name;
     }
 
     @Override

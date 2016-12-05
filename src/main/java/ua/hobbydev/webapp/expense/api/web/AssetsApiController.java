@@ -24,6 +24,7 @@ import ua.hobbydev.webapp.expense.domain.asset.AssetFactory;
 import ua.hobbydev.webapp.expense.domain.currency.Currency;
 import ua.hobbydev.webapp.expense.domain.user.User;
 
+import javax.persistence.Table;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -84,6 +85,9 @@ public class AssetsApiController {
         List<Asset> assets = new ArrayList<Asset>();
 
         for(Class<? extends Asset> a:assetSet) {
+            if(!a.isAnnotationPresent(Table.class)) {
+                continue;
+            }
             assets.addAll(defaultService.list(a));
         }
 

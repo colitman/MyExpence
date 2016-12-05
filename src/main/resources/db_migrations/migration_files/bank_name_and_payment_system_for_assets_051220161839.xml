@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+		xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      		http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+	
+	<changeSet id="bank_name_and_payment_system_for_assets_051220161839" author="romenskyi" dbms="postgresql">
+		
+		<addColumn tableName="bank_account_assets">
+			<column name="bankName" afterColumn="amount" type="text" ></column>
+		</addColumn>
+		
+		<addColumn tableName="credit_card_assets">
+			<column name="bankName" afterColumn="amount" type="text" ></column>
+			<column name="paymentSystem" afterColumn="bankName" type="text"></column>
+		</addColumn>
+		
+		<addColumn tableName="debit_card_assets">
+			<column name="bankName" afterColumn="amount" type="text" ></column>
+			<column name="paymentSystem" afterColumn="bankName" type="text"></column>
+		</addColumn>
+		
+	</changeSet>
+</databaseChangeLog>
