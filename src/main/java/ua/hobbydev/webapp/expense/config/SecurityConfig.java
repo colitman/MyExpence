@@ -61,7 +61,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		}
         
         http
-			//.csrf().disable()
+			.csrf().disable()
 			.authorizeRequests()
 				.antMatchers(HttpMethod.GET, "/favicon.ico" , WebMvcConfig.RESOURCES_BASE_URL).permitAll()
 				.and()

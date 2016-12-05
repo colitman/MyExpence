@@ -7,6 +7,7 @@ package ua.hobbydev.webapp.expense.api.web;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import ua.hobbydev.webapp.expense.api.model.CurrencyViewModel;
 import ua.hobbydev.webapp.expense.business.DefaultServiceInterface;
@@ -33,6 +34,7 @@ public class CurrenciesApiController {
     @Autowired
     private CurrencyServiceInterface currencyService;
 
+    @PreAuthorize("isAuthenticated()")
     @RequestMapping(path="default", method = RequestMethod.POST)
     public ResponseEntity<String> setDefaultCurrency(@RequestParam Long id, @CurrentUser User currentUser) {
 
@@ -66,6 +68,7 @@ public class CurrenciesApiController {
         return new ResponseEntity<String>("Success", HttpStatus.OK);
     }
 
+    @PreAuthorize("isAuthenticated()")
     @RequestMapping(path="", method = RequestMethod.POST)
     public ResponseEntity<String> createCurrency(@ModelAttribute CurrencyViewModel newCurrency, @CurrentUser User currentUser) {
 
@@ -83,6 +86,7 @@ public class CurrenciesApiController {
         return new ResponseEntity<String>(String.valueOf(newId), HttpStatus.CREATED);
     }
 
+    @PreAuthorize("isAuthenticated()")
     @RequestMapping(path="{id}", method = RequestMethod.GET)
     public ResponseEntity<CurrencyViewModel> getCurrencyById(@PathVariable Long id, @CurrentUser User currentUser) {
         Currency currency = null;
@@ -98,6 +102,7 @@ public class CurrenciesApiController {
         return new ResponseEntity<CurrencyViewModel>(currencyVm, HttpStatus.OK);
     }
 
+    @PreAuthorize("isAuthenticated()")
     @RequestMapping(path="{id}/delete", method = RequestMethod.POST)
     public ResponseEntity<String> deleteCurrencyById(@PathVariable Long id, @CurrentUser User currentUser) {
         try {
@@ -108,6 +113,7 @@ public class CurrenciesApiController {
         return new ResponseEntity<String>("Deleted", HttpStatus.OK);
     }
 
+    @PreAuthorize("isAuthenticated()")
     @RequestMapping(path="{id}/update", method = RequestMethod.POST)
     public ResponseEntity<String> updateCurrencyById(@PathVariable Long id, @ModelAttribute CurrencyViewModel currencyVm, @CurrentUser User currentUser) {
         Currency currency = null;
@@ -125,6 +131,7 @@ public class CurrenciesApiController {
         return new ResponseEntity<String>("Updated", HttpStatus.OK);
     }
 
+    @PreAuthorize("isAuthenticated()")
     @RequestMapping(path="", method = RequestMethod.GET)
     public ResponseEntity<List<CurrencyViewModel>> getCurrencyList(@CurrentUser User currentUser) {
         List<Currency> currencies = defaultService.list(Currency.class);

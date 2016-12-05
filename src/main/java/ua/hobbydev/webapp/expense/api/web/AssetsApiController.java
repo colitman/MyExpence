@@ -8,6 +8,7 @@ import org.reflections.Reflections;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.util.ClassUtils;
 import org.springframework.web.bind.annotation.*;
 import ua.hobbydev.webapp.expense.Application;
@@ -37,6 +38,7 @@ public class AssetsApiController {
     @Autowired
     private UserServiceInterface userService;
 
+    @PreAuthorize("isAuthenticated()")
     @RequestMapping(path="", method = RequestMethod.POST)
     public ResponseEntity<String> createAsset(@ModelAttribute AssetViewModel newAsset, @CurrentUser User currentUser) {
 
@@ -70,6 +72,7 @@ public class AssetsApiController {
         return new ResponseEntity<List<AssetTypeViewModel>>(types, HttpStatus.OK);
     }
 
+    @PreAuthorize("isAuthenticated()")
     @RequestMapping(path="", method = RequestMethod.GET)
     public ResponseEntity<List<AssetViewModel>> getAssetList(@CurrentUser User currentUser) {
 
@@ -96,6 +99,7 @@ public class AssetsApiController {
         return new ResponseEntity<List<AssetViewModel>>(viewModels, HttpStatus.OK);
     }
 
+    @PreAuthorize("isAuthenticated()")
     @RequestMapping(path="{type}/{id}", method = RequestMethod.GET)
     public ResponseEntity<AssetViewModel> getAssetById(@PathVariable Long id, @PathVariable String type, @CurrentUser User currentUser) {
         Asset asset = null;
@@ -114,6 +118,7 @@ public class AssetsApiController {
         return new ResponseEntity<AssetViewModel>(assetVm, HttpStatus.OK);
     }
 
+    @PreAuthorize("isAuthenticated()")
     @RequestMapping(path="{type}/{id}/delete", method = RequestMethod.POST)
     public ResponseEntity<String> deleteAssetById(@PathVariable Long id, @PathVariable String type, @CurrentUser User currentUser) {
         AssetType enumType = AssetType.valueOf(type);
