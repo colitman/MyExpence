@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+		xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      		http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+	
+	<changeSet id="base_tables_051220161327" author="romenskyi" dbms="postgresql">
+		
+		<!--
+			Creating sequences
+		-->
+		<createSequence sequenceName="users_id_seq" startValue="1" ></createSequence>
+		<createSequence sequenceName="currencies_id_seq" startValue="1" ></createSequence>
+		<createSequence sequenceName="cash_assets_id_seq" startValue="1" ></createSequence>
+		
+		<!--
+			Creating tables
+		-->
+		
+		<createTable tableName="users">
+			<column name="id" defaultValueSequenceNext="users_id_seq" type="integer">
+				<constraints primaryKey="true" unique="true" nullable="false"></constraints>
+			</column>
+			<column name="username" type="text">
+				<constraints nullable="false" unique="true"></constraints>
+			</column>
+			<column name="password" type="text">
+				<constraints nullable="false"></constraints>
+			</column>
+			<column name="email" type="text">
+				<constraints nullable="false" unique="true"></constraints>
+			</column>
+		</createTable>
+		
+		<createTable tableName="currencies">
+			<column name="id" type="integer" defaultValueSequenceNext="currencies_id_seq">
+				<constraints primaryKey="true" unique="true" nullable="false"></constraints>
+			</column>
+			<column name="user_id" type="integer"></column>
+			<column name="name" type="text">
+				<constraints nullable="false"></constraints>
+			</column>
+			<column name="code" type="text">
+				<constraints nullable="false"></constraints>
+			</column>
+			<column name="symbol" type="text">
+				<constraints nullable="false"></constraints>
+			</column>
+			<column name="defaultcurrency" type="boolean" defaultValueBoolean="true">
+				<constraints nullable="false"></constraints>
+			</column>
+		</createTable>
+		
+		<createTable tableName="cash_assets">
+			<column name="id" type="integer" defaultValueSequenceNext="cash_assets_id_seq">
+				<constraints primaryKey="true" unique="true" nullable="false"></constraints>
+			</column>
+			<column name="user_id" type="integer"></column>
+			<column name="currency_id" type="integer"></column>
+			<column name="name" type="text">
+				<constraints nullable="false"></constraints>
+			</column>
+			<column name="type" type="text">
+				<constraints nullable="false"></constraints>
+			</column>
+			<column name="amount" type="numeric">
+				<constraints nullable="false"></constraints>
+			</column>
+		</createTable>
+		
+		<!--
+			Creating references
+		-->
+		
+		<addForeignKeyConstraint baseTableName="currencies"
+								 baseColumnNames="user_id"
+								 referencedTableName="users"
+								 referencedColumnNames="id"
+								 constraintName="currencies_user_id___users_id"
+								 onDelete="CASCADE"
+								 onUpdate="CASCADE"></addForeignKeyConstraint>
+		
+		<addForeignKeyConstraint baseTableName="cash_assets"
+								 baseColumnNames="user_id"
+								 referencedTableName="users"
+								 referencedColumnNames="id"
+								 constraintName="cash_assets_user_id___users_id"
+								 onDelete="CASCADE"
+								 onUpdate="CASCADE"></addForeignKeyConstraint>
+		
+		<addForeignKeyConstraint baseTableName="cash_assets"
+								 baseColumnNames="currency_id"
+								 referencedTableName="currencies"
+								 referencedColumnNames="id"
+								 constraintName="cash_assets_currency_id___currencies_id"
+								 onDelete="RESTRICT"
+								 onUpdate="CASCADE"></addForeignKeyConstraint>
+		
+	</changeSet>
+</databaseChangeLog>

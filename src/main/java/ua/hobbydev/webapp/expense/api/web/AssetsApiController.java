@@ -24,6 +24,7 @@ import ua.hobbydev.webapp.expense.domain.asset.AssetFactory;
 import ua.hobbydev.webapp.expense.domain.currency.Currency;
 import ua.hobbydev.webapp.expense.domain.user.User;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -53,6 +54,7 @@ public class AssetsApiController {
             asset.setUser(userService.loadUserByUsername(currentUser.getUsername()));
             asset.setType(enumType);
             asset.setCurrency(currency);
+            asset.setAmount(new BigDecimal(0));
             Long newId = defaultService.add(asset);
             return new ResponseEntity<String>(String.valueOf(newId), HttpStatus.CREATED);
         } catch (ResourceNotFoundException e) {

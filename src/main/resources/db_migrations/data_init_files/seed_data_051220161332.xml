@@ -5,7 +5,7 @@
 		xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
                       		http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
 	
-	<include file="migration_files/base_tables_051220161327.xml" relativeToChangelogFile="true"/>
-	
-	<include file="data_init_files/seed_data_051220161332.xml" relativeToChangelogFile="true"></include>
+	<changeSet id="seed_data_051220161332" author="romenskyi" dbms="postgresql">
+				
+	</changeSet>
 </databaseChangeLog>

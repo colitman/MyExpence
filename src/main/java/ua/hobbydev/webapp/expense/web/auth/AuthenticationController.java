@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 import ua.hobbydev.webapp.expense.business.users.UserServiceInterface;
+import ua.hobbydev.webapp.expense.domain.currency.Currency;
 import ua.hobbydev.webapp.expense.domain.user.User;
 
 @Controller
@@ -44,6 +45,12 @@ public class AuthenticationController {
             }
 
             newUser.setPassword(passwordEncoder.encodePassword(newUser.getPassword(), null));
+            Currency defaultCurrency = new Currency();
+            defaultCurrency.setName("US Dollar");
+            defaultCurrency.setCode("USD");
+            defaultCurrency.setSymbol("$");
+            defaultCurrency.setDefaultCurrency(true);
+            newUser.addCurrency(defaultCurrency);
             userServiceInterface.add(newUser);
             mv.setViewName("redirect:/login");
         } finally {
