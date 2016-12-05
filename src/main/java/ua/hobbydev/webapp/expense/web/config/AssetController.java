@@ -16,9 +16,10 @@ import org.springframework.web.servlet.ModelAndView;
 public class AssetController {
 
     @PreAuthorize("isAuthenticated()")
-    @RequestMapping(path = "{id}/configure", method = RequestMethod.GET)
-    public ModelAndView configureAssetPage(@PathVariable Long id, ModelAndView mv) {
+    @RequestMapping(path = "{type}/{id}/configure", method = RequestMethod.GET)
+    public ModelAndView configureAssetPage(@PathVariable Long id, @PathVariable String type, ModelAndView mv) {
         mv.addObject("id", id);
+        mv.addObject("type", type);
         mv.setViewName("settings/assets/configure");
         return mv;
     }

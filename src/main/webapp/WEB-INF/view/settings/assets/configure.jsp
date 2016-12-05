@@ -11,6 +11,8 @@
 <html lang="en">
 	<head>
 		<c:import url="/imports/head?pageTitle=Configure Asset"></c:import>
+		<meta name="target_id" content="${id}">
+		<meta name="target_type" content="${type}">
 	</head>
 	
 	<body>
@@ -27,7 +29,7 @@
 						</li>
 						<li class="active">Settings</li>
 						<li>assetsSettings</li>
-						<li class="active"></li>
+						<li class="active c-generate-crumb-name">#GenerateMe</li>
 					</ol>
 				</header>
 				

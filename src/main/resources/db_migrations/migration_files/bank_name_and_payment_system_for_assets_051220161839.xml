@@ -8,17 +8,23 @@
 	<changeSet id="bank_name_and_payment_system_for_assets_051220161839" author="romenskyi" dbms="postgresql">
 		
 		<addColumn tableName="bank_account_assets">
-			<column name="bankName" afterColumn="amount" type="text" ></column>
+			<column name="bankname" afterColumn="amount" type="text" ></column>
 		</addColumn>
 		
 		<addColumn tableName="credit_card_assets">
-			<column name="bankName" afterColumn="amount" type="text" ></column>
-			<column name="paymentSystem" afterColumn="bankName" type="text"></column>
+			<column name="bankname" afterColumn="amount" type="text" ></column>
+		</addColumn>
+		
+		<addColumn tableName="credit_card_assets">
+			<column name="paymentsystem" afterColumn="bankname" type="text"></column>
 		</addColumn>
 		
 		<addColumn tableName="debit_card_assets">
-			<column name="bankName" afterColumn="amount" type="text" ></column>
-			<column name="paymentSystem" afterColumn="bankName" type="text"></column>
+			<column name="bankname" afterColumn="amount" type="text" ></column>
+		</addColumn>
+		
+		<addColumn tableName="debit_card_assets">
+			<column name="paymentsystem" afterColumn="bankname" type="text"></column>
 		</addColumn>
 		
 	</changeSet>

@@ -39,7 +39,7 @@ public class CreditCard implements Asset, Card {
     @Column(name = "paymentSystem")
     private PaymentSystemType paymentSystem;
 
-    @Column(name = "limit")
+    @Column(name = "creditLimit")
     private BigDecimal limit;
 
     @ManyToOne

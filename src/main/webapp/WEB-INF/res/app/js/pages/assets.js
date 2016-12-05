@@ -130,7 +130,7 @@ function buildAssetActions(assetData) {
 	var tdActions = document.createElement('td');
 
 	var editAction = document.createElement('a');
-	$(editAction).attr('href', APP_ROOT + '/settings/assets/' + assetData.id + '/configure');
+	$(editAction).attr('href', APP_ROOT + '/settings/assets/' + assetData.type + '/' + assetData.id + '/configure');
 	$(editAction).html('<i class="fa fa-cog"></i>');
 	$(tdActions).append(editAction);
 
