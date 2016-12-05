@@ -15,3 +15,21 @@ function closeDeleteFailureAlert() {
 	});
 }
 
+function generateBreadcrumbs() {
+	var crumbsContainer = $('main header .breadcrumb');
+	
+	$('li:not(.active,.c-home-crumb)', crumbsContainer).each(function(index, item) {
+		var pageCode = $(item).text();
+		$(item).html('');
+		
+		var crumbURL = PAGES[pageCode].url;
+		var crumbName = PAGES[pageCode].name;
+		
+		var crumbLink = document.createElement('a');
+		$(crumbLink).attr('href', crumbURL);
+		$(crumbLink).text(crumbName);
+		
+		$(item).html(crumbLink);
+	});
+}
+

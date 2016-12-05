@@ -10676,6 +10676,39 @@
 		},
 		submitOperation: function(e) {
 			var t, n, r, i, a;
+			
+			var csrfToken = $('meta[name="_csrf"]').attr('content');
+			
+			$('.sandbox').each(function(index, item) {
+				'use strict';
+				
+				var tBody = $('.operation-params', item);
+				var tRow = document.createElement('tr');
+				var tdParName = document.createElement('td');
+				$(tdParName).addClass('code');
+				$(tdParName).html('<label for="_csrf">_csrf</label>');
+				$(tRow).append(tdParName);
+				
+				var tdParVal = document.createElement('td');
+				$(tdParVal).html('<input class="parameter" name="_csrf" id="_csrf" type="text">');
+				$('input', tdParVal).val(csrfToken);
+				$(tRow).append(tdParVal);
+				
+				var tdParDesc= document.createElement('td');
+				$(tdParDesc).addClass('markdown');
+				$(tRow).append(tdParDesc);
+				
+				var tdParQuery= document.createElement('td');
+				$(tdParQuery).html('query');
+				$(tRow).append(tdParQuery);
+				
+				var tdParType = document.createElement('td');
+				$(tdParType).html('<span class="model-signature">string</span>');
+				$(tRow).append(tdParType);
+				
+				tBody.prepend(tRow);
+			});
+			
 			if (null !== e && e.preventDefault(), n = $(".sandbox", $(this.el)), t = !0, n.find("input.required").each(function() {
 					$(this).removeClass("error"), "" === jQuery.trim($(this).val()) && ($(this).addClass("error"), $(this).wiggle({
 						callback: function(e) {

@@ -10,6 +10,6 @@
 		MyExpense |
 		<a href="https://ua.linkedin.com/in/dmytro-romenskyi-87035524">Dmytro Romenskyi</a> |
 		HobbyDev | 2016 |
-		<a href="${app}/swagger-ui.html">API Reference</a>
+		<a href="${app}/swagger">API Reference</a>
 	</p>
 </footer>

@@ -30,10 +30,10 @@ public class SwaggerConfig {
 	@Bean
 	public Docket webApi() {
 		String apiBasePackage = ClassUtils.getPackageName(Application.class) + ".api.web";
-		
+
 		Docket docket = new Docket(DocumentationType.SWAGGER_2);
 		docket
-				.groupName("web")
+				.groupName("1 - web")
 			.select()
 				.apis(RequestHandlerSelectors.basePackage(apiBasePackage))
 				.paths(PathSelectors.ant("/api/web/**"))
@@ -43,7 +43,7 @@ public class SwaggerConfig {
 									CookieValue.class,
 					HttpServletRequest.class,
 					HttpServletResponse.class);
-		
+
 		return docket;
 	}
 
@@ -53,7 +53,7 @@ public class SwaggerConfig {
 
 		Docket docket = new Docket(DocumentationType.SWAGGER_2);
 		docket
-				.groupName("mobile")
+				.groupName("2 - mobile")
 				.select()
 				.apis(RequestHandlerSelectors.basePackage(apiBasePackage))
 				.paths(PathSelectors.ant("/api/mobile/**"))
@@ -72,10 +72,10 @@ public class SwaggerConfig {
 				"Public API",
 				"API for public use and integration",
 				"1.0",
-				"[[terms_of_service_url]]",
+				"tos",
 				new Contact("Dmytro Romenskyi", "https://ua.linkedin.com/in/dmytro-romenskyi-87035524", "d.romenskyi@gmail.com"),
 				"This software is licensed under the terms of the MIT license.",
-				"[[licence_url]]");
+				"res/app/LICENSE.md");
 		return apiInfo;
 		
 	}

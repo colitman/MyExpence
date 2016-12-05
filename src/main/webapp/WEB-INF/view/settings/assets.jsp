@@ -21,9 +21,10 @@
 				<header class="page-header">
 					<h2>Assets</h2>
 					<ol class="breadcrumb">
-						<li>
-							<a href="#">Settings</a>
+						<li class="c-home-crumb">
+							<a href="${app}/"><i class="fa fa-home"></i></a>
 						</li>
+						<li class="active">Settings</li>
 						<li class="active">Assets</li>
 					</ol>
 				</header>

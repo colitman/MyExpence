@@ -22,9 +22,12 @@
 					<h2>Configure asset</h2>
 					
 					<ol class="breadcrumb">
-						<li><a href="#">Settings</a></li>
-						<li><a href="#">Assets</a></li>
-						<li class="active">Asset</li>
+						<li class="c-home-crumb">
+							<a href="${app}/"><i class="fa fa-home"></i></a>
+						</li>
+						<li class="active">Settings</li>
+						<li>assetsSettings</li>
+						<li class="active"></li>
 					</ol>
 				</header>
 				

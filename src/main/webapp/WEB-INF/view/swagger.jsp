@@ -24,9 +24,6 @@
   <script src='webjars/springfox-swagger-ui/lib/handlebars-2.0.0.js' type='text/javascript'></script>
   <script src='webjars/springfox-swagger-ui/lib/underscore-min.js' type='text/javascript'></script>
   <script src='webjars/springfox-swagger-ui/lib/backbone-min.js' type='text/javascript'></script>
-  <%--
-  <script src='webjars/springfox-swagger-ui/swagger-ui.min.js' type='text/javascript'></script>
-  --%>
   <script src='${app}/res/swagger/js/swagger-ui.js' type='text/javascript'></script>
   <script src='webjars/springfox-swagger-ui/lib/highlight.7.3.pack.js' type='text/javascript'></script>
   <script src='webjars/springfox-swagger-ui/lib/jsoneditor.min.js' type='text/javascript'></script>
@@ -40,7 +37,7 @@
 <body class="swagger-section">
 <div id='header'>
   <div class="swagger-ui-wrap">
-    <a id="logo" href="http://swagger.io">MyExpense - Swagger</a>
+    <a id="logo" href="http://swagger.io">Swagger</a> - <a id="" href="${app}/">MyExpense</a>
 
     <form id='api_selector'>
       <div class='input'>

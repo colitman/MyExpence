@@ -18,7 +18,17 @@
 			<c:import url="/imports/mainNav"></c:import>
 			
 			<main>
-				<header class="page-header"><h2>Currencies</h2></header>
+				<header class="page-header">
+					<h2>Currencies</h2>
+					
+					<ol class="breadcrumb">
+						<li class="c-home-crumb">
+							<a href="${app}/"><i class="fa fa-home"></i></a>
+						</li>
+						<li class="active">Settings</li>
+						<li class="active">Currencies</li>
+					</ol>
+				</header>
 				
 				<section id="c-add-currency-form">
 					<form action="" method="post" class="form-inline">
