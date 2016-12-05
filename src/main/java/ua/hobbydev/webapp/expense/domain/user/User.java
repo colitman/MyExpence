@@ -7,6 +7,7 @@ package ua.hobbydev.webapp.expense.domain.user;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import ua.hobbydev.webapp.expense.domain.IdentifiedEntityInterface;
+import ua.hobbydev.webapp.expense.domain.asset.BankAccount;
 import ua.hobbydev.webapp.expense.domain.asset.Cash;
 import ua.hobbydev.webapp.expense.domain.asset.CreditCard;
 import ua.hobbydev.webapp.expense.domain.asset.DebitCard;
@@ -45,6 +46,9 @@ public class User implements IdentifiedEntityInterface, UserDetails {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CreditCard> creditCardAssets = new ArrayList<CreditCard>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<BankAccount> bankAccountAssets = new ArrayList<BankAccount>();
 
     @Override
     public Long getId() {

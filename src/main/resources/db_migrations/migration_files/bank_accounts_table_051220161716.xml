@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+		xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      		http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+	
+	<changeSet id="bank_accounts_table_051220161716" author="romenskyi" dbms="postgresql">
+		
+		<!--
+			Creating sequences
+		-->
+		<createSequence sequenceName="bank_account_assets_id_seq" startValue="1" ></createSequence>
+		
+		<!--
+			Creating tables
+		-->
+		
+		<createTable tableName="bank_account_assets">
+			<column name="id" type="integer" defaultValueSequenceNext="bank_account_assets_id_seq">
+				<constraints primaryKey="true" unique="true" nullable="false"></constraints>
+			</column>
+			<column name="user_id" type="integer"></column>
+			<column name="currency_id" type="integer"></column>
+			<column name="name" type="text">
+				<constraints nullable="false"></constraints>
+			</column>
+			<column name="type" type="text">
+				<constraints nullable="false"></constraints>
+			</column>
+			<column name="amount" type="numeric">
+				<constraints nullable="false"></constraints>
+			</column>
+		</createTable>
+		
+		<!--
+			Creating references
+		-->
+		
+		<addForeignKeyConstraint baseTableName="bank_account_assets"
+								 baseColumnNames="user_id"
+								 referencedTableName="users"
+								 referencedColumnNames="id"
+								 constraintName="bank_account_assets_user_id___users_id"
+								 onDelete="CASCADE"
+								 onUpdate="CASCADE"></addForeignKeyConstraint>
+		
+		<addForeignKeyConstraint baseTableName="bank_account_assets"
+								 baseColumnNames="currency_id"
+								 referencedTableName="currencies"
+								 referencedColumnNames="id"
+								 constraintName="bank_account_assets_currency_id___currencies_id"
+								 onDelete="RESTRICT"
+								 onUpdate="CASCADE"></addForeignKeyConstraint>
+		
+	</changeSet>
+</databaseChangeLog>

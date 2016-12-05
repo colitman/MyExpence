@@ -22,6 +22,10 @@ public class AssetFactory {
             return new CreditCard();
         }
 
+        if(AssetType.BANK_ACCOUNT.equals(type)) {
+            return new BankAccount();
+        }
+
         return null;
     }
 }
