@@ -8,6 +8,8 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import ua.hobbydev.webapp.expense.domain.IdentifiedEntityInterface;
 import ua.hobbydev.webapp.expense.domain.asset.Cash;
+import ua.hobbydev.webapp.expense.domain.asset.CreditCard;
+import ua.hobbydev.webapp.expense.domain.asset.DebitCard;
 import ua.hobbydev.webapp.expense.domain.currency.Currency;
 
 import javax.persistence.*;
@@ -37,6 +39,12 @@ public class User implements IdentifiedEntityInterface, UserDetails {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Cash> cashAssets = new ArrayList<Cash>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<DebitCard> debitCardAssets = new ArrayList<DebitCard>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<CreditCard> creditCardAssets = new ArrayList<CreditCard>();
 
     @Override
     public Long getId() {
