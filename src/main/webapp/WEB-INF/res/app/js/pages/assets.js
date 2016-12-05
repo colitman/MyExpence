@@ -67,6 +67,10 @@ function updateCurrencySelect(data) {
 		
 		$(option).attr('value', data[i].id);
 		$(option).text(data[i].symbol + ' ' + data[i].name + ' (' + data[i].code + ')');
+		
+		if(data[i].defaultCurrency) {
+			$(option).prop('selected', 'selected');
+		}
 				
 		$(select).append(option);
 	}

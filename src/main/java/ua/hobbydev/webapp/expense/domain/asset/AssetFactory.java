@@ -14,6 +14,10 @@ public class AssetFactory {
             return new Cash();
         }
 
+        if(AssetType.DEBIT_CARD.equals(type)) {
+            return new DebitCard();
+        }
+
         return null;
     }
 }

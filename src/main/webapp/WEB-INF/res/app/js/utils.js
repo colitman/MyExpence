@@ -13,6 +13,10 @@ function closeDeleteFailureAlert() {
 		event.preventDefault();
 		$('#c-delete-failure-alert').addClass('hidden');
 	});
+	
+	$('#c-delete-confirmation-modal').on('hidden.bs.modal', function (event) {
+		$('#c-delete-failure-alert').addClass('hidden');
+	})
 }
 
 function generateBreadcrumbs() {

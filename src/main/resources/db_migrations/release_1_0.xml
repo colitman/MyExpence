@@ -6,6 +6,7 @@
                       		http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
 	
 	<include file="migration_files/base_tables_051220161327.xml" relativeToChangelogFile="true"/>
+	<include file="migration_files/debit_cards_table_051220161636.xml" relativeToChangelogFile="true" />
 	
 	<include file="data_init_files/seed_data_051220161332.xml" relativeToChangelogFile="true"></include>
 </databaseChangeLog>
