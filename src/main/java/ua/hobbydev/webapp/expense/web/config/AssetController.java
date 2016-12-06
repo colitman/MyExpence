@@ -19,7 +19,6 @@ public class AssetController {
     @RequestMapping(path = "{type}/{id}/configure", method = RequestMethod.GET)
     public ModelAndView configureAssetPage(@PathVariable Long id, @PathVariable String type, ModelAndView mv) {
         mv.addObject("id", id);
-        mv.addObject("type", type);
         mv.setViewName("settings/assets/configure");
         return mv;
     }

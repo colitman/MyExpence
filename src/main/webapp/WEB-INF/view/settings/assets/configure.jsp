@@ -12,7 +12,6 @@
 	<head>
 		<c:import url="/imports/head?pageTitle=Configure Asset"></c:import>
 		<meta name="target_id" content="${id}">
-		<meta name="target_type" content="${type}">
 	</head>
 	
 	<body>
@@ -29,9 +28,43 @@
 						</li>
 						<li class="active">Settings</li>
 						<li>assetsSettings</li>
-						<li class="active c-generate-crumb-name">#GenerateMe</li>
+						<li class="active">#GenerateMe</li>
 					</ol>
 				</header>
+				
+				<form id="c-configure-asset-form" action="" method="post" class="form-horizontal" role="form">
+				    <div class="form-group">
+				        <legend>#GenerateMe</legend>
+				    </div>
+					
+					<div class="form-group">
+						<label for="name" class="col-sm-3 control-label">Name</label>
+						<div class="col-sm-4">
+							<input type="text" class="form-control" name="name" id="name" placeholder="Name" required="required" autofocus="autofocus">
+						</div>
+					</div>
+					
+					<div class="form-group">
+						<label for="currency" class="col-sm-3 control-label">Currency</label>
+						<div class="col-sm-4">
+							<select class="form-control" name="currency" id="currency" placeholder="Currency" required="required">
+							</select>
+						</div>
+					</div>
+					
+					<div class="form-group">
+						<label for="amount" class="col-sm-3 control-label">Amount</label>
+						<div class="col-sm-4">
+							<input type="number"  class="form-control" name="amount" id="amount" placeholder="Amount">
+						</div>
+					</div>
+				
+				    <div class="form-group">
+				        <div class="col-sm-4 col-sm-offset-3">
+				            <button type="submit" class="btn btn-primary pull-right">Submit</button>
+				        </div>
+				    </div>
+				</form>
 				
 			</main>
 			
@@ -46,6 +79,8 @@
 		<script src="${app}/res/app/js/services/currencyServices.js"></script>
 		<script src="${app}/res/app/js/pages/assets.js"></script>
 		<script src="${app}/res/app/js/services/assetServices.js"></script>
+		<script src="${app}/res/app/js/pages/assetConfig.js"></script>
+		<script src="${app}/res/app/js/init/assetConfig.js"></script>
 
 	</body>
 </html>
