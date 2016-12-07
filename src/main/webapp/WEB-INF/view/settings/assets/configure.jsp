@@ -12,6 +12,7 @@
 	<head>
 		<c:import url="/imports/head?pageTitle=Configure Asset"></c:import>
 		<meta name="target_id" content="${id}">
+		<meta name="target_type" content="${type}">
 	</head>
 	
 	<body>
@@ -32,10 +33,13 @@
 					</ol>
 				</header>
 				
-				<form id="c-configure-asset-form" action="" method="post" class="form-horizontal" role="form">
+				<form id="c-js-configure-asset-form" action="" method="post" class="form-horizontal" role="form">
 				    <div class="form-group">
 				        <legend>#GenerateMe</legend>
 				    </div>
+					
+					<input type="hidden" name="id" id="id" required="required" />
+					<input type="hidden" name="type" id="type" required="required" />
 					
 					<div class="form-group">
 						<label for="name" class="col-sm-3 control-label">Name</label>
@@ -75,12 +79,14 @@
 		</div>
 
 		<c:import url="/imports/scripts"></c:import>
-		<script src="${app}/res/app/js/pages/currencies.js"></script>
-		<script src="${app}/res/app/js/services/currencyServices.js"></script>
-		<script src="${app}/res/app/js/pages/assets.js"></script>
-		<script src="${app}/res/app/js/services/assetServices.js"></script>
+		<script src="${app}/res/app/js/services/assetService.js"></script>
+		<script src="${app}/res/app/js/services/currencyService.js"></script>
+		<script src="${app}/res/app/js/services/paymentSystemService.js"></script>
+		<script src="${app}/res/app/js/models/currencies.js"></script>
+		<script src="${app}/res/app/js/models/assetConfig.js"></script>
+		<script src="${app}/res/app/js/views/assetConfig.js"></script>
+		<script src="${app}/res/app/js/controllers/assetConfig.js"></script>
 		<script src="${app}/res/app/js/pages/assetConfig.js"></script>
-		<script src="${app}/res/app/js/init/assetConfig.js"></script>
 
 	</body>
 </html>

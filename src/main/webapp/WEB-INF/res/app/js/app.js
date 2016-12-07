@@ -32,16 +32,19 @@
 			
 			$(operatedCrumbs).each(function(index, crumbItem) {
 				var pageCode = $(crumbItem).text();
-				$(crumbItem).html('');
 				
-				var crumbURL = myExpense.PAGES[pageCode].url;
-				var crumbName = myExpense.PAGES[pageCode].name;
+				var crumbTemplate = myExpense.PAGES[pageCode];
 				
-				var crumbLink = $(document.createElement('a'));
-				crumbLink.attr('href', crumbURL);
-				crumbLink.text(crumbName);
+				if(crumbTemplate !== undefined) {
+					var crumbURL = myExpense.PAGES[pageCode].url;
+					var crumbName = myExpense.PAGES[pageCode].name;
 				
-				$(crumbItem).html(crumbLink);
+					var crumbLink = $(document.createElement('a'));
+					crumbLink.attr('href', crumbURL);
+					crumbLink.text(crumbName);
+					
+					$(crumbItem).html(crumbLink);
+				}
 			});
 			
 			var currentCrumb = $('.active', crumbsContainer).filter(':last');

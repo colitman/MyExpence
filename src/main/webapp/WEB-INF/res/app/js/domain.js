@@ -23,13 +23,27 @@ function AssetType() {
 	return model;
 }
 
+function PaymentSystem() {
+	var model = {
+		name:'',
+		label:''
+	}
+	
+	Object.seal(model);
+	return model;
+}
+
 function Asset() {
 	var model = {
 		id:'',
 		name:'',
 		type:'',
 		label:'',
-		currency:''
+		currency:'',
+		amount:'',
+		paymentSystem:'',
+		bankName:'',
+		limit:''
 	}
 	
 	Object.seal(model);

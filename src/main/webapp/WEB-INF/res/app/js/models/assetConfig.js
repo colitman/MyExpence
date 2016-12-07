@@ -18,24 +18,22 @@ It also should have the following private methods:
 	
 	var observable = new Observable();
 	
-	var assetsModel = {
+	var assetModel = {
 		__proto__: observable,
 		
-		getAssets: function() {
-			return aScope.assetService.getAssets();
+		getPaymentSystems: function() {
+			return aScope.paymentSystemService.getPaymentSystems();
 		},
 		
-		getAssetTypes: function() {
-			return aScope.assetService.getAssetTypes();
-		},
-		
-		getAsset: function(id, type) {
+		getAsset: function() {
+			var id = $('meta[name="target_id"]').attr('content');
+			var type = $('meta[name="target_type"]').attr('content');
 			return aScope.assetService.getAssetById(id, type);
 		},
 		
-		addAsset: function(assetData) {
+		updateAsset: function(assetData) {
 			var _this = this;
-			aScope.assetService.createAsset(assetData)
+			aScope.assetService.updateAsset(assetData)
 				.done(function(data) {
 					_this.setChanged();
 					_this.notifyObservers(_this);
@@ -43,20 +41,11 @@ It also should have the following private methods:
 				.fail(function(jqXHR, textStatus, errorThrown) {
 					console.log(jqXHR.responseText);
 				});
-		},
-		
-		deleteAsset: function(id, type) {
-			var _this = this;
-			return aScope.assetService.deleteAsset(id, type)
-				.done(function(data) {
-					_this.setChanged();
-					_this.notifyObservers(_this);
-				});
 		}
 	
 	};
 	
 	
-	aScope.assetsModel = assetsModel;
+	aScope.assetModel = assetModel;
 	
 })($EX);

@@ -6,6 +6,11 @@ package ua.hobbydev.webapp.expense.api.model;
 
 
 import ua.hobbydev.webapp.expense.domain.asset.Asset;
+import ua.hobbydev.webapp.expense.domain.asset.BankRelatedAsset;
+import ua.hobbydev.webapp.expense.domain.asset.Card;
+import ua.hobbydev.webapp.expense.domain.asset.CreditCard;
+
+import java.math.BigDecimal;
 
 public class AssetViewModel implements ViewModelInterface<Asset> {
 
@@ -14,6 +19,10 @@ public class AssetViewModel implements ViewModelInterface<Asset> {
     private String type;
     private String label;
     private Long currency;
+    private BigDecimal amount;
+    private String paymentSystem;
+    private String bankName;
+    private BigDecimal limit;
 
     public AssetViewModel() {}
 
@@ -23,6 +32,22 @@ public class AssetViewModel implements ViewModelInterface<Asset> {
         this.type = domain.getType().toString();
         this.label = domain.getType().getLabel();
         this.currency = domain.getCurrency().getId();
+        this.amount = domain.getAmount();
+
+        if(domain instanceof BankRelatedAsset) {
+            BankRelatedAsset bankRelatedAsset = (BankRelatedAsset)domain;
+            this.bankName = bankRelatedAsset.getBankName();
+        }
+
+        if(domain instanceof Card) {
+            Card cardAsset = (Card) domain;
+            this.paymentSystem = cardAsset.getPaymentSystem() == null? "": cardAsset.getPaymentSystem().name();
+        }
+
+        if(domain instanceof CreditCard) {
+            CreditCard creditCardAsset = (CreditCard) domain;
+            this.limit = creditCardAsset.getLimit();
+        }
     }
 
     @Override
@@ -68,5 +93,37 @@ public class AssetViewModel implements ViewModelInterface<Asset> {
 
     public void setLabel(String label) {
         this.label = label;
+    }
+
+    public BigDecimal getAmount() {
+        return amount;
+    }
+
+    public void setAmount(BigDecimal amount) {
+        this.amount = amount;
+    }
+
+    public String getPaymentSystem() {
+        return paymentSystem;
+    }
+
+    public void setPaymentSystem(String paymentSystem) {
+        this.paymentSystem = paymentSystem;
+    }
+
+    public String getBankName() {
+        return bankName;
+    }
+
+    public void setBankName(String bankName) {
+        this.bankName = bankName;
+    }
+
+    public BigDecimal getLimit() {
+        return limit;
+    }
+
+    public void setLimit(BigDecimal limit) {
+        this.limit = limit;
     }
 }

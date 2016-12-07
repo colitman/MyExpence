@@ -133,4 +133,23 @@ public class AssetsApiController {
         defaultService.delete(assetClass, id);
         return new ResponseEntity<String>("Deleted", HttpStatus.OK);
     }
+
+    @PreAuthorize("isAuthenticated()")
+    @RequestMapping(path="{type}/{id}", method = RequestMethod.PUT)
+    public ResponseEntity<String> updateAssetById(@PathVariable Long id, @PathVariable String type, @ModelAttribute AssetViewModel assetVm, @CurrentUser User currentUser) {
+        Asset asset = null;
+
+        AssetType enumType = AssetType.valueOf(type);
+        Class<? extends Asset> assetClass = AssetFactory.getAssetOfType(enumType).getClass();
+
+        try {
+            asset = defaultService.get(assetClass, id);
+            asset.setName(assetVm.getName());
+            defaultService.update(asset);
+        } catch (ResourceNotFoundException e) {
+            return new ResponseEntity<String>(HttpStatus.NOT_FOUND);
+        }
+
+        return new ResponseEntity<String>("Updated", HttpStatus.OK);
+    }
 }
