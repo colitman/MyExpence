@@ -125,7 +125,7 @@ public class AssetsApiController {
     }
 
     @PreAuthorize("isAuthenticated()")
-    @RequestMapping(path="{type}/{id}/delete", method = RequestMethod.POST)
+    @RequestMapping(path="{type}/{id}", method = RequestMethod.DELETE)
     public ResponseEntity<String> deleteAssetById(@PathVariable Long id, @PathVariable String type, @CurrentUser User currentUser) {
         AssetType enumType = AssetType.valueOf(type);
         Class<? extends Asset> assetClass = AssetFactory.getAssetOfType(enumType).getClass();

@@ -126,7 +126,7 @@ It should expose the following public access interfaces:
 		__proto__: observable,
 		
 		update: function(currenciesModel) {
-			var currencies = currenciesModel.getCurrencies()
+			currenciesModel.getCurrencies()
 				.done(function(currenciesData) {
 					$('button[type="reset"]', addCurrencyForm).click();
 					$(deleteModal).modal('hide');

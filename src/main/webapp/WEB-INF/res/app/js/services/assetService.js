@@ -49,7 +49,7 @@
 		updateAsset: function(assetData) {
 			return $.ajax({
 				url   : $EX.WEB_API_ROOT + '/assets/' + assetData.type + '/' + assetData.id,
-				method: 'UPDATE',
+				method: 'PUT',
 				data  : assetData
 			});
 		}

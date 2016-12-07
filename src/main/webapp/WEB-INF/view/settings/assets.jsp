@@ -20,8 +20,8 @@
 			<main>
 				<header class="page-header">
 					<h2>Assets</h2>
-					<ol class="breadcrumb">
-						<li class="c-home-crumb">
+					<ol class="breadcrumb" id="c-js-crumbs">
+						<li class="c-js-home-crumb">
 							<a href="${app}/"><i class="fa fa-home"></i></a>
 						</li>
 						<li class="active">Settings</li>
@@ -29,7 +29,7 @@
 					</ol>
 				</header>
 				
-				<section id="c-add-asset-form">
+				<section id="c-js-add-asset-form">
 					<form action="" method="post" class="form-inline">
 						<sec:csrfInput/>
 						<div class="form-group">
@@ -54,7 +54,7 @@
 					</form>
 				</section>
 				
-				<section id="c-added-assets-table">
+				<section id="c-js-added-assets-table">
 					<div class="table-responsive">
 						<table class="table table-hover">
 							<thead>
@@ -86,11 +86,13 @@
 		</div>
 
 		<c:import url="/imports/scripts"></c:import>
-		<script src="${app}/res/app/js/pages/currencies.js"></script>
-		<script src="${app}/res/app/js/services/currencyServices.js"></script>
+		<script src="${app}/res/app/js/services/assetService.js"></script>
+		<script src="${app}/res/app/js/services/currencyService.js"></script>
+		<script src="${app}/res/app/js/models/currencies.js"></script>
+		<script src="${app}/res/app/js/models/assets.js"></script>
+		<script src="${app}/res/app/js/views/assets.js"></script>
+		<script src="${app}/res/app/js/controllers/assets.js"></script>
 		<script src="${app}/res/app/js/pages/assets.js"></script>
-		<script src="${app}/res/app/js/services/assetServices.js"></script>
-		<script src="${app}/res/app/js/init/assets.js"></script>
 
 	</body>
 </html>
