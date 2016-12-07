@@ -21,8 +21,8 @@
 				<header class="page-header">
 					<h2>Currencies</h2>
 					
-					<ol class="breadcrumb">
-						<li class="c-home-crumb">
+					<ol class="breadcrumb" id="c-js-crumbs">
+						<li class="c-js-home-crumb">
 							<a href="${app}/"><i class="fa fa-home"></i></a>
 						</li>
 						<li class="active">Settings</li>
@@ -30,7 +30,7 @@
 					</ol>
 				</header>
 				
-				<section id="c-add-currency-form">
+				<section id="c-js-add-currency-form">
 					<form action="" method="post" class="form-inline">
 						<sec:csrfInput/>
 						<div class="form-group">
@@ -53,7 +53,7 @@
 					</form>
 				</section>
 				
-				<section id="c-choose-default-currency-form">
+				<section id="c-js-choose-default-currency-form">
 					<form action="" method="post" class="form-inline" role="form">
 						<sec:csrfInput/>
 						<div class="form-group">
@@ -67,10 +67,11 @@
 					</form>
 				</section>
 				
-				<section id="c-edit-currency-form" class="hidden">
+				<section id="c-js-edit-currency-form" class="hidden">
 					<form action="" method="post" class="form-inline">
 						<sec:csrfInput/>
 						<input type="hidden" value="" name="id" id="id">
+						<input type="hidden" value="" name="defaultCurrency" id="defaultCurrency">
 						<div class="form-group">
 							<label class="sr-only" for="name">Name</label>
 							<input type="text" class="form-control" name="name" id="name" placeholder="Name" required="required">
@@ -87,11 +88,12 @@
 						</div>
 						
 						<button type="submit" class="btn btn-primary">Save changes</button>
-						<button type="reset" class="btn btn-danger">Cancel</button>
+						<button id="c-js-cancel-edit-currency-button" type="button" class="btn btn-warning">Cancel</button>
+						<button type="reset" class="btn btn-danger">Close</button>
 					</form>
 				</section>
 				
-				<section id="c-added-currencies-table">
+				<section id="c-js-currencies-table">
 					<div class="table-responsive">
 						<table class="table table-hover">
 							<thead>
@@ -123,9 +125,11 @@
 		</div>
 
 		<c:import url="/imports/scripts"></c:import>
+		<script src="${app}/res/app/js/services/currencyService.js"></script>
+		<script src="${app}/res/app/js/models/currencies.js"></script>
+		<script src="${app}/res/app/js/views/currencies.js"></script>
+		<script src="${app}/res/app/js/controllers/currencies.js"></script>
 		<script src="${app}/res/app/js/pages/currencies.js"></script>
-		<script src="${app}/res/app/js/services/currencyServices.js"></script>
-		<script src="${app}/res/app/js/init/currencies.js"></script>
 
 	</body>
 </html>

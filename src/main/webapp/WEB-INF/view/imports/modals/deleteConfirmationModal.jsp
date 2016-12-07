@@ -18,7 +18,7 @@
 				
 				<div id="c-delete-failure-alert" class="alert alert-danger hidden">
 					<button type="button" class="close">&times;</button>
-					<p id="c-delete-failure-message"></p>
+					<p id="c-delete-failure-message" class="c-js-error-message-container"></p>
 				</div>
 			</div>
 			<footer class="modal-footer">

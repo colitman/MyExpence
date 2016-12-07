@@ -16,49 +16,10 @@ It also should have the following private methods:
 
 (function(aScope, undefined){
 	
-	var observers = [];
-	var changed = false;
-	var _this = this;
-	
-	var countObservers = function() {
-		return observers.length;
-	};
-	
-	var isChanged = function() {
-		return changed;
-	};
-	
-	var setChanged = function() {
-		changed = true;
-	};
-	
-	var clearChanged = function() {
-		changed = false;
-	};
-	
-	var deleteObservers = function() {
-		observers.length = 0;
-	};
-	
-	var notifyObservers = function() {
-		
-		if(!isChanged()) {
-			return;
-		}
-		
-		for(var i = 0; i < observers.length; i++) {
-			var observer = observers[i];
-			observer.update(_this);
-		}
-		
-		clearChanged();
-	};
+	var observable = new Observable();
 	
 	var currenciesModel = {
-		
-		subscribe: function(observer){
-			observers.push(observer);
-		},
+		__proto__: observable,
 		
 		getCurrencies: function() {
 			return aScope.curencyService.getCurrencies();
@@ -69,10 +30,11 @@ It also should have the following private methods:
 		},
 		
 		addCurrency: function(currencyData) {
+			var _this = this;
 			aScope.curencyService.createCurrency(currencyData)
 				.done(function(data) {
-					setChanged();
-					notifyObservers();
+					_this.setChanged();
+					_this.notifyObservers(_this);
 				})
 				.fail(function(jqXHR, textStatus, errorThrown) {
 					console.log(jqXHR.responseText);
@@ -80,10 +42,11 @@ It also should have the following private methods:
 		},
 		
 		updateCurrency: function(currencyData) {
+			var _this = this;
 			aScope.curencyService.updateCurrency(currencyData)
 				.done(function(data) {
-					setChanged();
-					notifyObservers();
+					_this.setChanged();
+					_this.notifyObservers(_this);
 				})
 				.fail(function(jqXHR, textStatus, errorThrown) {
 					console.log(jqXHR.responseText);
@@ -91,10 +54,11 @@ It also should have the following private methods:
 		},
 		
 		setDefaultCurrency: function(id) {
+			var _this = this;
 			aScope.curencyService.setDefaultCurrency(id)
 				.done(function(data) {
-					setChanged();
-					notifyObservers();
+					_this.setChanged();
+					_this.notifyObservers(_this);
 				})
 				.fail(function(jqXHR, textStatus, errorThrown) {
 					console.log(jqXHR.responseText);
@@ -102,13 +66,11 @@ It also should have the following private methods:
 		},
 		
 		deleteCurrency: function(id) {
-			aScope.curencyService.deleteCurrency(id)
+			var _this = this;
+			return aScope.curencyService.deleteCurrency(id)
 				.done(function(data) {
-					setChanged();
-					notifyObservers();
-				})
-				.fail(function(jqXHR, textStatus, errorThrown) {
-					console.log(jqXHR.responseText);
+					_this.setChanged();
+					_this.notifyObservers(_this);
 				});
 		}
 	

@@ -22,8 +22,8 @@
 				<header class="page-header">
 					<h2>Configure asset</h2>
 					
-					<ol class="breadcrumb">
-						<li class="c-home-crumb">
+					<ol class="breadcrumb" id="c-js-crumbs">
+						<li class="c-js-home-crumb">
 							<a href="${app}/"><i class="fa fa-home"></i></a>
 						</li>
 						<li class="active">Settings</li>

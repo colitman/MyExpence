@@ -41,7 +41,7 @@
 		updateCurrency: function(currencyData) {
 			return $.ajax({
 				url   : $EX.WEB_API_ROOT + '/currencies/' + currencyData.id,
-				method: 'UPDATE',
+				method: 'PUT',
 				data  : currencyData
 			});
 		},
@@ -49,7 +49,7 @@
 		setDefaultCurrency: function(id) {
 			return $.ajax({
 				url   : $EX.WEB_API_ROOT + '/currencies/' + id + '/default',
-				method: 'UPDATE'
+				method: 'PUT'
 			});
 		}
 	}

@@ -35,8 +35,8 @@ public class CurrenciesApiController {
     private CurrencyServiceInterface currencyService;
 
     @PreAuthorize("isAuthenticated()")
-    @RequestMapping(path="default", method = RequestMethod.POST)
-    public ResponseEntity<String> setDefaultCurrency(@RequestParam Long id, @CurrentUser User currentUser) {
+    @RequestMapping(path="{id}/default", method = RequestMethod.PUT)
+    public ResponseEntity<String> setDefaultCurrency(@PathVariable Long id, @CurrentUser User currentUser) {
 
         User user = userService.loadUserByUsername(currentUser.getUsername());
 
@@ -103,7 +103,7 @@ public class CurrenciesApiController {
     }
 
     @PreAuthorize("isAuthenticated()")
-    @RequestMapping(path="{id}/delete", method = RequestMethod.POST)
+    @RequestMapping(path="{id}", method = RequestMethod.DELETE)
     public ResponseEntity<String> deleteCurrencyById(@PathVariable Long id, @CurrentUser User currentUser) {
         try {
             currencyService.delete(id);
@@ -114,7 +114,7 @@ public class CurrenciesApiController {
     }
 
     @PreAuthorize("isAuthenticated()")
-    @RequestMapping(path="{id}/update", method = RequestMethod.POST)
+    @RequestMapping(path="{id}", method = RequestMethod.PUT)
     public ResponseEntity<String> updateCurrencyById(@PathVariable Long id, @ModelAttribute CurrencyViewModel currencyVm, @CurrentUser User currentUser) {
         Currency currency = null;
 
