@@ -20,8 +20,8 @@ deploy:
   provider: heroku
   api_key: 7a9136c5-e6b1-41e1-95a0-274dc570d283
   app:
-    master: <>
-    dev: <>-dev
+    master: hdexp
+    dev: hdexp-dev
 
 # notifications
 #notifications:
