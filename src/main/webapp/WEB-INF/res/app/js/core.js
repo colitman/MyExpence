@@ -58,13 +58,3 @@ function Observable() {
 	
 	return observable;
 }
-
-function DeletionException(message, cause) {
-	var exception = {
-		message:message,
-		cause:cause
-	}
-	
-	Object.seal(exception);
-	return exception;
-}

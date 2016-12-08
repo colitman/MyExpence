@@ -13,14 +13,14 @@ import org.springframework.util.ClassUtils;
 import org.springframework.web.bind.annotation.*;
 import ua.hobbydev.webapp.expense.Application;
 import ua.hobbydev.webapp.expense.EnumUtils.AssetEnums.AssetType;
+import ua.hobbydev.webapp.expense.EnumUtils.AssetEnums.PaymentSystemType;
 import ua.hobbydev.webapp.expense.api.model.AssetTypeViewModel;
 import ua.hobbydev.webapp.expense.api.model.AssetViewModel;
 import ua.hobbydev.webapp.expense.business.DefaultServiceInterface;
 import ua.hobbydev.webapp.expense.business.ResourceNotFoundException;
 import ua.hobbydev.webapp.expense.business.users.UserServiceInterface;
 import ua.hobbydev.webapp.expense.config.CurrentUser;
-import ua.hobbydev.webapp.expense.domain.asset.Asset;
-import ua.hobbydev.webapp.expense.domain.asset.AssetFactory;
+import ua.hobbydev.webapp.expense.domain.asset.*;
 import ua.hobbydev.webapp.expense.domain.currency.Currency;
 import ua.hobbydev.webapp.expense.domain.user.User;
 
@@ -145,6 +145,27 @@ public class AssetsApiController {
         try {
             asset = defaultService.get(assetClass, id);
             asset.setName(assetVm.getName());
+
+            Currency currency = defaultService.get(Currency.class, assetVm.getCurrency());
+            asset.setCurrency(currency);
+
+            asset.setAmount(assetVm.getAmount());
+
+            if(asset instanceof BankRelatedAsset) {
+                BankRelatedAsset bAsset = (BankRelatedAsset) asset;
+                bAsset.setBankName(assetVm.getBankName());
+            }
+
+            if(asset instanceof Card) {
+                Card dAsset = (Card) asset;
+                dAsset.setPaymentSystem(PaymentSystemType.valueOf(assetVm.getPaymentSystem()));
+            }
+
+            if(asset instanceof CreditCard) {
+                CreditCard cAsset = (CreditCard) asset;
+                cAsset.setLimit(assetVm.getLimit());
+            }
+
             defaultService.update(asset);
         } catch (ResourceNotFoundException e) {
             return new ResponseEntity<String>(HttpStatus.NOT_FOUND);

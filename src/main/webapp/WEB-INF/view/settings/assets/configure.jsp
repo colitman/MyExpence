@@ -29,14 +29,12 @@
 						</li>
 						<li class="active">Settings</li>
 						<li>assetsSettings</li>
-						<li class="active">#GenerateMe</li>
+						<li class="active"></li>
 					</ol>
 				</header>
 				
 				<form id="c-js-configure-asset-form" action="" method="post" class="form-horizontal" role="form">
-				    <div class="form-group">
-				        <legend>#GenerateMe</legend>
-				    </div>
+					<legend></legend>
 					
 					<input type="hidden" name="id" id="id" required="required" />
 					<input type="hidden" name="type" id="type" required="required" />
@@ -65,7 +63,10 @@
 				
 				    <div class="form-group">
 				        <div class="col-sm-4 col-sm-offset-3">
-				            <button type="submit" class="btn btn-primary pull-right">Submit</button>
+				            <div class="pull-right">
+								<a class="btn btn-default" role="button" href="${app}/settings/assets">Go Back</a>
+								<button type="submit" class="btn btn-primary">Submit</button>
+							</div>
 				        </div>
 				    </div>
 				</form>

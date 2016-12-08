@@ -61,10 +61,98 @@ It should expose the following public access interfaces:
 	}
 	
 	var fillInAssetConfigureForm = function(assetData) {
+		
+		$('.c-js-generated', configureAssetForm).remove();
+		$('legend', configureAssetForm).text(assetData.name);
+		
 		$('#id', configureAssetForm).val(assetData.id);
 		$('#type', configureAssetForm).val(assetData.type);
 		$('#name', configureAssetForm).val(assetData.name);
 		$('#amount', configureAssetForm).val(assetData.amount);
+		
+		if(assetData.type === $EX.ASSET_TYPES.BANK_ACCOUNT ||
+			assetData.type === $EX.ASSET_TYPES.DEBIT_CARD ||
+			assetData.type === $EX.ASSET_TYPES.CREDIT_CARD) {
+			
+			var formGroupDiv = $(document.createElement('div'));
+			formGroupDiv.addClass('form-group c-js-generated');
+			
+			var label = $(document.createElement('label'));
+			label.attr('for', 'bankName');
+			label.addClass('col-sm-3 control-label');
+			label.text('Bank Name');
+			formGroupDiv.append(label);
+			
+			var inputDiv = $(document.createElement('div'));
+			inputDiv.addClass('col-sm-4');
+			formGroupDiv.append(inputDiv);
+			
+			var bankNameInput = $(document.createElement('input'));
+			bankNameInput.attr('type', 'text');
+			bankNameInput.addClass('form-control');
+			bankNameInput.attr('name', 'bankName');
+			bankNameInput.attr('id', 'bankName');
+			bankNameInput.attr('placeholder', 'Bank Name');
+			inputDiv.append(bankNameInput);
+			
+			bankNameInput.val(assetData.bankName);
+			
+			$('.form-group:nth-last-child(2)', configureAssetForm).after(formGroupDiv);
+			
+			if(assetData.type === $EX.ASSET_TYPES.DEBIT_CARD ||
+				assetData.type === $EX.ASSET_TYPES.CREDIT_CARD) {
+				
+				var formGroupDiv2 = $(document.createElement('div'));
+				formGroupDiv2.addClass('form-group c-js-generated');
+				
+				var label2 = $(document.createElement('label'));
+				label2.attr('for', 'paymentSystem');
+				label2.addClass('col-sm-3 control-label');
+				label2.text('Payment System');
+				formGroupDiv2.append(label2);
+				
+				var inputDiv2 = $(document.createElement('div'));
+				inputDiv2.addClass('col-sm-4');
+				formGroupDiv2.append(inputDiv2);
+				
+				var paymentSystemSelect = $(document.createElement('select'));
+				paymentSystemSelect.addClass('form-control');
+				paymentSystemSelect.attr('name', 'paymentSystem');
+				paymentSystemSelect.attr('id', 'paymentSystem');
+				paymentSystemSelect.attr('placeholder', 'Payment System');
+				inputDiv2.append(paymentSystemSelect);
+				
+				$('.form-group:nth-last-child(2)', configureAssetForm).after(formGroupDiv2);
+				
+				if(assetData.type === $EX.ASSET_TYPES.CREDIT_CARD) {
+					
+					var formGroupDiv3 = $(document.createElement('div'));
+					formGroupDiv3.addClass('form-group c-js-generated');
+					
+					var label3 = $(document.createElement('label'));
+					label3.attr('for', 'limit');
+					label3.addClass('col-sm-3 control-label');
+					label3.text('Credit Limit');
+					formGroupDiv3.append(label3);
+					
+					var inputDiv3 = $(document.createElement('div'));
+					inputDiv3.addClass('col-sm-4');
+					formGroupDiv3.append(inputDiv3);
+					
+					var limitInput = $(document.createElement('input'));
+					limitInput.attr('type', 'number');
+					limitInput.addClass('form-control');
+					limitInput.attr('name', 'limit');
+					limitInput.attr('id', 'limit');
+					limitInput.attr('placeholder', 'Credit Limit');
+					inputDiv3.append(limitInput);
+					
+					limitInput.val(assetData.limit);
+					
+					$('.form-group:nth-last-child(2)', configureAssetForm).after(formGroupDiv3);
+				}
+			}
+		}
 	}
 	
 	var observable = new Observable();

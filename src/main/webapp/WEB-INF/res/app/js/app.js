@@ -15,6 +15,13 @@
 			currenciesSettings: {url: appRoot + '/settings/currencies', name: 'Currencies'}
 		},
 		
+		ASSET_TYPES: {
+			CASH: 'CASH',
+			BANK_ACCOUNT: 'BANK_ACCOUNT',
+			DEBIT_CARD: 'DEBIT_CARD',
+			CREDIT_CARD: 'CREDIT_CARD'
+		},
+		
 		markRequiredFields: function(){
 			$('form').each(function(index, form) {
 				$('[required="required"]', form).each(function(index, control) {
