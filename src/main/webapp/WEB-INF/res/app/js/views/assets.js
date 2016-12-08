@@ -69,10 +69,12 @@ It should expose the following public access interfaces:
 			
 			var tdName = document.createElement('td');
 			var tdType = document.createElement('td');
+			var tdAmount = document.createElement('td');
 			var tdCurrency = document.createElement('td');
 			
 			$(tdName).text(assetData[i].name);
 			$(tdType).text(assetData[i].label);
+			$(tdAmount).text(assetData[i].amount);
 			
 			for(var j = 0; j < currencyData.length; j++) {
 				var currency = currencyData[j];
@@ -84,6 +86,7 @@ It should expose the following public access interfaces:
 			
 			$(row).append(tdName);
 			$(row).append(tdType);
+			$(row).append(tdAmount);
 			$(row).append(tdCurrency);
 			$(row).append(createAssetActions(assetData[i]));
 			

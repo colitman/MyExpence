@@ -65,7 +65,7 @@
 				        <div class="col-sm-4 col-sm-offset-3">
 				            <div class="pull-right">
 								<a class="btn btn-default" role="button" href="${app}/settings/assets">Go Back</a>
-								<button type="submit" class="btn btn-primary">Submit</button>
+								<button type="submit" class="btn btn-primary">Save Changes</button>
 							</div>
 				        </div>
 				    </div>

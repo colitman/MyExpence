@@ -53,4 +53,4 @@
 	</div>
 </nav>
 
-<section class="c-alerts"></section>
+<section id="c-js-alerts"></section>

@@ -33,13 +33,10 @@ It also should have the following private methods:
 		
 		updateAsset: function(assetData) {
 			var _this = this;
-			aScope.assetService.updateAsset(assetData)
+			return aScope.assetService.updateAsset(assetData)
 				.done(function(data) {
 					_this.setChanged();
-					_this.notifyObservers(_this);
-				})
-				.fail(function(jqXHR, textStatus, errorThrown) {
-					console.log(jqXHR.responseText);
+					_this.notifyObservers(_this, 'updated');
 				});
 		}
 	

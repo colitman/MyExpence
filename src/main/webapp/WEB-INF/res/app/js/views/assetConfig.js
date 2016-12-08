@@ -162,7 +162,11 @@ It should expose the following public access interfaces:
 		
 		__proto__: observable,
 		
-		update: function(assetModel) {
+		update: function(assetModel, message) {
+			
+			if('updated' === message) {
+				new Alert('success', 'Success!', 'Asset has been successfully updated.').show();
+			}
 			
 			assetModel.getAsset()
 				.done(function(assetData) {

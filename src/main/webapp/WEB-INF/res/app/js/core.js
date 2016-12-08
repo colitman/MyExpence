@@ -41,7 +41,7 @@ function Observable() {
 			observers.length = 0;
 		},
 		
-		notifyObservers: function(subject) {
+		notifyObservers: function(subject, message) {
 			
 			if(!this.isChanged()) {
 				return;
@@ -49,7 +49,7 @@ function Observable() {
 			
 			for(var i = 0; i < observers.length; i++) {
 				var observer = observers[i];
-				observer.update(subject);
+				observer.update(subject, message);
 			}
 			
 			this.clearChanged();

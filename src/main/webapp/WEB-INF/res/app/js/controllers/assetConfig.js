@@ -24,7 +24,10 @@ function AssetConfigController(model, undefined){
 				assetData.bankName = $('#bankName', changedAssetForm).val();
 				assetData.limit = $('#limit', changedAssetForm).val();
 				
-				assetModel.updateAsset(assetData);
+				assetModel.updateAsset(assetData)
+					.fail(function(jqXHR, textStatus, errorThrown) {
+						console.log(jqXHR.responseText);
+					});
 			}
 		}
 	};
