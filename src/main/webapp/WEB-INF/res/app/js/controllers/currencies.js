@@ -4,9 +4,8 @@
 Controller - Observer
 */
 
-function CurrenciesController(view, model, undefined){
+function CurrenciesController(model, undefined){
 	
-	var currenciesView = view;
 	var currenciesModel = model;
 	
 	var currenciesController = {

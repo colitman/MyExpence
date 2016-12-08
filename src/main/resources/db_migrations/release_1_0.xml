@@ -11,6 +11,8 @@
 	<include file="migration_files/bank_accounts_table_051220161716.xml" relativeToChangelogFile="true" />
 	<include file="migration_files/bank_name_and_payment_system_for_assets_051220161839.xml" relativeToChangelogFile="true" />
 	<include file="migration_files/add_limit_for_credit_card_assets_051220161918.xml" relativeToChangelogFile="true" />
+	<include file="migration_files/categories_table_081220161550.xml" relativeToChangelogFile="true" />
+	
 	
 	<include file="data_init_files/seed_data_051220161332.xml" relativeToChangelogFile="true"></include>
 </databaseChangeLog>

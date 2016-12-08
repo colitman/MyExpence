@@ -27,4 +27,11 @@ public class SettingsController {
         mv.setViewName("settings/assets");
         return mv;
     }
+
+    @PreAuthorize("isAuthenticated()")
+    @RequestMapping(path = "categories", method = RequestMethod.GET)
+    public ModelAndView categoriesConfigPage(ModelAndView mv) {
+        mv.setViewName("settings/categories");
+        return mv;
+    }
 }

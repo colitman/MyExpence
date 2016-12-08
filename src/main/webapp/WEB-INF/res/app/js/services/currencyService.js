@@ -54,6 +54,6 @@
 		}
 	}
 	
-	aScope.curencyService = currencyService;
+	aScope.currencyService = currencyService;
 	
 })($EX);

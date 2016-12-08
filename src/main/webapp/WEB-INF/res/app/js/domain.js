@@ -49,3 +49,14 @@ function Asset() {
 	Object.seal(model);
 	return model;
 }
+
+function Category() {
+	var model = {
+		id:'',
+		name:'',
+		type:''
+	}
+	
+	Object.seal(model);
+	return model;
+}

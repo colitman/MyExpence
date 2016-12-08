@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+		xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      		http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+	
+	<changeSet id="categories_table_081220161550" author="romenskyi" dbms="postgresql">
+		
+		<!--
+			Creating sequences
+		-->
+		<createSequence sequenceName="categories_id_seq" startValue="1" ></createSequence>
+		
+		<!--
+			Creating tables
+		-->
+		
+		<createTable tableName="categories">
+			<column name="id" type="integer" defaultValueSequenceNext="categories_id_seq">
+				<constraints primaryKey="true" unique="true" nullable="false"></constraints>
+			</column>
+			<column name="user_id" type="integer"></column>
+			<column name="name" type="text">
+				<constraints nullable="false"></constraints>
+			</column>
+			<column name="type" type="text">
+				<constraints nullable="false"></constraints>
+			</column>
+		</createTable>
+		
+		<!--
+			Creating references
+		-->
+		
+		<addForeignKeyConstraint baseTableName="categories"
+								 baseColumnNames="user_id"
+								 referencedTableName="users"
+								 referencedColumnNames="id"
+								 constraintName="categories_user_id___users_id"
+								 onDelete="CASCADE"
+								 onUpdate="CASCADE" />
+		
+	</changeSet>
+</databaseChangeLog>

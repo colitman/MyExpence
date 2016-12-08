@@ -11,6 +11,7 @@ import ua.hobbydev.webapp.expense.domain.asset.BankAccount;
 import ua.hobbydev.webapp.expense.domain.asset.Cash;
 import ua.hobbydev.webapp.expense.domain.asset.CreditCard;
 import ua.hobbydev.webapp.expense.domain.asset.DebitCard;
+import ua.hobbydev.webapp.expense.domain.category.Category;
 import ua.hobbydev.webapp.expense.domain.currency.Currency;
 
 import javax.persistence.*;
@@ -49,6 +50,9 @@ public class User implements IdentifiedEntityInterface, UserDetails {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<BankAccount> bankAccountAssets = new ArrayList<BankAccount>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Category> categories = new ArrayList<Category>();
 
     @Override
     public Long getId() {
@@ -102,6 +106,56 @@ public class User implements IdentifiedEntityInterface, UserDetails {
     public void  removeCurrency(Currency currency) {
         currencies.remove(currency);
         currency.setUser(null);
+    }
+
+    public List<Cash> getCashAssets() {
+        return cashAssets;
+    }
+
+    public void setCashAssets(List<Cash> cashAssets) {
+        this.cashAssets = cashAssets;
+    }
+
+    public List<DebitCard> getDebitCardAssets() {
+        return debitCardAssets;
+    }
+
+    public void setDebitCardAssets(List<DebitCard> debitCardAssets) {
+        this.debitCardAssets = debitCardAssets;
+    }
+
+    public List<CreditCard> getCreditCardAssets() {
+        return creditCardAssets;
+    }
+
+    public void setCreditCardAssets(List<CreditCard> creditCardAssets) {
+        this.creditCardAssets = creditCardAssets;
+    }
+
+    public List<BankAccount> getBankAccountAssets() {
+        return bankAccountAssets;
+    }
+
+    public void setBankAccountAssets(List<BankAccount> bankAccountAssets) {
+        this.bankAccountAssets = bankAccountAssets;
+    }
+
+    public List<Category> getCategories() {
+        return categories;
+    }
+
+    public void setCategories(List<Category> categories) {
+        this.categories = categories;
+    }
+
+    public void addCategory(Category category) {
+        categories.add(category);
+        category.setUser(this);
+    }
+
+    public void  removeCategory(Category category) {
+        categories.remove(category);
+        category.setUser(null);
     }
 
     @Override

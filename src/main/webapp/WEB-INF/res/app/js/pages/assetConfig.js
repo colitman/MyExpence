@@ -3,7 +3,7 @@
 $(function() {
 	var m = $EX.assetModel;
 	var v = $EX.assetView;
-	var c = new AssetConfigController(v,m);
+	var c = new AssetConfigController(m);
 	
 	m.subscribe(v);
 	v.subscribe(c);

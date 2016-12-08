@@ -22,6 +22,11 @@
 			CREDIT_CARD: 'CREDIT_CARD'
 		},
 		
+		CATEGORY_TYPES: {
+			INCOME: 'INCOME',
+			OUTGOING: 'OUTGOING'
+		},
+		
 		markRequiredFields: function(){
 			$('form').each(function(index, form) {
 				$('[required="required"]', form).each(function(index, control) {

@@ -22,16 +22,16 @@ It also should have the following private methods:
 		__proto__: observable,
 		
 		getCurrencies: function() {
-			return aScope.curencyService.getCurrencies();
+			return aScope.currencyService.getCurrencies();
 		},
 		
 		getCurrency: function(id) {
-			return aScope.curencyService.getCurrencyById(id);
+			return aScope.currencyService.getCurrencyById(id);
 		},
 		
 		addCurrency: function(currencyData) {
 			var _this = this;
-			aScope.curencyService.createCurrency(currencyData)
+			aScope.currencyService.createCurrency(currencyData)
 				.done(function(data) {
 					_this.setChanged();
 					_this.notifyObservers(_this);
@@ -43,7 +43,7 @@ It also should have the following private methods:
 		
 		updateCurrency: function(currencyData) {
 			var _this = this;
-			aScope.curencyService.updateCurrency(currencyData)
+			aScope.currencyService.updateCurrency(currencyData)
 				.done(function(data) {
 					_this.setChanged();
 					_this.notifyObservers(_this);
@@ -55,7 +55,7 @@ It also should have the following private methods:
 		
 		setDefaultCurrency: function(id) {
 			var _this = this;
-			aScope.curencyService.setDefaultCurrency(id)
+			aScope.currencyService.setDefaultCurrency(id)
 				.done(function(data) {
 					_this.setChanged();
 					_this.notifyObservers(_this);
@@ -67,7 +67,7 @@ It also should have the following private methods:
 		
 		deleteCurrency: function(id) {
 			var _this = this;
-			return aScope.curencyService.deleteCurrency(id)
+			return aScope.currencyService.deleteCurrency(id)
 				.done(function(data) {
 					_this.setChanged();
 					_this.notifyObservers(_this);

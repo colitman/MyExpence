@@ -4,9 +4,8 @@
 Controller - Observer
 */
 
-function AssetConfigController(view, model, undefined){
+function AssetConfigController(model, undefined){
 	
-	var assetView = view;
 	var assetModel = model;
 	
 	var assetController = {

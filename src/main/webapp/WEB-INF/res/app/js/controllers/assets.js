@@ -4,9 +4,8 @@
 Controller - Observer
 */
 
-function AssetsController(view, model, undefined){
+function AssetsController(model, undefined){
 	
-	var assetsView = view;
 	var assetsModel = model;
 	
 	var assetsController = {

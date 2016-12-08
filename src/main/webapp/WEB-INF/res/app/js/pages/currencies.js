@@ -3,7 +3,7 @@
 $(function() {
 	var m = $EX.currenciesModel;
 	var v = $EX.currenciesView;
-	var c = new CurrenciesController(v,m);
+	var c = new CurrenciesController(m);
 	
 	m.subscribe(v);
 	v.subscribe(c);

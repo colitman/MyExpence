@@ -33,6 +33,7 @@
 							<span class="caret"></span>
 						</a>
 						<ul class="dropdown-menu">
+							<li><a href="${app}/settings/categories">Categories</a></li>
 							<li><a href="${app}/settings/currencies">Currencies</a></li>
 							<li><a href="${app}/settings/assets">Assets</a></li>
 						</ul>

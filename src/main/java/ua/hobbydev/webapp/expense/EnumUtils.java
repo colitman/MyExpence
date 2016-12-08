@@ -9,9 +9,10 @@ package ua.hobbydev.webapp.expense;
  */
 public class EnumUtils {
 
-    public static class AuthorityEnums {
-        public enum VIEW {
-            VIEW_MENU_ADMIN
+    public static class CategoryEnums {
+        public enum CategoryType {
+            INCOME,
+            OUTGOING
         }
     }
 
