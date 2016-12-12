@@ -4,14 +4,11 @@
  */
 package ua.hobbydev.webapp.expense.api.web;
 
-import org.reflections.Reflections;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.util.ClassUtils;
 import org.springframework.web.bind.annotation.*;
-import ua.hobbydev.webapp.expense.Application;
 import ua.hobbydev.webapp.expense.EnumUtils.AssetEnums.AssetType;
 import ua.hobbydev.webapp.expense.EnumUtils.AssetEnums.PaymentSystemType;
 import ua.hobbydev.webapp.expense.api.model.AssetTypeViewModel;
@@ -20,15 +17,15 @@ import ua.hobbydev.webapp.expense.business.DefaultServiceInterface;
 import ua.hobbydev.webapp.expense.business.ResourceNotFoundException;
 import ua.hobbydev.webapp.expense.business.users.UserServiceInterface;
 import ua.hobbydev.webapp.expense.config.CurrentUser;
-import ua.hobbydev.webapp.expense.domain.asset.*;
+import ua.hobbydev.webapp.expense.domain.asset.Asset;
+import ua.hobbydev.webapp.expense.domain.asset.AssetConfiguration;
 import ua.hobbydev.webapp.expense.domain.currency.Currency;
+import ua.hobbydev.webapp.expense.domain.transaction.Transaction;
 import ua.hobbydev.webapp.expense.domain.user.User;
 
-import javax.persistence.Table;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @RestController
@@ -50,13 +47,26 @@ public class AssetsApiController {
             currency = defaultService.get(Currency.class, newAsset.getCurrency());
             String assetType = newAsset.getType();
             AssetType enumType = AssetType.valueOf(assetType);
-            Asset asset = AssetFactory.getAssetOfType(enumType);
+            Asset asset = new Asset();
             asset.setName(newAsset.getName());
             asset.setUser(userService.loadUserByUsername(currentUser.getUsername()));
             asset.setType(enumType);
             asset.setCurrency(currency);
             asset.setAmount(new BigDecimal(0));
+
+            Transaction t = new Transaction();
+            t.setUser(currentUser);
+
+            AssetConfiguration configuration = new AssetConfiguration();
+            configuration.setBankName(newAsset.getBankName());
+            configuration.setPaymentSystem(PaymentSystemType.valueOf(newAsset.getPaymentSystem()));
+            configuration.setLimit(newAsset.getLimit());
+
+            asset.addTransaction(t);
+            asset.addConfiguration(configuration);
+
             Long newId = defaultService.add(asset);
+
             return new ResponseEntity<String>(String.valueOf(newId), HttpStatus.CREATED);
         } catch (ResourceNotFoundException e) {
             return new ResponseEntity<String>(e.getMessage(), HttpStatus.NOT_FOUND);
@@ -79,17 +89,7 @@ public class AssetsApiController {
     @RequestMapping(path="", method = RequestMethod.GET)
     public ResponseEntity<List<AssetViewModel>> getAssetList(@CurrentUser User currentUser) {
 
-        Reflections refs = new Reflections(ClassUtils.getPackageName(Application.class) + ".domain.asset");
-        Set<Class<? extends Asset>> assetSet = refs.getSubTypesOf(Asset.class);
-
-        List<Asset> assets = new ArrayList<Asset>();
-
-        for(Class<? extends Asset> a:assetSet) {
-            if(!a.isAnnotationPresent(Table.class)) {
-                continue;
-            }
-            assets.addAll(defaultService.list(a));
-        }
+        List<Asset> assets = defaultService.list(Asset.class);
 
         List<Asset> userAssets = assets.stream()
                 .filter(
@@ -111,11 +111,8 @@ public class AssetsApiController {
         Asset asset = null;
         AssetViewModel assetVm = null;
 
-        AssetType enumType = AssetType.valueOf(type);
-        Class<? extends Asset> assetClass = AssetFactory.getAssetOfType(enumType).getClass();
-
         try {
-            asset = defaultService.get(assetClass, id);
+            asset = defaultService.get(Asset.class, id);
             assetVm = new AssetViewModel(asset);
         } catch (ResourceNotFoundException e) {
             return new ResponseEntity<AssetViewModel>(HttpStatus.NOT_FOUND);
@@ -127,10 +124,7 @@ public class AssetsApiController {
     @PreAuthorize("isAuthenticated()")
     @RequestMapping(path="{type}/{id}", method = RequestMethod.DELETE)
     public ResponseEntity<String> deleteAssetById(@PathVariable Long id, @PathVariable String type, @CurrentUser User currentUser) {
-        AssetType enumType = AssetType.valueOf(type);
-        Class<? extends Asset> assetClass = AssetFactory.getAssetOfType(enumType).getClass();
-
-        defaultService.delete(assetClass, id);
+        defaultService.delete(Asset.class, id);
         return new ResponseEntity<String>("Deleted", HttpStatus.OK);
     }
 
@@ -139,11 +133,8 @@ public class AssetsApiController {
     public ResponseEntity<String> updateAssetById(@PathVariable Long id, @PathVariable String type, @ModelAttribute AssetViewModel assetVm, @CurrentUser User currentUser) {
         Asset asset = null;
 
-        AssetType enumType = AssetType.valueOf(type);
-        Class<? extends Asset> assetClass = AssetFactory.getAssetOfType(enumType).getClass();
-
         try {
-            asset = defaultService.get(assetClass, id);
+            asset = defaultService.get(Asset.class, id);
             asset.setName(assetVm.getName());
 
             Currency currency = defaultService.get(Currency.class, assetVm.getCurrency());
@@ -151,20 +142,9 @@ public class AssetsApiController {
 
             asset.setAmount(assetVm.getAmount());
 
-            if(asset instanceof BankRelatedAsset) {
-                BankRelatedAsset bAsset = (BankRelatedAsset) asset;
-                bAsset.setBankName(assetVm.getBankName());
-            }
-
-            if(asset instanceof Card) {
-                Card dAsset = (Card) asset;
-                dAsset.setPaymentSystem(PaymentSystemType.valueOf(assetVm.getPaymentSystem()));
-            }
-
-            if(asset instanceof CreditCard) {
-                CreditCard cAsset = (CreditCard) asset;
-                cAsset.setLimit(assetVm.getLimit());
-            }
+            asset.getConfiguration().setBankName(assetVm.getBankName());
+            asset.getConfiguration().setPaymentSystem(PaymentSystemType.valueOf(assetVm.getPaymentSystem()));
+            asset.getConfiguration().setLimit(assetVm.getLimit());
 
             defaultService.update(asset);
         } catch (ResourceNotFoundException e) {

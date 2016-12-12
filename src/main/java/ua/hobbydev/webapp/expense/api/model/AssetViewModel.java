@@ -5,10 +5,10 @@
 package ua.hobbydev.webapp.expense.api.model;
 
 
+import ua.hobbydev.webapp.expense.EnumUtils.AssetEnums.*;
 import ua.hobbydev.webapp.expense.domain.asset.Asset;
-import ua.hobbydev.webapp.expense.domain.asset.BankRelatedAsset;
-import ua.hobbydev.webapp.expense.domain.asset.Card;
-import ua.hobbydev.webapp.expense.domain.asset.CreditCard;
+import ua.hobbydev.webapp.expense.domain.asset.AssetConfiguration;
+import ua.hobbydev.webapp.expense.domain.currency.Currency;
 
 import java.math.BigDecimal;
 
@@ -34,25 +34,32 @@ public class AssetViewModel implements ViewModelInterface<Asset> {
         this.currency = domain.getCurrency().getId();
         this.amount = domain.getAmount();
 
-        if(domain instanceof BankRelatedAsset) {
-            BankRelatedAsset bankRelatedAsset = (BankRelatedAsset)domain;
-            this.bankName = bankRelatedAsset.getBankName();
-        }
-
-        if(domain instanceof Card) {
-            Card cardAsset = (Card) domain;
-            this.paymentSystem = cardAsset.getPaymentSystem() == null? "": cardAsset.getPaymentSystem().name();
-        }
-
-        if(domain instanceof CreditCard) {
-            CreditCard creditCardAsset = (CreditCard) domain;
-            this.limit = creditCardAsset.getLimit();
-        }
+        this.bankName = domain.getConfiguration().getBankName();
+        this.paymentSystem = domain.getConfiguration().getPaymentSystem() == null? "": domain.getConfiguration().getPaymentSystem().name();
+        this.limit = domain.getConfiguration().getLimit();
     }
 
     @Override
     public Asset toDomain() {
-        return null;
+        Asset domain = new Asset();
+        domain.setId(id);
+        domain.setName(name);
+        domain.setType(AssetType.valueOf(type));
+        domain.setAmount(amount);
+
+        Currency assetCurrency = new Currency();
+        assetCurrency.setId(currency);
+
+        domain.setCurrency(assetCurrency);
+
+        AssetConfiguration configuration = new AssetConfiguration();
+        configuration.setBankName(bankName);
+        configuration.setPaymentSystem(PaymentSystemType.valueOf(paymentSystem));
+        configuration.setLimit(limit);
+
+        domain.addConfiguration(configuration);
+
+        return domain;
     }
 
     public Long getId() {

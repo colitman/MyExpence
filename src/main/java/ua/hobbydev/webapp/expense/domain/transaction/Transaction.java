@@ -2,33 +2,29 @@
  * This software is licensed under the terms of the MIT license.
  * Copyright (C) 2016 Dmytro Romenskyi
  */
-package ua.hobbydev.webapp.expense.domain.currency;
+package ua.hobbydev.webapp.expense.domain.transaction;
 
 import ua.hobbydev.webapp.expense.domain.IdentifiedEntityInterface;
+import ua.hobbydev.webapp.expense.domain.asset.Asset;
+import ua.hobbydev.webapp.expense.domain.category.Category;
 import ua.hobbydev.webapp.expense.domain.user.User;
 
 import javax.persistence.*;
 
 @Entity
-@Table(name = "currencies")
-public class Currency implements IdentifiedEntityInterface {
+@Table(name = "transactions")
+public class Transaction implements IdentifiedEntityInterface {
 
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "name")
-    private String name;
+    @ManyToOne
+    private Asset asset;
 
-    @Column(name = "code")
-    private String code;
-
-    @Column(name = "symbol")
-    private String symbol;
-
-    @Column(name = "defaultCurrency")
-    private boolean defaultCurrency;
+    @ManyToOne
+    private Category category;
 
     @ManyToOne
     private User user;
@@ -43,37 +39,23 @@ public class Currency implements IdentifiedEntityInterface {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public Asset getAsset() {
+        return asset;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setAsset(Asset asset) {
+        this.asset = asset;
     }
 
-    public String getCode() {
-        return code;
+    public Category getCategory() {
+        return category;
     }
 
-    public void setCode(String code) {
-        this.code = code;
+    public void setCategory(Category category) {
+        this.category = category;
     }
 
-    public String getSymbol() {
-        return symbol;
-    }
 
-    public void setSymbol(String symbol) {
-        this.symbol = symbol;
-    }
-
-    public boolean isDefaultCurrency() {
-        return defaultCurrency;
-    }
-
-    public void setDefaultCurrency(boolean defaultCurrency) {
-        this.defaultCurrency = defaultCurrency;
-    }
 
     public User getUser() {
         return user;
@@ -92,7 +74,7 @@ public class Currency implements IdentifiedEntityInterface {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        Currency that = (Currency) o;
+        Transaction that = (Transaction) o;
 
         return getId().equals(that.getId());
 

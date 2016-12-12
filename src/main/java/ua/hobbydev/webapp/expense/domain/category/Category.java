@@ -6,9 +6,12 @@ package ua.hobbydev.webapp.expense.domain.category;
 
 import ua.hobbydev.webapp.expense.EnumUtils.CategoryEnums.*;
 import ua.hobbydev.webapp.expense.domain.IdentifiedEntityInterface;
+import ua.hobbydev.webapp.expense.domain.transaction.Transaction;
 import ua.hobbydev.webapp.expense.domain.user.User;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "categories")
@@ -28,6 +31,9 @@ public class Category implements IdentifiedEntityInterface {
 
     @ManyToOne
     private User user;
+
+    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
+    private List<Transaction> transactions = new ArrayList<Transaction>();
 
     @Override
     public Long getId() {
@@ -61,6 +67,14 @@ public class Category implements IdentifiedEntityInterface {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public List<Transaction> getTransactions() {
+        return transactions;
+    }
+
+    public void setTransactions(List<Transaction> transactions) {
+        this.transactions = transactions;
     }
 
     // ~ ======== Hashcode and equals

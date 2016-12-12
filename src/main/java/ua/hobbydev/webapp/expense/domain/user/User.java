@@ -7,12 +7,10 @@ package ua.hobbydev.webapp.expense.domain.user;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import ua.hobbydev.webapp.expense.domain.IdentifiedEntityInterface;
-import ua.hobbydev.webapp.expense.domain.asset.BankAccount;
-import ua.hobbydev.webapp.expense.domain.asset.Cash;
-import ua.hobbydev.webapp.expense.domain.asset.CreditCard;
-import ua.hobbydev.webapp.expense.domain.asset.DebitCard;
+import ua.hobbydev.webapp.expense.domain.asset.*;
 import ua.hobbydev.webapp.expense.domain.category.Category;
 import ua.hobbydev.webapp.expense.domain.currency.Currency;
+import ua.hobbydev.webapp.expense.domain.transaction.Transaction;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -40,19 +38,15 @@ public class User implements IdentifiedEntityInterface, UserDetails {
     private List<Currency> currencies = new ArrayList<Currency>();
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Cash> cashAssets = new ArrayList<Cash>();
-
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<DebitCard> debitCardAssets = new ArrayList<DebitCard>();
-
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<CreditCard> creditCardAssets = new ArrayList<CreditCard>();
-
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<BankAccount> bankAccountAssets = new ArrayList<BankAccount>();
+    private List<Asset> assets = new ArrayList<Asset>();
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Category> categories = new ArrayList<Category>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Transaction> transactions = new ArrayList<Transaction>();
+
+
 
     @Override
     public Long getId() {
@@ -108,36 +102,12 @@ public class User implements IdentifiedEntityInterface, UserDetails {
         currency.setUser(null);
     }
 
-    public List<Cash> getCashAssets() {
-        return cashAssets;
+    public List<Asset> getAssets() {
+        return assets;
     }
 
-    public void setCashAssets(List<Cash> cashAssets) {
-        this.cashAssets = cashAssets;
-    }
-
-    public List<DebitCard> getDebitCardAssets() {
-        return debitCardAssets;
-    }
-
-    public void setDebitCardAssets(List<DebitCard> debitCardAssets) {
-        this.debitCardAssets = debitCardAssets;
-    }
-
-    public List<CreditCard> getCreditCardAssets() {
-        return creditCardAssets;
-    }
-
-    public void setCreditCardAssets(List<CreditCard> creditCardAssets) {
-        this.creditCardAssets = creditCardAssets;
-    }
-
-    public List<BankAccount> getBankAccountAssets() {
-        return bankAccountAssets;
-    }
-
-    public void setBankAccountAssets(List<BankAccount> bankAccountAssets) {
-        this.bankAccountAssets = bankAccountAssets;
+    public void setAssets(List<Asset> assets) {
+        this.assets = assets;
     }
 
     public List<Category> getCategories() {
@@ -156,6 +126,14 @@ public class User implements IdentifiedEntityInterface, UserDetails {
     public void  removeCategory(Category category) {
         categories.remove(category);
         category.setUser(null);
+    }
+
+    public List<Transaction> getTransactions() {
+        return transactions;
+    }
+
+    public void setTransactions(List<Transaction> transactions) {
+        this.transactions = transactions;
     }
 
     @Override
