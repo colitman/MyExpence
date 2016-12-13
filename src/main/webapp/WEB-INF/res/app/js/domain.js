@@ -1,5 +1,20 @@
 "use strict";
 
+function Transaction() {
+	var model = {
+		id:'',
+		transactionDate:'',
+		sender:'',
+		recipient:'',
+		amount:'',
+		message:'',
+		category:''
+	}
+	
+	Object.seal(this);
+	return model;
+}
+
 function Currency() {
 	var model = {
 		id:'',

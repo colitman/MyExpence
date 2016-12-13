@@ -23,7 +23,7 @@ import ua.hobbydev.webapp.expense.domain.transaction.Transaction;
 import ua.hobbydev.webapp.expense.domain.user.User;
 
 import java.math.BigDecimal;
-import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -57,7 +57,7 @@ public class AssetsApiController {
             Transaction t = new Transaction();
             t.setUser(currentUser);
 
-            Calendar date = Calendar.getInstance(TimeZone.getTimeZone(ZoneId.of("UTC+0")));
+            Calendar date = Calendar.getInstance(TimeZone.getTimeZone(ZoneOffset.UTC));
             t.setTransactionDate(date);
             t.setAmount(BigDecimal.ZERO);
 
@@ -138,7 +138,7 @@ public class AssetsApiController {
                 Transaction t = new Transaction();
                 t.setAmount(BigDecimal.ZERO);
                 t.setUser(currentUser);
-                t.setTransactionDate(Calendar.getInstance(TimeZone.getTimeZone(ZoneId.of("UTC+0"))));
+                t.setTransactionDate(Calendar.getInstance(TimeZone.getTimeZone(ZoneOffset.UTC)));
                 t.setSender(asset);
 
 
@@ -174,7 +174,7 @@ public class AssetsApiController {
             if(asset.getAmount().compareTo(assetVm.getAmount()) != 0) { // i.e. if amount was changed
                 Transaction t = new Transaction();
                 t.setUser(currentUser);
-                t.setTransactionDate(Calendar.getInstance(TimeZone.getTimeZone(ZoneId.of("UTC+0"))));
+                t.setTransactionDate(Calendar.getInstance(TimeZone.getTimeZone(ZoneOffset.UTC)));
                 t.setAmount(assetVm.getAmount().subtract(asset.getAmount()));
                 t.setRecipient(asset);
                 t.setMessage("Asset amount change.");

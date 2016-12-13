@@ -11,6 +11,11 @@
 <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
 
 <sec:csrfMetaTags/>
+<sec:authorize access="isAuthenticated()" var="authenticated"></sec:authorize>
+<c:if test="${authenticated}">
+	<sec:authentication property="name" var="currentUsername"></sec:authentication>
+	<meta name="principal" content="${currentUsername}" >
+</c:if>
 <meta name="contextPath" content="${app}">
 
 <title>${pageTitle}</title>

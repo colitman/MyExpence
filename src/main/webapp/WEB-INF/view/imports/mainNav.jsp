@@ -44,6 +44,7 @@
 						</a>
 						<ul class="dropdown-menu">
 							<li><a href="${app}/profile"><i class="fa fa-user"></i> ${currentUsername}</a></li>
+							<li><a href="${app}/transactions"><i class="fa fa-exchange"></i> Transactions</a></li>
 							<li class="c-logout-link"><a href="${app}/logout"><i class="fa fa-sign-out"></i> Log Out</a></li>
 						</ul>
 					</li>

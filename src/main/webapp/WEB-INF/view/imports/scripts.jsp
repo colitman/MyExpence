@@ -15,6 +15,7 @@
 		crossorigin="anonymous"></script>
 
 <script src="${app}/res/jscookie/js.cookie.js"></script>
+<script src="${app}/res/datejs/date.js"></script>
 <script src="${app}/res/app/js/alerts.js"></script>
 <script src="${app}/res/app/js/app.js"></script>
 <script src="${app}/res/app/js/core.js"></script>

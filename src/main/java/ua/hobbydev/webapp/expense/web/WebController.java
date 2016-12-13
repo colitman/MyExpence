@@ -16,6 +16,13 @@ import org.springframework.web.servlet.ModelAndView;
 @RequestMapping(method = RequestMethod.GET)
 public class WebController {
 
+    @PreAuthorize("isAuthenticated()")
+    @RequestMapping(path = "/transactions")
+    public ModelAndView userTransactions(ModelAndView mv) {
+        mv.setViewName("userTransactions");
+        return mv;
+    }
+
     @RequestMapping(path = "/swagger")
     public ModelAndView swagger(ModelAndView mv) {
         mv.setViewName("swagger");
