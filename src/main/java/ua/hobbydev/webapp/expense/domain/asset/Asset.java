@@ -13,8 +13,7 @@ import ua.hobbydev.webapp.expense.domain.user.User;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 
 @Entity
@@ -45,8 +44,14 @@ public class Asset implements IdentifiedEntityInterface {
     @OneToOne(mappedBy = "asset", cascade = CascadeType.ALL, orphanRemoval = true)
     private AssetConfiguration configuration;
 
-    @OneToMany(mappedBy = "asset", cascade =  CascadeType.ALL)
-    private List<Transaction> transactions = new ArrayList<Transaction>();
+    /*@OneToMany(mappedBy = "asset", cascade =  CascadeType.ALL)
+    private List<Transaction> transactions = new ArrayList<Transaction>();*/
+
+    @OneToMany(mappedBy = "sender", cascade =  CascadeType.ALL)
+    private List<Transaction> senderTransactions = new ArrayList<Transaction>();
+
+    @OneToMany(mappedBy = "recipient", cascade =  CascadeType.ALL)
+    private List<Transaction> recipientTransactions = new ArrayList<Transaction>();
 
     @Column(name = "deleted")
     private boolean deleted;
@@ -129,15 +134,43 @@ public class Asset implements IdentifiedEntityInterface {
         this.user = user;
     }
 
-    public List<Transaction> getTransactions() {
-        return transactions;
+    public List<Transaction> getSenderTransactions() {
+        return senderTransactions;
     }
 
-    public void setTransactions(List<Transaction> transactions) {
-        this.transactions = transactions;
+    public void setSenderTransactions(List<Transaction> senderTransactions) {
+        this.senderTransactions = senderTransactions;
     }
 
-    public void addTransaction(Transaction transaction) {
+    public List<Transaction> getRecipientTransactions() {
+        return recipientTransactions;
+    }
+
+    public void setRecipientTransactions(List<Transaction> recipientTransactions) {
+        this.recipientTransactions = recipientTransactions;
+    }
+
+    public void addSenderTransaction(Transaction transaction) {
+        transaction.setSender(this);
+        this.senderTransactions.add(transaction);
+    }
+
+    public void removeSenderTransaction(Transaction transaction) {
+        transaction.setSender(null);
+        this.senderTransactions.remove(transaction);
+    }
+
+    public void addRecipientTransaction(Transaction transaction) {
+        transaction.setRecipient(this);
+        this.recipientTransactions.add(transaction);
+    }
+
+    public void removeRecipientTransaction(Transaction transaction) {
+        transaction.setRecipient(null);
+        this.recipientTransactions.remove(transaction);
+    }
+
+    /*public void addTransaction(Transaction transaction) {
         transaction.setAsset(this);
         this.transactions.add(transaction);
     }
@@ -145,7 +178,7 @@ public class Asset implements IdentifiedEntityInterface {
     public void removeTransaction(Transaction transaction) {
         transaction.setAsset(null);
         this.transactions.remove(transaction);
-    }
+    }*/
 
     @Override
     public boolean isDeleted() {
@@ -155,6 +188,18 @@ public class Asset implements IdentifiedEntityInterface {
     @Override
     public void setDeleted(boolean deleted) {
         this.deleted = deleted;
+    }
+
+    @Transient
+    public List<Transaction> getTransactions() {
+        List<Transaction> all = new ArrayList<Transaction>();
+
+        all.addAll(getRecipientTransactions());
+        all.addAll(getSenderTransactions());
+
+        Collections.sort(all/*, (t1, t2) -> t1.getTransactionDate().compareTo(t2.getTransactionDate())*/);
+
+        return all;
     }
 
     // ~ ======== Hashcode and equals

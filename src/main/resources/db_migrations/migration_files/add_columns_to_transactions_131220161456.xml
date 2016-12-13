@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+		xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      		http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+	
+	<changeSet id="add_columns_to_transactions_131220161456" author="romenskyi" dbms="postgresql">
+		<addColumn tableName="transactions">
+			<column name="transactiondate" afterColumn="id" type="timestamp with time zone" defaultValueDate="now()">
+				<constraints nullable="false" />
+			</column>
+		</addColumn>
+		<addColumn tableName="transactions">
+			<column name="sender_id" beforeColumn="category_id" type="integer" ></column>
+		</addColumn>
+		<addColumn tableName="transactions">
+			<column name="recipient_id" beforeColumn="category_id" type="integer" ></column>
+		</addColumn>
+		<addColumn tableName="transactions">
+			<column name="amount" beforeColumn="category_id" type="numeric" defaultValueNumeric="0">
+				<constraints nullable="false" />
+			</column>
+		</addColumn>
+		
+		<update tableName="transactions">
+			<column name="transactiondate" valueDate="now()" />
+			<where>transactiondate is null</where>
+		</update>
+		
+		<update tableName="transactions">
+			<column name="amount" valueNumeric="0" />
+			<where>amount is null</where>
+		</update>
+	</changeSet>
+</databaseChangeLog>

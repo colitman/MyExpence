@@ -15,6 +15,10 @@
 	<include file="migration_files/assets_db_model_change_121220161907.xml" relativeToChangelogFile="true" />
 	<include file="migration_files/add_deleted_property_121220162042.xml" relativeToChangelogFile="true" />
 	<include file="migration_files/deleted_property_fix_131220161057.xml" relativeToChangelogFile="true" />
+	<include file="migration_files/add_columns_to_transactions_131220161456.xml" relativeToChangelogFile="true" />
+	<include file="migration_files/add_fks_to_transactions_131220161522.xml" relativeToChangelogFile="true" />
+	<include file="migration_files/add_message_column_to_transactions_131220161544.xml" relativeToChangelogFile="true" />
+	<include file="migration_files/remove_asset_id_column_from_transactions_131220161547.xml" relativeToChangelogFile="true" />
 	
 	
 	<include file="data_init_files/seed_data_051220161332.xml" relativeToChangelogFile="true"></include>

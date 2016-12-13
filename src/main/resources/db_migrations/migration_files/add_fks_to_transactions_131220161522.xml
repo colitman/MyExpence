@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+		xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      		http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+	
+	<changeSet id="add_fks_to_transactions_131220161522" author="romenskyi" dbms="postgresql">
+		
+		<addForeignKeyConstraint baseTableName="transactions"
+								 baseColumnNames="sender_id"
+								 referencedTableName="assets"
+								 referencedColumnNames="id"
+								 constraintName="transactions_sender_id___assets_id"
+								 onDelete="RESTRICT"
+								 onUpdate="CASCADE" />
+		
+		<addForeignKeyConstraint baseTableName="transactions"
+								 baseColumnNames="recipient_id"
+								 referencedTableName="assets"
+								 referencedColumnNames="id"
+								 constraintName="transactions_recipient_id___assets_id"
+								 onDelete="RESTRICT"
+								 onUpdate="CASCADE" />
+		
+		
+	</changeSet>
+</databaseChangeLog>

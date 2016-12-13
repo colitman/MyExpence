@@ -23,8 +23,11 @@ import ua.hobbydev.webapp.expense.domain.transaction.Transaction;
 import ua.hobbydev.webapp.expense.domain.user.User;
 
 import java.math.BigDecimal;
+import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
+import java.util.TimeZone;
 import java.util.stream.Collectors;
 
 @RestController
@@ -49,14 +52,18 @@ public class AssetsApiController {
             asset.setUser(currentUser);
             asset.setType(enumType);
             asset.setCurrency(currency);
-            asset.setAmount(new BigDecimal(0));
+            asset.setAmount(BigDecimal.ZERO);
 
             Transaction t = new Transaction();
             t.setUser(currentUser);
 
+            Calendar date = Calendar.getInstance(TimeZone.getTimeZone(ZoneId.of("UTC+0")));
+            t.setTransactionDate(date);
+            t.setAmount(BigDecimal.ZERO);
+
             AssetConfiguration configuration = new AssetConfiguration();
 
-            asset.addTransaction(t);
+            asset.addRecipientTransaction(t);
             asset.addConfiguration(configuration);
 
             Long newId = defaultService.add(asset);
@@ -127,7 +134,18 @@ public class AssetsApiController {
         try {
             Asset asset = defaultService.get(Asset.class, id);
             if(asset.getUser().equals(currentUser)) {
+
+                Transaction t = new Transaction();
+                t.setAmount(BigDecimal.ZERO);
+                t.setUser(currentUser);
+                t.setTransactionDate(Calendar.getInstance(TimeZone.getTimeZone(ZoneId.of("UTC+0"))));
+                t.setSender(asset);
+
+
+
                 defaultService.delete(Asset.class, id);
+                defaultService.delete(AssetConfiguration.class, asset.getConfiguration().getId());
+                defaultService.add(t);
                 return new ResponseEntity<String>("Deleted", HttpStatus.OK);
             }
             return new ResponseEntity<String>("No content", HttpStatus.NO_CONTENT);
@@ -153,6 +171,17 @@ public class AssetsApiController {
             Currency currency = defaultService.get(Currency.class, assetVm.getCurrency());
             asset.setCurrency(currency);
 
+            if(asset.getAmount().compareTo(assetVm.getAmount()) != 0) { // i.e. if amount was changed
+                Transaction t = new Transaction();
+                t.setUser(currentUser);
+                t.setTransactionDate(Calendar.getInstance(TimeZone.getTimeZone(ZoneId.of("UTC+0"))));
+                t.setAmount(assetVm.getAmount().subtract(asset.getAmount()));
+                t.setRecipient(asset);
+                t.setMessage("Asset amount change.");
+
+                defaultService.add(t);
+            }
+
             asset.setAmount(assetVm.getAmount());
 
             if(asset.getType() == AssetType.BANK_ACCOUNT ||
@@ -171,6 +200,7 @@ public class AssetsApiController {
                     }
                 }
             }
+
 
             defaultService.update(asset);
         } catch (ResourceNotFoundException e) {

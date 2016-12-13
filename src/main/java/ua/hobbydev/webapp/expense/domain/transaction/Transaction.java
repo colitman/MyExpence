@@ -10,18 +10,36 @@ import ua.hobbydev.webapp.expense.domain.category.Category;
 import ua.hobbydev.webapp.expense.domain.user.User;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
+import java.util.Calendar;
 
 @Entity
 @Table(name = "transactions")
-public class Transaction implements IdentifiedEntityInterface {
+public class Transaction implements IdentifiedEntityInterface, Comparable<Transaction> {
 
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "transactionDate")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Calendar transactionDate;
+
+    /*@ManyToOne
+    private Asset asset;*/
+
     @ManyToOne
-    private Asset asset;
+    private Asset sender;
+
+    @ManyToOne
+    private Asset recipient;
+
+    @Column(name = "amount")
+    private BigDecimal amount;
+
+    @Column(name = "message")
+    private String message;
 
     @ManyToOne
     private Category category;
@@ -42,12 +60,52 @@ public class Transaction implements IdentifiedEntityInterface {
         this.id = id;
     }
 
-    public Asset getAsset() {
+    public Calendar getTransactionDate() {
+        return transactionDate;
+    }
+
+    public void setTransactionDate(Calendar transactionDate) {
+        this.transactionDate = transactionDate;
+    }
+
+    public Asset getSender() {
+        return sender;
+    }
+
+    public void setSender(Asset sender) {
+        this.sender = sender;
+    }
+
+    public Asset getRecipient() {
+        return recipient;
+    }
+
+    public void setRecipient(Asset recipient) {
+        this.recipient = recipient;
+    }
+
+    /*public Asset getAsset() {
         return asset;
     }
 
     public void setAsset(Asset asset) {
         this.asset = asset;
+    }*/
+
+    public BigDecimal getAmount() {
+        return amount;
+    }
+
+    public void setAmount(BigDecimal amount) {
+        this.amount = amount;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
     }
 
     public Category getCategory() {
@@ -74,6 +132,17 @@ public class Transaction implements IdentifiedEntityInterface {
     @Override
     public void setDeleted(boolean deleted) {
         this.deleted = deleted;
+    }
+
+    @Override
+    public int compareTo(Transaction otherTransaction) {
+        int order = getTransactionDate().compareTo(otherTransaction.getTransactionDate());
+
+        if(order == 0) {
+            order = getId().compareTo(otherTransaction.getId());
+        }
+
+        return order;
     }
 
     // ~ ======== Hashcode and equals
