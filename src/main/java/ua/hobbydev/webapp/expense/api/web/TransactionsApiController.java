@@ -64,7 +64,7 @@ public class TransactionsApiController {
         if(sender != null) {
             try {
                 Asset senderAsset = defaultService.get(Asset.class, sender);
-                stream = stream.filter((t) -> t.getSender().equals(senderAsset));
+                stream = stream.filter((t) -> senderAsset.equals(t.getSender()));
             } catch (ResourceNotFoundException e) {
                 // TODO add logging
             }
@@ -73,7 +73,7 @@ public class TransactionsApiController {
         if(recipient != null) {
             try {
                 Asset recipientAsset = defaultService.get(Asset.class, recipient);
-                stream = stream.filter((t) -> t.getRecipient().equals(recipientAsset));
+                stream = stream.filter((t) -> recipientAsset.equals(t.getRecipient()));
             } catch (ResourceNotFoundException e) {
                 // TODO add logging
             }

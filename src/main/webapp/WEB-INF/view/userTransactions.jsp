@@ -30,24 +30,27 @@
 				</header>
 				
 				<section id="c-js-transactions-filter-form">
-					<form action="" method="post" class="form-inline">
+					<form action="" method="get" class="form-inline">
 						<sec:csrfInput/>
 						<div class="form-group">
-							<label class="sr-only" for="name">Name</label>
-							<input type="text" class="form-control" name="name" id="name" placeholder="Name" required="required">
+							<label class="sr-only" for="sender">Sender</label>
+							<select class="form-control" name="sender" id="sender" placeholder="Sender">
+							</select>
 						</div>
 						
 						<div class="form-group">
-							<label class="sr-only" for="code">Code</label>
-							<input type="text" class="form-control" name="code" id="code" placeholder="Code" required="required">
+							<label class="sr-only" for="recipient">Recipient</label>
+							<select class="form-control" name="recipient" id="recipient" placeholder="Recipient">
+							</select>
 						</div>
 						
 						<div class="form-group">
-							<label class="sr-only" for="symbol">Symbol</label>
-							<input type="text" class="form-control" name="symbol" id="symbol" placeholder="Symbol" required="required">
+							<label class="sr-only" for="category">Category</label>
+							<select class="form-control" name="category" id="category" placeholder="Category">
+							</select>
 						</div>
 						
-						<button type="submit" class="btn btn-primary">Add</button>
+						<button type="submit" class="btn btn-primary">Filter</button>
 						<button type="reset" class="btn btn-danger">Reset</button>
 					</form>
 				</section>
@@ -90,7 +93,9 @@
 
 		<c:import url="/imports/scripts"></c:import>
 		<script src="${app}/res/app/js/services/transactionService.js"></script>
+		<script src="${app}/res/app/js/services/assetService.js"></script>
 		<script src="${app}/res/app/js/models/userTransactions.js"></script>
+		<script src="${app}/res/app/js/models/assets.js"></script>
 		<script src="${app}/res/app/js/views/transactions.js"></script>
 		<script src="${app}/res/app/js/controllers/transactions.js"></script>
 		<script src="${app}/res/app/js/pages/userTransactions.js"></script>

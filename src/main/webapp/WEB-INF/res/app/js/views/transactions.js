@@ -28,6 +28,36 @@ It should expose the following public access interfaces:
 	var formatTime = function(millis) {
 		var date = new Date(millis);
 		return date.toString('dd-MM-yyyy HH:mm:ss');
+	};
+	
+	var updateAssetFilters = function(assetsData, chosenSender, chosenRecipient) {
+		var senderSelect = $('#sender', transactionsFilterForm);
+		var recipientSelect = $('#recipient', transactionsFilterForm);
+		$(senderSelect).html('');
+		$(recipientSelect).html('');
+		
+		$(senderSelect).append('<option selected="selected" value="">Any</option>');
+		$(recipientSelect).append('<option selected="selected" value="">Any</option>');
+		
+		for(var i = 0; i < assetsData.length; i++) {
+			var option = $(document.createElement('option'));
+			
+			$(option).attr('value', assetsData[i].id);
+			$(option).text(assetsData[i].name);
+			
+			var option2 = $(option).clone();
+			
+			if(option.attr('value') === chosenSender) {
+				option.prop('selected', 'selected');
+			}
+			
+			if(option2.attr('value') === chosenRecipient) {
+				option2.prop('selected', 'selected');
+			}
+			
+			$(senderSelect).append(option);
+			$(recipientSelect).append(option2);
+		}
 	}
 	
 	var updateTransactionsList = function(data) {
@@ -84,7 +114,7 @@ It should expose the following public access interfaces:
 				category:transactionsFilterForm.find('#category').val(),
 				startDate:transactionsFilterForm.find('#startDate').val(),
 				endDate:transactionsFilterForm.find('#endDate').val()
-			}
+			};
 			
 			model.getTransactions(filterData)
 				.done(function(transactionsData) {
@@ -92,6 +122,11 @@ It should expose the following public access interfaces:
 				})
 				.fail(function(jqXHR) {
 					console.log(jqXHR.responseText);
+				});
+			
+			$EX.assetsModel.getAssets()
+				.done(function(assetsData) {
+					updateAssetFilters(assetsData, filterData.sender, filterData.recipient);
 				});
 		}
 	
