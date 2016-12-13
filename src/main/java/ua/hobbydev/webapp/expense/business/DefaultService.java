@@ -13,6 +13,7 @@ import ua.hobbydev.webapp.expense.data.DefaultDAO;
 import ua.hobbydev.webapp.expense.data.ObjectNotExistsException;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Default entity service implementation
@@ -30,7 +31,18 @@ public class DefaultService implements DefaultServiceInterface {
 	@Override
 	@Transactional
 	public <ENTITY extends IdentifiedEntityInterface> boolean exists(Class<ENTITY> clazz, Long id) {
-		return getDAO().exists(clazz, id);
+		boolean exists = getDAO().exists(clazz, id);
+		if(exists) {
+			try {
+				ENTITY entity = this.get(clazz, id);
+				exists = !entity.isDeleted();
+			} catch (ResourceNotFoundException e) {
+				// TODO add logging
+				exists = false;
+			}
+		}
+
+		return exists;
 	}
 	
 	@Override
@@ -42,6 +54,10 @@ public class DefaultService implements DefaultServiceInterface {
 		} catch (ObjectNotExistsException one) {
 			throw new ResourceNotFoundException(one.getMessage(), one);
 		}
+
+		if(entity.isDeleted()) {
+			throw new ResourceNotFoundException("Entity has been deleted or has never existed.");
+		}
 		
 		return entity;
 	}
@@ -49,7 +65,14 @@ public class DefaultService implements DefaultServiceInterface {
 	@Override
 	@Transactional
 	public <ENTITY extends EntityInterface> List<ENTITY> list(Class<ENTITY> clazz) {
-		return getDAO().getAll(clazz);
+		List<ENTITY> entities = getDAO().getAll(clazz);
+
+		List<ENTITY> availableEntities = entities.stream()
+				.filter(
+						(entity) -> !entity.isDeleted()
+				).collect(Collectors.toList());
+
+		return availableEntities;
 	}
 	
 	@Override

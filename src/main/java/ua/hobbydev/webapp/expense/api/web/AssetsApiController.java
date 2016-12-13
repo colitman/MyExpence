@@ -15,7 +15,6 @@ import ua.hobbydev.webapp.expense.api.model.AssetTypeViewModel;
 import ua.hobbydev.webapp.expense.api.model.AssetViewModel;
 import ua.hobbydev.webapp.expense.business.DefaultServiceInterface;
 import ua.hobbydev.webapp.expense.business.ResourceNotFoundException;
-import ua.hobbydev.webapp.expense.business.users.UserServiceInterface;
 import ua.hobbydev.webapp.expense.config.CurrentUser;
 import ua.hobbydev.webapp.expense.domain.asset.Asset;
 import ua.hobbydev.webapp.expense.domain.asset.AssetConfiguration;
@@ -34,8 +33,6 @@ public class AssetsApiController {
 
     @Autowired
     private DefaultServiceInterface defaultService;
-    @Autowired
-    private UserServiceInterface userService;
 
     @PreAuthorize("isAuthenticated()")
     @RequestMapping(path="", method = RequestMethod.POST)
@@ -49,7 +46,7 @@ public class AssetsApiController {
             AssetType enumType = AssetType.valueOf(assetType);
             Asset asset = new Asset();
             asset.setName(newAsset.getName());
-            asset.setUser(userService.loadUserByUsername(currentUser.getUsername()));
+            asset.setUser(currentUser);
             asset.setType(enumType);
             asset.setCurrency(currency);
             asset.setAmount(new BigDecimal(0));
@@ -86,18 +83,11 @@ public class AssetsApiController {
     @RequestMapping(path="", method = RequestMethod.GET)
     public ResponseEntity<List<AssetViewModel>> getAssetList(@CurrentUser User currentUser) {
 
-        /*List<Asset> assets = defaultService.list(Asset.class);
+        List<Asset> assets = defaultService.list(Asset.class);
 
         List<Asset> userAssets = assets.stream()
                 .filter(
                         (asset) -> asset.getUser().equals(currentUser)
-                ).collect(Collectors.toList());*/
-
-        List<Asset> assets = currentUser.getAssets();
-
-        List<Asset> userAssets = assets.stream()
-                .filter(
-                        (asset) -> !asset.isDeleted()
                 ).collect(Collectors.toList());
 
         List<AssetViewModel> viewModels = new ArrayList<AssetViewModel>();
@@ -110,7 +100,6 @@ public class AssetsApiController {
     }
 
     @PreAuthorize("isAuthenticated()")
-    /*@RequestMapping(path="{type}/{id}", method = RequestMethod.GET)*/
     @RequestMapping(path="{id}", method = RequestMethod.GET)
     public ResponseEntity<AssetViewModel> getAssetById(@PathVariable Long id, /*@PathVariable String type,*/ @CurrentUser User currentUser) {
         Asset asset = null;
@@ -119,7 +108,7 @@ public class AssetsApiController {
         try {
             asset = defaultService.get(Asset.class, id);
 
-            if(!currentUser.getAssets().contains(asset) || asset.isDeleted()) {
+            if(!asset.getUser().equals(currentUser)) {
                 return new ResponseEntity<AssetViewModel>(HttpStatus.NOT_FOUND);
             }
 
@@ -132,30 +121,30 @@ public class AssetsApiController {
     }
 
     @PreAuthorize("isAuthenticated()")
-    /*@RequestMapping(path="{type}/{id}", method = RequestMethod.DELETE)*/
     @RequestMapping(path="{id}", method = RequestMethod.DELETE)
-    public ResponseEntity<String> deleteAssetById(@PathVariable Long id,/* @PathVariable String type, */@CurrentUser User currentUser) {
+    public ResponseEntity<String> deleteAssetById(@PathVariable Long id, @CurrentUser User currentUser) {
 
-        for(Asset a:currentUser.getAssets()) {
-            if(a.getId().equals(id)) {
+        try {
+            Asset asset = defaultService.get(Asset.class, id);
+            if(asset.getUser().equals(currentUser)) {
                 defaultService.delete(Asset.class, id);
                 return new ResponseEntity<String>("Deleted", HttpStatus.OK);
             }
+            return new ResponseEntity<String>("No content", HttpStatus.NO_CONTENT);
+        } catch (ResourceNotFoundException e) {
+            return new ResponseEntity<String>(HttpStatus.NOT_FOUND);
         }
-
-        return new ResponseEntity<String>("No content", HttpStatus.NO_CONTENT);
     }
 
     @PreAuthorize("isAuthenticated()")
-    /*@RequestMapping(path="{type}/{id}", method = RequestMethod.PUT)*/
     @RequestMapping(path="{id}", method = RequestMethod.PUT)
-    public ResponseEntity<String> updateAssetById(@PathVariable Long id,/* @PathVariable String type, */@ModelAttribute AssetViewModel assetVm, @CurrentUser User currentUser) {
+    public ResponseEntity<String> updateAssetById(@PathVariable Long id, @ModelAttribute AssetViewModel assetVm, @CurrentUser User currentUser) {
         Asset asset = null;
 
         try {
             asset = defaultService.get(Asset.class, id);
 
-            if(!currentUser.getAssets().contains(asset) || asset.isDeleted()) {
+            if(!asset.getUser().equals(currentUser)) {
                 return new ResponseEntity<String>(HttpStatus.NOT_FOUND);
             }
 

@@ -13,7 +13,6 @@ import ua.hobbydev.webapp.expense.EnumUtils.CategoryEnums.CategoryType;
 import ua.hobbydev.webapp.expense.api.model.CategoryViewModel;
 import ua.hobbydev.webapp.expense.business.DefaultServiceInterface;
 import ua.hobbydev.webapp.expense.business.ResourceNotFoundException;
-import ua.hobbydev.webapp.expense.business.users.UserServiceInterface;
 import ua.hobbydev.webapp.expense.config.CurrentUser;
 import ua.hobbydev.webapp.expense.domain.category.Category;
 import ua.hobbydev.webapp.expense.domain.user.User;
@@ -28,22 +27,18 @@ public class CategoriesApiController {
 
     @Autowired
     private DefaultServiceInterface defaultService;
-    @Autowired
-    private UserServiceInterface userService;
 
     @PreAuthorize("isAuthenticated()")
     @RequestMapping(path="income", method = RequestMethod.GET)
     public ResponseEntity<List<CategoryViewModel>> getIncomeCategoriesList(@CurrentUser User currentUser) {
 
-        /*List<Category> categories = new ArrayList<Category>();
+        List<Category> categories = new ArrayList<Category>();
 
-        categories = defaultService.list(Category.class);*/
-
-        List<Category> categories = currentUser.getCategories();
+        categories = defaultService.list(Category.class);
 
         List<Category> incomeCategories = categories.stream()
         .filter(
-                (category) -> !category.isDeleted() && category.getType().equals(CategoryType.INCOME)
+                (category) -> category.getUser().equals(currentUser) && category.getType().equals(CategoryType.INCOME)
         ).collect(Collectors.toList());
 
         List<CategoryViewModel> viewModels = new ArrayList<CategoryViewModel>();
@@ -59,15 +54,13 @@ public class CategoriesApiController {
     @RequestMapping(path="outgoing", method = RequestMethod.GET)
     public ResponseEntity<List<CategoryViewModel>> getOutgoingCategoriesList(@CurrentUser User currentUser) {
 
-        /*List<Category> categories = new ArrayList<Category>();
+        List<Category> categories = new ArrayList<Category>();
 
-        categories = defaultService.list(Category.class);*/
-
-        List<Category> categories = currentUser.getCategories();
+        categories = defaultService.list(Category.class);
 
         List<Category> outgoingCategories = categories.stream()
                 .filter(
-                        (category) -> !category.isDeleted() && category.getType().equals(CategoryType.OUTGOING)
+                        (category) -> category.getUser().equals(currentUser) && category.getType().equals(CategoryType.OUTGOING)
                 ).collect(Collectors.toList());
 
         List<CategoryViewModel> viewModels = new ArrayList<CategoryViewModel>();
@@ -88,7 +81,7 @@ public class CategoriesApiController {
         try {
             category = defaultService.get(Category.class, id);
 
-            if(!currentUser.getCategories().contains(category) || category.isDeleted()) {
+            if(!category.getUser().equals(currentUser)) {
                 return new ResponseEntity<CategoryViewModel>(HttpStatus.NOT_FOUND);
             }
 
@@ -105,7 +98,6 @@ public class CategoriesApiController {
     public ResponseEntity<String> createCategory(@ModelAttribute CategoryViewModel newCategory, @CurrentUser User currentUser) {
 
         Category category = newCategory.toDomain();
-        /*User user = userService.loadUserByUsername(currentUser.getUsername());*/
         category.setUser(currentUser);
 
         Long newId = defaultService.add(category);
@@ -116,14 +108,16 @@ public class CategoriesApiController {
     @RequestMapping(path="{id}", method = RequestMethod.DELETE)
     public ResponseEntity<String> deleteCategoryById(@PathVariable Long id, @CurrentUser User currentUser) {
 
-        for(Category c:currentUser.getCategories()) {
-            if(c.getId().equals(id)) {
+        try {
+            Category category = defaultService.get(Category.class, id);
+            if(category.getUser().equals(currentUser)) {
                 defaultService.delete(Category.class, id);
                 return new ResponseEntity<String>("Deleted", HttpStatus.OK);
             }
+            return new ResponseEntity<String>("No content", HttpStatus.NO_CONTENT);
+        } catch (ResourceNotFoundException e) {
+            return new ResponseEntity<String>(HttpStatus.NOT_FOUND);
         }
-
-        return new ResponseEntity<String>("No content", HttpStatus.NO_CONTENT);
     }
 
     @PreAuthorize("isAuthenticated()")
@@ -134,7 +128,7 @@ public class CategoriesApiController {
         try {
             category = defaultService.get(Category.class, id);
 
-            if(!currentUser.getCategories().contains(category) || category.isDeleted()) {
+            if(!category.getUser().equals(currentUser)) {
                 return new ResponseEntity<String>(HttpStatus.NOT_FOUND);
             }
 

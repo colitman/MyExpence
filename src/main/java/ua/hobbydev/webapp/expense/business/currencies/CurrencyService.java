@@ -46,6 +46,10 @@ public class CurrencyService extends DefaultService implements CurrencyServiceIn
                 throw new ResourceOperationForbiddenException("Currency cannot be deleted, since it has one or more assets associated.");
             }
 
+            if(currency.isDefaultCurrency()) {
+                throw new ResourceOperationForbiddenException("Currency cannot be deleted, since it is a default one.");
+            }
+
             getDAO().delete(currency);
 
         } catch (ResourceNotFoundException e) {

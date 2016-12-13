@@ -44,7 +44,7 @@ public class UserService extends DefaultService implements UserServiceInterface 
             List<User> allUsers = list();
             User foundUser = allUsers.stream()
                     .filter(
-                            (user) -> user.getUsername().equals(username)
+                            (user) -> user.getUsername().equals(username) && !user.isDeleted()
                     )
                     .findFirst()
                     .orElseThrow(() -> new UsernameNotFoundException(username));

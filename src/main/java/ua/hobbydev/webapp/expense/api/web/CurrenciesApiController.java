@@ -10,7 +10,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import ua.hobbydev.webapp.expense.api.model.CurrencyViewModel;
-import ua.hobbydev.webapp.expense.business.DefaultServiceInterface;
 import ua.hobbydev.webapp.expense.business.ResourceNotFoundException;
 import ua.hobbydev.webapp.expense.business.ResourceOperationForbiddenException;
 import ua.hobbydev.webapp.expense.business.currencies.CurrencyServiceInterface;
@@ -26,26 +25,22 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping(path = "/api/web/currencies")
 public class CurrenciesApiController {
-
-    @Autowired
-    private DefaultServiceInterface defaultService;
-    @Autowired
-    private UserServiceInterface userService;
     @Autowired
     private CurrencyServiceInterface currencyService;
+
+    @Autowired
+    UserServiceInterface userService;
 
     @PreAuthorize("isAuthenticated()")
     @RequestMapping(path="{id}/default", method = RequestMethod.PUT)
     public ResponseEntity<String> setDefaultCurrency(@PathVariable Long id, @CurrentUser User currentUser) {
 
-        /*User user = userService.loadUserByUsername(currentUser.getUsername());*/
-
         Currency newDefaultCurrency = null;
 
         try {
-            newDefaultCurrency = defaultService.get(Currency.class, id);
+            newDefaultCurrency = currencyService.get(Currency.class, id);
 
-            if(!currentUser.getCurrencies().contains(newDefaultCurrency) || newDefaultCurrency.isDeleted()) {
+            if(!newDefaultCurrency.getUser().equals(currentUser)) {
                 return new ResponseEntity<String>(HttpStatus.NOT_FOUND);
             }
 
@@ -53,18 +48,18 @@ public class CurrenciesApiController {
             return new ResponseEntity<String>(e.getMessage(), HttpStatus.NOT_FOUND);
         }
 
-        List<Currency> userCurrencies = currentUser.getCurrencies();
-        Currency oldDefaultCurrency = userCurrencies.stream()
+        List<Currency> currencies = currencyService.list(Currency.class);
+        Currency oldDefaultCurrency = currencies.stream()
                 .filter(
-                        (currency) -> currency.isDefaultCurrency()
+                        (currency) -> currency.getUser().equals(currentUser) && currency.isDefaultCurrency()
                 ).findFirst()
                 .orElse(null);
 
         if(oldDefaultCurrency != null) {
             try {
-                oldDefaultCurrency = defaultService.get(Currency.class, oldDefaultCurrency.getId());
+                //oldDefaultCurrency = currencyService.get(Currency.class, oldDefaultCurrency.getId());
                 oldDefaultCurrency.setDefaultCurrency(false);
-                defaultService.update(oldDefaultCurrency);
+                currencyService.update(oldDefaultCurrency);
             } catch (ResourceNotFoundException e) {
                 //TODO think on it
             }
@@ -72,7 +67,7 @@ public class CurrenciesApiController {
 
         try {
             newDefaultCurrency.setDefaultCurrency(true);
-            defaultService.update(newDefaultCurrency);
+            currencyService.update(newDefaultCurrency);
         } catch (ResourceNotFoundException e) {
             return new ResponseEntity<String>("Currency not found", HttpStatus.NOT_FOUND);
         }
@@ -85,16 +80,21 @@ public class CurrenciesApiController {
     public ResponseEntity<String> createCurrency(@ModelAttribute CurrencyViewModel newCurrency, @CurrentUser User currentUser) {
 
         Currency currency = newCurrency.toDomain();
+        User user = null;
 
-        User user = userService.loadUserByUsername(currentUser.getUsername());
+        try {
+            user = userService.get(currentUser.getId());
 
-        if(user.getCurrencies().isEmpty()) {
-            currency.setDefaultCurrency(true);
+            if(user.getCurrencies().isEmpty()) {
+                currency.setDefaultCurrency(true);
+            }
+        } catch (ResourceNotFoundException e) {
+            // TODO add logging
         }
 
         currency.setUser(currentUser);
 
-        Long newId = defaultService.add(currency);
+        Long newId = currencyService.add(currency);
         return new ResponseEntity<String>(String.valueOf(newId), HttpStatus.CREATED);
     }
 
@@ -105,9 +105,9 @@ public class CurrenciesApiController {
         CurrencyViewModel currencyVm = null;
 
         try {
-            currency = defaultService.get(Currency.class, id);
+            currency = currencyService.get(Currency.class, id);
 
-            if(!currentUser.getCurrencies().contains(currency) || currency.isDeleted()) {
+            if(!currency.getUser().equals(currentUser)) {
                 return new ResponseEntity<CurrencyViewModel>(HttpStatus.NOT_FOUND);
             }
 
@@ -122,20 +122,19 @@ public class CurrenciesApiController {
     @PreAuthorize("isAuthenticated()")
     @RequestMapping(path="{id}", method = RequestMethod.DELETE)
     public ResponseEntity<String> deleteCurrencyById(@PathVariable Long id, @CurrentUser User currentUser) {
+
         try {
-
-            for(Currency c:currentUser.getCurrencies()) {
-                if(c.getId().equals(id)) {
-                    currencyService.delete(id);
-                    return new ResponseEntity<String>("Deleted", HttpStatus.OK);
-                }
+            Currency currency = currencyService.get(Currency.class, id);
+            if(currency.getUser().equals(currentUser)) {
+                currencyService.delete(id);
+                return new ResponseEntity<String>("Deleted", HttpStatus.OK);
             }
-
+            return new ResponseEntity<String>("No content", HttpStatus.NO_CONTENT);
+        } catch (ResourceNotFoundException e) {
+            return new ResponseEntity<String>(HttpStatus.NOT_FOUND);
         } catch (ResourceOperationForbiddenException e) {
             return new ResponseEntity<String>(e.getMessage(), HttpStatus.UNPROCESSABLE_ENTITY);
         }
-
-        return new ResponseEntity<String>("No content", HttpStatus.NO_CONTENT);
     }
 
     @PreAuthorize("isAuthenticated()")
@@ -144,9 +143,9 @@ public class CurrenciesApiController {
         Currency currency = null;
 
         try {
-            currency = defaultService.get(Currency.class, id);
+            currency = currencyService.get(Currency.class, id);
 
-            if(!currentUser.getCurrencies().contains(currency) || currency.isDeleted()) {
+            if(!currency.getUser().equals(currentUser)) {
                 return new ResponseEntity<String>(HttpStatus.NOT_FOUND);
             }
 
@@ -154,7 +153,7 @@ public class CurrenciesApiController {
             updated.setId(currency.getId());
             updated.setUser(currency.getUser());
             updated.setDefaultCurrency(currency.isDefaultCurrency());
-            defaultService.update(updated);
+            currencyService.update(updated);
         } catch (ResourceNotFoundException e) {
             return new ResponseEntity<String>(HttpStatus.NOT_FOUND);
         }
@@ -164,11 +163,11 @@ public class CurrenciesApiController {
     @PreAuthorize("isAuthenticated()")
     @RequestMapping(path="", method = RequestMethod.GET)
     public ResponseEntity<List<CurrencyViewModel>> getCurrencyList(@CurrentUser User currentUser) {
-        List<Currency> currencies = currentUser.getCurrencies();
+        List<Currency> currencies = currencyService.list(Currency.class);
 
         List<Currency> userCurrencies = currencies.stream()
                 .filter(
-                        (currency) -> !currency.isDeleted()
+                        (currency) -> currency.getUser().equals(currentUser)
                 ).collect(Collectors.toList());
 
         List<CurrencyViewModel> viewModels = new ArrayList<CurrencyViewModel>();

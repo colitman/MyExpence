@@ -17,7 +17,7 @@ public class AssetController {
 
     @PreAuthorize("isAuthenticated()")
     @RequestMapping(path = "{id}/configure", method = RequestMethod.GET)
-    public ModelAndView configureAssetPage(@PathVariable Long id, @PathVariable String type, ModelAndView mv) {
+    public ModelAndView configureAssetPage(@PathVariable Long id, ModelAndView mv) {
         mv.addObject("id", id);
         mv.setViewName("settings/assets/configure");
         return mv;
