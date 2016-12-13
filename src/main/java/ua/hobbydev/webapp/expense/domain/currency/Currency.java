@@ -33,6 +33,9 @@ public class Currency implements IdentifiedEntityInterface {
     @ManyToOne
     private User user;
 
+    @Column(name = "deleted")
+    private boolean deleted;
+
     @Override
     public Long getId() {
         return id;
@@ -83,7 +86,15 @@ public class Currency implements IdentifiedEntityInterface {
         this.user = user;
     }
 
+    @Override
+    public boolean isDeleted() {
+        return deleted;
+    }
 
+    @Override
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
+    }
 
     // ~ ======== Hashcode and equals
 

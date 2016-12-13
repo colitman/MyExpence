@@ -12,7 +12,6 @@
 	<head>
 		<c:import url="/imports/head?pageTitle=Configure Asset"></c:import>
 		<meta name="target_id" content="${id}">
-		<meta name="target_type" content="${type}">
 	</head>
 	
 	<body>

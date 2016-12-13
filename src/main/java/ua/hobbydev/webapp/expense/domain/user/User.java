@@ -43,10 +43,11 @@ public class User implements IdentifiedEntityInterface, UserDetails {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Category> categories = new ArrayList<Category>();
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "user")
     private List<Transaction> transactions = new ArrayList<Transaction>();
 
-
+    @Column(name = "deleted")
+    private boolean deleted;
 
     @Override
     public Long getId() {
@@ -134,6 +135,16 @@ public class User implements IdentifiedEntityInterface, UserDetails {
 
     public void setTransactions(List<Transaction> transactions) {
         this.transactions = transactions;
+    }
+
+    @Override
+    public boolean isDeleted() {
+        return deleted;
+    }
+
+    @Override
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
     }
 
     @Override

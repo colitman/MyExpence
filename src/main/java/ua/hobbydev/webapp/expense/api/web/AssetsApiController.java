@@ -58,9 +58,6 @@ public class AssetsApiController {
             t.setUser(currentUser);
 
             AssetConfiguration configuration = new AssetConfiguration();
-            configuration.setBankName(newAsset.getBankName());
-            configuration.setPaymentSystem(PaymentSystemType.valueOf(newAsset.getPaymentSystem()));
-            configuration.setLimit(newAsset.getLimit());
 
             asset.addTransaction(t);
             asset.addConfiguration(configuration);
@@ -89,11 +86,18 @@ public class AssetsApiController {
     @RequestMapping(path="", method = RequestMethod.GET)
     public ResponseEntity<List<AssetViewModel>> getAssetList(@CurrentUser User currentUser) {
 
-        List<Asset> assets = defaultService.list(Asset.class);
+        /*List<Asset> assets = defaultService.list(Asset.class);
 
         List<Asset> userAssets = assets.stream()
                 .filter(
                         (asset) -> asset.getUser().equals(currentUser)
+                ).collect(Collectors.toList());*/
+
+        List<Asset> assets = currentUser.getAssets();
+
+        List<Asset> userAssets = assets.stream()
+                .filter(
+                        (asset) -> !asset.isDeleted()
                 ).collect(Collectors.toList());
 
         List<AssetViewModel> viewModels = new ArrayList<AssetViewModel>();
@@ -106,13 +110,19 @@ public class AssetsApiController {
     }
 
     @PreAuthorize("isAuthenticated()")
-    @RequestMapping(path="{type}/{id}", method = RequestMethod.GET)
-    public ResponseEntity<AssetViewModel> getAssetById(@PathVariable Long id, @PathVariable String type, @CurrentUser User currentUser) {
+    /*@RequestMapping(path="{type}/{id}", method = RequestMethod.GET)*/
+    @RequestMapping(path="{id}", method = RequestMethod.GET)
+    public ResponseEntity<AssetViewModel> getAssetById(@PathVariable Long id, /*@PathVariable String type,*/ @CurrentUser User currentUser) {
         Asset asset = null;
         AssetViewModel assetVm = null;
 
         try {
             asset = defaultService.get(Asset.class, id);
+
+            if(!currentUser.getAssets().contains(asset) || asset.isDeleted()) {
+                return new ResponseEntity<AssetViewModel>(HttpStatus.NOT_FOUND);
+            }
+
             assetVm = new AssetViewModel(asset);
         } catch (ResourceNotFoundException e) {
             return new ResponseEntity<AssetViewModel>(HttpStatus.NOT_FOUND);
@@ -122,19 +132,33 @@ public class AssetsApiController {
     }
 
     @PreAuthorize("isAuthenticated()")
-    @RequestMapping(path="{type}/{id}", method = RequestMethod.DELETE)
-    public ResponseEntity<String> deleteAssetById(@PathVariable Long id, @PathVariable String type, @CurrentUser User currentUser) {
-        defaultService.delete(Asset.class, id);
-        return new ResponseEntity<String>("Deleted", HttpStatus.OK);
+    /*@RequestMapping(path="{type}/{id}", method = RequestMethod.DELETE)*/
+    @RequestMapping(path="{id}", method = RequestMethod.DELETE)
+    public ResponseEntity<String> deleteAssetById(@PathVariable Long id,/* @PathVariable String type, */@CurrentUser User currentUser) {
+
+        for(Asset a:currentUser.getAssets()) {
+            if(a.getId().equals(id)) {
+                defaultService.delete(Asset.class, id);
+                return new ResponseEntity<String>("Deleted", HttpStatus.OK);
+            }
+        }
+
+        return new ResponseEntity<String>("No content", HttpStatus.NO_CONTENT);
     }
 
     @PreAuthorize("isAuthenticated()")
-    @RequestMapping(path="{type}/{id}", method = RequestMethod.PUT)
-    public ResponseEntity<String> updateAssetById(@PathVariable Long id, @PathVariable String type, @ModelAttribute AssetViewModel assetVm, @CurrentUser User currentUser) {
+    /*@RequestMapping(path="{type}/{id}", method = RequestMethod.PUT)*/
+    @RequestMapping(path="{id}", method = RequestMethod.PUT)
+    public ResponseEntity<String> updateAssetById(@PathVariable Long id,/* @PathVariable String type, */@ModelAttribute AssetViewModel assetVm, @CurrentUser User currentUser) {
         Asset asset = null;
 
         try {
             asset = defaultService.get(Asset.class, id);
+
+            if(!currentUser.getAssets().contains(asset) || asset.isDeleted()) {
+                return new ResponseEntity<String>(HttpStatus.NOT_FOUND);
+            }
+
             asset.setName(assetVm.getName());
 
             Currency currency = defaultService.get(Currency.class, assetVm.getCurrency());
@@ -142,9 +166,22 @@ public class AssetsApiController {
 
             asset.setAmount(assetVm.getAmount());
 
-            asset.getConfiguration().setBankName(assetVm.getBankName());
-            asset.getConfiguration().setPaymentSystem(PaymentSystemType.valueOf(assetVm.getPaymentSystem()));
-            asset.getConfiguration().setLimit(assetVm.getLimit());
+            if(asset.getType() == AssetType.BANK_ACCOUNT ||
+                    asset.getType() == AssetType.DEBIT_CARD ||
+                    asset.getType() == AssetType.CREDIT_CARD) {
+
+                asset.getConfiguration().setBankName(assetVm.getBankName());
+
+                if(asset.getType() == AssetType.DEBIT_CARD ||
+                        asset.getType() == AssetType.CREDIT_CARD) {
+
+                    asset.getConfiguration().setPaymentSystem(PaymentSystemType.valueOf(assetVm.getPaymentSystem()));
+
+                    if(asset.getType() == AssetType.CREDIT_CARD) {
+                        asset.getConfiguration().setLimit(assetVm.getLimit());
+                    }
+                }
+            }
 
             defaultService.update(asset);
         } catch (ResourceNotFoundException e) {

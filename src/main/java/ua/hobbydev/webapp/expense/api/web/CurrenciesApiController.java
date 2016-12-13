@@ -38,9 +38,22 @@ public class CurrenciesApiController {
     @RequestMapping(path="{id}/default", method = RequestMethod.PUT)
     public ResponseEntity<String> setDefaultCurrency(@PathVariable Long id, @CurrentUser User currentUser) {
 
-        User user = userService.loadUserByUsername(currentUser.getUsername());
+        /*User user = userService.loadUserByUsername(currentUser.getUsername());*/
 
-        List<Currency> userCurrencies = user.getCurrencies();
+        Currency newDefaultCurrency = null;
+
+        try {
+            newDefaultCurrency = defaultService.get(Currency.class, id);
+
+            if(!currentUser.getCurrencies().contains(newDefaultCurrency) || newDefaultCurrency.isDeleted()) {
+                return new ResponseEntity<String>(HttpStatus.NOT_FOUND);
+            }
+
+        } catch (ResourceNotFoundException e) {
+            return new ResponseEntity<String>(e.getMessage(), HttpStatus.NOT_FOUND);
+        }
+
+        List<Currency> userCurrencies = currentUser.getCurrencies();
         Currency oldDefaultCurrency = userCurrencies.stream()
                 .filter(
                         (currency) -> currency.isDefaultCurrency()
@@ -58,7 +71,6 @@ public class CurrenciesApiController {
         }
 
         try {
-            Currency newDefaultCurrency = defaultService.get(Currency.class, id);
             newDefaultCurrency.setDefaultCurrency(true);
             defaultService.update(newDefaultCurrency);
         } catch (ResourceNotFoundException e) {
@@ -94,6 +106,11 @@ public class CurrenciesApiController {
 
         try {
             currency = defaultService.get(Currency.class, id);
+
+            if(!currentUser.getCurrencies().contains(currency) || currency.isDeleted()) {
+                return new ResponseEntity<CurrencyViewModel>(HttpStatus.NOT_FOUND);
+            }
+
             currencyVm = new CurrencyViewModel(currency);
         } catch (ResourceNotFoundException e) {
             return new ResponseEntity<CurrencyViewModel>(HttpStatus.NOT_FOUND);
@@ -106,11 +123,19 @@ public class CurrenciesApiController {
     @RequestMapping(path="{id}", method = RequestMethod.DELETE)
     public ResponseEntity<String> deleteCurrencyById(@PathVariable Long id, @CurrentUser User currentUser) {
         try {
-            currencyService.delete(id);
+
+            for(Currency c:currentUser.getCurrencies()) {
+                if(c.getId().equals(id)) {
+                    currencyService.delete(id);
+                    return new ResponseEntity<String>("Deleted", HttpStatus.OK);
+                }
+            }
+
         } catch (ResourceOperationForbiddenException e) {
             return new ResponseEntity<String>(e.getMessage(), HttpStatus.UNPROCESSABLE_ENTITY);
         }
-        return new ResponseEntity<String>("Deleted", HttpStatus.OK);
+
+        return new ResponseEntity<String>("No content", HttpStatus.NO_CONTENT);
     }
 
     @PreAuthorize("isAuthenticated()")
@@ -120,6 +145,11 @@ public class CurrenciesApiController {
 
         try {
             currency = defaultService.get(Currency.class, id);
+
+            if(!currentUser.getCurrencies().contains(currency) || currency.isDeleted()) {
+                return new ResponseEntity<String>(HttpStatus.NOT_FOUND);
+            }
+
             Currency updated = currencyVm.toDomain();
             updated.setId(currency.getId());
             updated.setUser(currency.getUser());
@@ -134,11 +164,11 @@ public class CurrenciesApiController {
     @PreAuthorize("isAuthenticated()")
     @RequestMapping(path="", method = RequestMethod.GET)
     public ResponseEntity<List<CurrencyViewModel>> getCurrencyList(@CurrentUser User currentUser) {
-        List<Currency> currencies = defaultService.list(Currency.class);
+        List<Currency> currencies = currentUser.getCurrencies();
 
         List<Currency> userCurrencies = currencies.stream()
                 .filter(
-                        (currency) -> currency.getUser().equals(currentUser)
+                        (currency) -> !currency.isDeleted()
                 ).collect(Collectors.toList());
 
         List<CurrencyViewModel> viewModels = new ArrayList<CurrencyViewModel>();

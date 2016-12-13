@@ -102,7 +102,7 @@ It should expose the following public access interfaces:
 		var tdActions = document.createElement('td');
 		
 		var editAction = document.createElement('a');
-		$(editAction).attr('href', $EX.APP_ROOT + '/settings/assets/' + assetData.type + '/' + assetData.id + '/configure');
+		$(editAction).attr('href', $EX.APP_ROOT + '/settings/assets/' + assetData.id + '/configure');
 		$(editAction).html('<i class="fa fa-cog"></i>');
 		$(tdActions).append(editAction);
 		
@@ -111,12 +111,11 @@ It should expose the following public access interfaces:
 		$(deleteAction).addClass('c-js-delete-action');
 		$(deleteAction).html('<i class="fa fa-remove"></i>');
 		$(deleteAction).data('target', assetData.id);
-		$(deleteAction).data('type', assetData.type);
 		$(tdActions).append(deleteAction);
 		
 		$(deleteAction).click(function(event) {
 			event.preventDefault();
-			var deleteAssetData = {id:$(deleteAction).data('target'), type: $(deleteAction).data('type')}
+			var deleteAssetData = {id:$(deleteAction).data('target')}
 			assetDeleteEvent.data = deleteAssetData;
 			assetsView.setChanged();
 			assetsView.notifyObservers(assetDeleteEvent);

@@ -24,7 +24,8 @@ public class DefaultDAO {
 	private SessionFactory sessionFactory;
 	
 	protected Session getSession() {
-		return sessionFactory.getCurrentSession();
+		Session session = sessionFactory.getCurrentSession();
+		return session;
 	}
 
 	/**
@@ -146,7 +147,15 @@ public class DefaultDAO {
 			return;
 		}
 
-		Session session = getSession();
-		session.delete(entity);
+		entity.setDeleted(true);
+		try {
+			update(entity);
+		} catch (ObjectNotExistsException e) {
+			// TODO add logging
+			return;
+		}
+
+		//Session session = getSession();
+		//session.delete(entity);
 	}
 }

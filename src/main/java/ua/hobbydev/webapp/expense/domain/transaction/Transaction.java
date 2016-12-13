@@ -29,6 +29,9 @@ public class Transaction implements IdentifiedEntityInterface {
     @ManyToOne
     private User user;
 
+    @Column(name = "deleted")
+    private boolean deleted;
+
     @Override
     public Long getId() {
         return id;
@@ -55,8 +58,6 @@ public class Transaction implements IdentifiedEntityInterface {
         this.category = category;
     }
 
-
-
     public User getUser() {
         return user;
     }
@@ -65,7 +66,15 @@ public class Transaction implements IdentifiedEntityInterface {
         this.user = user;
     }
 
+    @Override
+    public boolean isDeleted() {
+        return deleted;
+    }
 
+    @Override
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
+    }
 
     // ~ ======== Hashcode and equals
 

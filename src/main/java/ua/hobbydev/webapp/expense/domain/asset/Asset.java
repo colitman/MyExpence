@@ -45,8 +45,11 @@ public class Asset implements IdentifiedEntityInterface {
     @OneToOne(mappedBy = "asset", cascade = CascadeType.ALL, orphanRemoval = true)
     private AssetConfiguration configuration;
 
-    @OneToMany(mappedBy = "asset", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "asset", cascade =  CascadeType.ALL)
     private List<Transaction> transactions = new ArrayList<Transaction>();
+
+    @Column(name = "deleted")
+    private boolean deleted;
 
     @Override
     public Long getId() {
@@ -142,6 +145,16 @@ public class Asset implements IdentifiedEntityInterface {
     public void removeTransaction(Transaction transaction) {
         transaction.setAsset(null);
         this.transactions.remove(transaction);
+    }
+
+    @Override
+    public boolean isDeleted() {
+        return deleted;
+    }
+
+    @Override
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
     }
 
     // ~ ======== Hashcode and equals

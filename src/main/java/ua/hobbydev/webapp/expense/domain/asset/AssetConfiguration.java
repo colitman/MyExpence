@@ -5,13 +5,14 @@
 package ua.hobbydev.webapp.expense.domain.asset;
 
 import ua.hobbydev.webapp.expense.EnumUtils.AssetEnums.*;
+import ua.hobbydev.webapp.expense.domain.IdentifiedEntityInterface;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
 
 @Entity
 @Table(name = "asset_configurations")
-public class AssetConfiguration {
+public class AssetConfiguration implements IdentifiedEntityInterface {
 
     @Id
     @Column(name = "id")
@@ -30,6 +31,9 @@ public class AssetConfiguration {
 
     @Column(name = "creditLimit")
     private BigDecimal limit;
+
+    @Column(name = "deleted")
+    private boolean deleted;
 
     public Long getId() {
         return id;
@@ -69,6 +73,16 @@ public class AssetConfiguration {
 
     public void setLimit(BigDecimal limit) {
         this.limit = limit;
+    }
+
+    @Override
+    public boolean isDeleted() {
+        return deleted;
+    }
+
+    @Override
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
     }
 
     // ~ ======== Hashcode and equals

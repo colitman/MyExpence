@@ -27,8 +27,8 @@ It also should have the following private methods:
 		
 		getAsset: function() {
 			var id = $('meta[name="target_id"]').attr('content');
-			var type = $('meta[name="target_type"]').attr('content');
-			return aScope.assetService.getAssetById(id, type);
+			/*var type = $('meta[name="target_type"]').attr('content');*/
+			return aScope.assetService.getAssetById(id/*, type*/);
 		},
 		
 		updateAsset: function(assetData) {

@@ -32,8 +32,11 @@ public class Category implements IdentifiedEntityInterface {
     @ManyToOne
     private User user;
 
-    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "category")
     private List<Transaction> transactions = new ArrayList<Transaction>();
+
+    @Column(name = "deleted")
+    private boolean deleted;
 
     @Override
     public Long getId() {
@@ -75,6 +78,16 @@ public class Category implements IdentifiedEntityInterface {
 
     public void setTransactions(List<Transaction> transactions) {
         this.transactions = transactions;
+    }
+
+    @Override
+    public boolean isDeleted() {
+        return deleted;
+    }
+
+    @Override
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
     }
 
     // ~ ======== Hashcode and equals

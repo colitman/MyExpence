@@ -8,5 +8,7 @@ package ua.hobbydev.webapp.expense.domain;
  * Designates a persistent entity
  */
 public interface EntityInterface {
-	
+
+    public boolean isDeleted();
+    public void setDeleted(boolean deleted);
 }

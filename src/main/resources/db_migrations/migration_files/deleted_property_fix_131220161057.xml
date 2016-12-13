@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+		xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      		http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+	
+	<changeSet id="deleted_property_fix_131220161057" author="romenskyi" dbms="postgresql">
+		<addDefaultValue tableName="asset_configurations" columnName="deleted" defaultValueBoolean="false" />
+		<addDefaultValue tableName="assets" columnName="deleted" defaultValueBoolean="false" />
+		<addDefaultValue tableName="categories" columnName="deleted" defaultValueBoolean="false" />
+		<addDefaultValue tableName="currencies" columnName="deleted" defaultValueBoolean="false" />
+		<addDefaultValue tableName="transactions" columnName="deleted" defaultValueBoolean="false" />
+		<addDefaultValue tableName="users" columnName="deleted" defaultValueBoolean="false" />
+		
+		<update tableName="asset_configurations">
+			<column name="deleted" value="false" />
+		</update>
+		
+		<update tableName="assets">
+			<column name="deleted" value="false" />
+		</update>
+		
+		<update tableName="categories">
+			<column name="deleted" value="false" />
+		</update>
+		
+		<update tableName="currencies">
+			<column name="deleted" value="false" />
+		</update>
+		
+		<update tableName="transactions">
+			<column name="deleted" value="false" />
+		</update>
+		
+		<update tableName="users">
+			<column name="deleted" value="false" />
+		</update>
+	</changeSet>
+</databaseChangeLog>

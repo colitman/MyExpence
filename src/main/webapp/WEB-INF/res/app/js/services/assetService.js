@@ -22,17 +22,17 @@
 			});
 		},
 		
-		getAssetById: function(id, type) {
+		getAssetById: function(id/*, type*/) {
 			return $.ajax({
-				url     : $EX.WEB_API_ROOT + '/assets/' + type + '/' + id,
+				url     : $EX.WEB_API_ROOT + '/assets/'/* + type + '/'*/ + id,
 				method  : 'GET',
 				dataType: 'json'
 			});
 		},
 		
-		deleteAsset: function(id, type) {
+		deleteAsset: function(id/*, type*/) {
 			return $.ajax({
-				url   : $EX.WEB_API_ROOT + '/assets/' + type + '/' + id,
+				url   : $EX.WEB_API_ROOT + '/assets/'/* + type + '/'*/ + id,
 				method: 'DELETE'
 			});
 		},
@@ -48,7 +48,7 @@
 		
 		updateAsset: function(assetData) {
 			return $.ajax({
-				url   : $EX.WEB_API_ROOT + '/assets/' + assetData.type + '/' + assetData.id,
+				url   : $EX.WEB_API_ROOT + '/assets/'/* + assetData.type + '/'*/ + assetData.id,
 				method: 'PUT',
 				data  : assetData
 			});

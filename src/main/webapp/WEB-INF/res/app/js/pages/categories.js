@@ -10,11 +10,6 @@ $(function() {
 	m.subscribe(vI);
 	vI.subscribe(c);
 	
-	/*m.subscribe(vO);
-	vO.subscribe(c);*/
-	
-	
-	
 	$('a[href="#c-js-income-categories"]').on('show.bs.tab', function(event) {
 		m.deleteObservers();
 		vO.deleteObservers();
