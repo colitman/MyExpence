@@ -57,6 +57,11 @@ It should expose the following public access interfaces:
 	var createIncomeCategoryActions = function(categoryData) {
 		var tdActions = document.createElement('td');
 		
+		var seeTxAction = document.createElement('a');
+		$(seeTxAction).attr('href', $EX.APP_ROOT + '/settings/categories/' + categoryData.id + '/transactions');
+		$(seeTxAction).html('<i class="fa fa-database"></i>');
+		$(tdActions).append(seeTxAction);
+		
 		var editAction = document.createElement('a');
 		$(editAction).attr('href', '#');
 		$(editAction).html('<i class="fa fa-pencil"></i>');

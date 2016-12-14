@@ -10,7 +10,7 @@
 <!DOCTYPE html>
 <html lang="en">
 	<head>
-		<c:import url="/imports/head?pageTitle=Asset Transactions"></c:import>
+		<c:import url="/imports/head?pageTitle=Category Transactions"></c:import>
 		<meta name="target_id" content="${id}">
 	</head>
 	
@@ -20,15 +20,15 @@
 			
 			<main>
 				<header class="page-header">
-					<h2>Asset Transactions</h2>
+					<h2>Category Transactions</h2>
 					
 					<ol class="breadcrumb" id="c-js-crumbs">
 						<li class="c-js-home-crumb">
 							<a href="${app}/"><i class="fa fa-home"></i></a>
 						</li>
 						<li class="active">Settings</li>
-						<li>assetsSettings</li>
-						<li class="active">Asset Transactions</li>
+						<li>categoriesSettings</li>
+						<li class="active">Category Transactions</li>
 					</ol>
 				</header>
 				
@@ -91,10 +91,10 @@
 		<script src="${app}/res/excellentexport/excellentexport.js" ></script>
 		
 		<script src="${app}/res/app/js/services/transactionService.js"></script>
-		<script src="${app}/res/app/js/models/assetTransactions.js"></script>
+		<script src="${app}/res/app/js/models/categoryTransactions.js"></script>
 		<script src="${app}/res/app/js/views/transactions.js"></script>
 		<script src="${app}/res/app/js/controllers/transactions.js"></script>
-		<script src="${app}/res/app/js/pages/assetTransactions.js"></script>
+		<script src="${app}/res/app/js/pages/categoryTransactions.js"></script>
 
 	</body>
 </html>

@@ -12,7 +12,8 @@
 			login: {url: appRoot + '/login', name: 'Log In'},
 			signup: {url: appRoot + '/register', name: 'Sign Up'},
 			assetsSettings: {url: appRoot + '/settings/assets', name: 'Assets'},
-			currenciesSettings: {url: appRoot + '/settings/currencies', name: 'Currencies'}
+			currenciesSettings: {url: appRoot + '/settings/currencies', name: 'Currencies'},
+			categoriesSettings: {url: appRoot + '/settings/categories', name: 'Categories'}
 		},
 		
 		ASSET_TYPES: {

@@ -157,7 +157,7 @@ public class TransactionsApiController {
         if(category != null) {
             try {
                 Category relatedCategory = defaultService.get(Category.class, category);
-                stream = stream.filter((t) -> t.getCategory().equals(relatedCategory));
+                stream = stream.filter((t) -> relatedCategory.equals(t.getCategory()));
             } catch (ResourceNotFoundException e) {
                 // TODO add logging
             }
