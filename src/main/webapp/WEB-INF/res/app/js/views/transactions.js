@@ -23,7 +23,7 @@ It should expose the following public access interfaces:
 	var transactionsTable = $('#c-js-transactions-table');
 	/*var transactionsFilterForm = $('#c-js-transactions-filter-form');*/
 	
-	/*var transactionsFilterChangedEvent = new ViewEvent('c.transactions.filterChanged');*/
+	var transactionsExportEvent = new ViewEvent('c.transactions.export');
 	
 	var formatTime = function(millis) {
 		var date = new Date(millis);
@@ -177,6 +177,17 @@ It should expose the following public access interfaces:
 		}
 	
 	};
+	
+	//$('#c-js-transactions-export-button').click(function(event) {
+		/*event.preventDefault();
+		transactionsExportEvent.data = {trigger: this, target: $(transactionsTable).attr('id')};
+		transactionsView.setChanged();
+		transactionsView.notifyObservers(transactionsExportEvent);*/
+		
+		/*var anchor = viewEvent.data.trigger;
+		var table = viewEvent.data.target;*/
+		/*return ExcellentExport.excel(this, transactionsTable.attr('id'), 'Transactions');*/
+	//});
 		
 	aScope.transactionsView = transactionsView;
 	

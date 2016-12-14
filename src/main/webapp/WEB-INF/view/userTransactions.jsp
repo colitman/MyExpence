@@ -30,12 +30,25 @@
 				</header>
 				
 				<section id="c-js-transactions-search-form">
-					<input type="search" name="tx-search" id="tx-search" class="form-control" placeholder="Search..." autofocus="autofocus" />
+					<div class="form-group">
+						<input type="search" name="tx-search" id="tx-search" class="form-control" placeholder="Search..." autofocus="autofocus" />
+					</div>
+					
+					<div class="form-group row">
+						<div class="col-xs-12">
+							<div class="pull-right">
+								<a id="c-js-transactions-export-button"
+										class="btn btn-primary"
+										download="${username}_transactions.xls" onclick="return ExcellentExport.excel(this, 'c-js-datatable', 'Transactions');">Export</a>
+							</div>
+						</div>
+					</div>
+					
 				</section>
 				
 				<section id="c-js-transactions-table">
 					<div class="table-responsive">
-						<table class="table table-hover">
+						<table class="table table-hover" id="c-js-datatable">
 							<thead>
 								<tr>
 									<th class="col-sm-1">ID</th>
@@ -72,6 +85,7 @@
 		<c:import url="/imports/scripts"></c:import>
 		
 		<script src="${app}/res/jquery-searchable/jquery.searchable.js" ></script>
+		<script src="${app}/res/excellentexport/excellentexport.js" ></script>
 		
 		<script src="${app}/res/app/js/services/transactionService.js"></script>
 		<script src="${app}/res/app/js/models/userTransactions.js"></script>
