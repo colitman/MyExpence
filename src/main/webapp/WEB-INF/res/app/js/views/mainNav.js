@@ -73,6 +73,7 @@ It should expose the following public access interfaces:
 		update: function(data, message) {
 			if('category' === message) {
 				updateCategorySelect(data);
+				return;
 			}
 			
 			if('assets' === message) {
@@ -80,7 +81,10 @@ It should expose the following public access interfaces:
 				var currencies = data.currencies;
 				
 				updateAssetSelect(assets, currencies);
+				return;
 			}
+			
+			$(addExpenseModal).modal('hide');
 		}
 	
 	};

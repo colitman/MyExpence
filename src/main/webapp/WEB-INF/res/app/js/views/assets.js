@@ -24,10 +24,14 @@ It should expose the following public access interfaces:
 	var assetsTable = $('#c-js-added-assets-table');
 	var deleteModal = $('#c-delete-confirmation-modal');
 	var deleteAssetForm = $('#c-modal-delete-form');
+	var transferModal = $('#c-js-asset-transfer-modal');
+	var transferForm = $('#c-js-asset-transfer-form');
 	
 	var assetAddedEvent = new ViewEvent('c.asset.added',addAssetForm);
 	var assetDeleteEvent = new ViewEvent('c.asset.delete');
 	var assetDeletedEvent = new ViewEvent('c.asset.deleted');
+	var transferAttemptEvent = new ViewEvent('c.asset.transfer.attempt');
+	var transferDoEvent = new ViewEvent('c.asset.transfer.do', transferForm);
 	
 	var updateAssetTypesSelect = function(data) {
 		var select = $('#type', addAssetForm);
@@ -58,7 +62,21 @@ It should expose the following public access interfaces:
 			
 			$(select).append(option);
 		}
-	}
+	};
+	
+	var fillInTransferTargets = function(data) {
+		var select = $('select#to', transferModal);
+		$(select).html('');
+		
+		for(var i = 0; i < data.length; i++) {
+			var option = document.createElement('option');
+			
+			$(option).attr('value', data[i].id);
+			$(option).text(data[i].name);
+			
+			$(select).append(option);
+		}
+	};
 	
 	var updateAssetsList = function(assetData, currencyData) {
 		var oldTbody = $('tbody', assetsTable);
@@ -101,6 +119,22 @@ It should expose the following public access interfaces:
 	var createAssetActions = function(assetData) {
 		var tdActions = document.createElement('td');
 		
+		var transferAction = document.createElement('a');
+		$(transferAction).attr('href', '#');
+		$(transferAction).addClass('c-js-transfer-action');
+		$(transferAction).data('sender', assetData.id);
+		$(transferAction).html('<i class="fa fa-exchange"></i>');
+		$(tdActions).append(transferAction);
+		
+		$(transferAction).click(function(event) {
+			event.preventDefault();
+			var senderData = {id:$(transferAction).data('sender')}
+			$('#from', transferModal).val(senderData.id);
+			transferAttemptEvent.data = senderData;
+			assetsView.setChanged();
+			assetsView.notifyObservers(transferAttemptEvent);
+		});
+		
 		var editAction = document.createElement('a');
 		$(editAction).attr('href', $EX.APP_ROOT + '/settings/assets/' + assetData.id + '/configure');
 		$(editAction).html('<i class="fa fa-cog"></i>');
@@ -131,16 +165,23 @@ It should expose the following public access interfaces:
 		
 		__proto__: observable,
 		
-		update: function(assetsModel) {
+		update: function(subject, message) {
+			
+			if('transferAttempt' === message) {
+				fillInTransferTargets(subject);
+				$(transferModal).modal('show');
+				return;
+			}
 			
 			$('button[type="reset"]', addAssetForm).click();
 			$(deleteModal).modal('hide');
+			$(transferModal).modal('hide');
 			
 			currenciesModel.getCurrencies()
 				.done(function(currenciesData) {
 					updateCurrenciesSelect(currenciesData);
 					
-					assetsModel.getAssets()
+					subject.getAssets()
 						.done(function(assetData) {
 							updateAssetsList(assetData, currenciesData);
 						})
@@ -152,7 +193,7 @@ It should expose the following public access interfaces:
 					console.log(jqXHR.responseText);
 				});
 			
-			assetsModel.getAssetTypes()
+			subject.getAssetTypes()
 				.done(function(assetTypesData) {
 					updateAssetTypesSelect(assetTypesData);
 				})
@@ -165,7 +206,7 @@ It should expose the following public access interfaces:
 	addAssetForm.submit(function(event) {
 		event.preventDefault();
 		assetsView.setChanged();
-		assetsView.notifyObservers(assetAddedEvent)
+		assetsView.notifyObservers(assetAddedEvent);
 	});
 	
 	deleteAssetForm.submit(function(event) {
@@ -173,6 +214,12 @@ It should expose the following public access interfaces:
 		assetDeletedEvent.data = $(deleteAssetForm);
 		assetsView.setChanged();
 		assetsView.notifyObservers(assetDeletedEvent);
+	});
+	
+	transferForm.submit(function(event) {
+		event.preventDefault();
+		assetsView.setChanged();
+		assetsView.notifyObservers(transferDoEvent);
 	});
 		
 	aScope.assetsView = assetsView;

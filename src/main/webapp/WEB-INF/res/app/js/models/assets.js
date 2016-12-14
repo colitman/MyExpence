@@ -52,6 +52,18 @@ It also should have the following private methods:
 					_this.setChanged();
 					_this.notifyObservers(_this);
 				});
+		},
+		
+		transfer: function(expenseData) {
+			var _this = this;
+			aScope.assetService.transfer(expenseData)
+				.done(function(data) {
+					_this.setChanged();
+					_this.notifyObservers(_this);
+				})
+				.fail(function(jqXHR, textStatus, errorThrown) {
+					console.log(jqXHR.responseText);
+				});
 		}
 	
 	};

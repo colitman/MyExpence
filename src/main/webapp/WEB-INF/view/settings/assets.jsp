@@ -85,6 +85,7 @@
 
 		<div class="c-modals">
 			<c:import url="/imports/modals/deleteConfirmationModal"></c:import>
+			<c:import url="/imports/modals/assetTranferModal"></c:import>
 		</div>
 
 		<c:import url="/imports/scripts"></c:import>

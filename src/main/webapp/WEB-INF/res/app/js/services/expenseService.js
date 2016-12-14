@@ -10,8 +10,7 @@
 			return $.ajax({
 				url     : $EX.WEB_API_ROOT + '/expenses',
 				method  : 'POST',
-				data    : expenseData,
-				dataType: 'json'
+				data    : expenseData
 			});
 		}
 	}

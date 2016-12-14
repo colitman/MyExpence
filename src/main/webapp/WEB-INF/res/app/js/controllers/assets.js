@@ -50,6 +50,44 @@ function AssetsController(model, undefined){
 						$('#c-delete-failure-alert', deleteModal).removeClass('hidden');
 					});
 			}
+			
+			if(viewEvent.name === 'c.asset.transfer.attempt') {
+				
+				var sender = viewEvent.data.id;
+				
+				assetsModel.getAsset(sender)
+					.done(function(senderData) {
+						
+						assetsModel.getAssets()
+							.done(function(assetsData) {
+								var filteredAssets = assetsData.filter(function(asset) {
+									return asset.currency === senderData.currency && asset.id !== senderData.id;
+								});
+								
+								assetsModel.setChanged();
+								assetsModel.notifyObservers(filteredAssets, 'transferAttempt');
+								
+							})
+							.fail(function(jqXHR) {
+								console.log(jqXHR.responseText);
+							});
+					})
+					.fail(function(jqXHR) {
+						console.log(jqXHR.responseText);
+					});
+			}
+			
+			if(viewEvent.name === 'c.asset.transfer.do') {
+				var transferForm = viewEvent.data;
+				
+				var expenseData = new Expense();
+				expenseData.amount = $('#amount', transferForm).val();
+				expenseData.to = $('#to', transferForm).val();
+				expenseData.from = $('#from', transferForm).val();
+				expenseData.description = $('#description', transferForm).val();
+				
+				assetsModel.transfer(expenseData);
+			}
 		}
 	};
 	

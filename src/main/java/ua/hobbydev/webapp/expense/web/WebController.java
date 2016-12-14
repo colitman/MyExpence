@@ -92,4 +92,10 @@ public class WebController {
         mv.setViewName("imports/modals/addExpenseModal");
         return mv;
     }
+
+    @RequestMapping(path = "/imports/modals/assetTranferModal")
+    public ModelAndView assetTranferModal(ModelAndView mv) {
+        mv.setViewName("imports/modals/assetTranferModal");
+        return mv;
+    }
 }

@@ -5,16 +5,16 @@
 
 <c:set var="app" value="${pageContext.servletContext.contextPath}" />
 
-<aside class="modal fade" id="c-js-add-expense-modal">
+<aside class="modal fade" id="c-js-asset-transfer-modal">
 	<div class="modal-dialog">
 		<div class="modal-content">
 			<header class="modal-header">
 				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-				<h4 class="modal-title">Add Expense</h4>
+				<h4 class="modal-title">Transfer</h4>
 			</header>
 			<div class="modal-body">
-				<form id="c-js-add-expense-full-form" action="" method="post" class="form-horizontal">
-					<input type="hidden" id="type" name="type" required="required" />
+				<form id="c-js-asset-transfer-form" action="" method="post" class="form-horizontal">
+					<input type="hidden" id="from" name="from" required="required" />
 					<div class="form-group">
 						<label for="amount" class="col-sm-3 control-label">Amount</label>
 						<div class="col-sm-9">
@@ -22,24 +22,16 @@
 						</div>
 					</div>
 					
-					<div class="form-group" id="c-js-expense-category-form-group">
-						<label for="category" class="col-sm-3 control-label">Category</label>
+					<div class="form-group">
+						<label for="to" class="col-sm-3 control-label">To</label>
 						<div class="col-sm-9">
-							<select class="form-control" name="category" id="category" placeholder="Category" required="required">
-							</select>
-						</div>
-					</div>
-					
-					<div class="form-group" id="c-js-expense-asset-form-group">
-						<label for="asset" class="col-sm-3 control-label"></label>
-						<div class="col-sm-9">
-							<select class="form-control" name="asset" id="asset" placeholder="Asset" required="required">
+							<select class="form-control" name="to" id="to" placeholder="Asset" required="required">
 							</select>
 						</div>
 					</div>
 					
 					<div class="form-group">
-						<label for="description" class="col-sm-3 control-label">Description</label>
+						<label for="description" class="col-sm-3 control-label">Comment</label>
 						<div class="col-sm-9">
 							<textarea class="form-control" name="description" id="description" placeholder="Description"></textarea>
 						</div>
@@ -48,7 +40,7 @@
 			</div>
 			<footer class="modal-footer">
 				<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-				<button form="c-js-add-expense-full-form" type="submit" class="btn btn-primary">Add</button>
+				<button form="c-js-asset-transfer-form" type="submit" class="btn btn-primary">Transfer</button>
 			</footer>
 		</div>
 	</div>

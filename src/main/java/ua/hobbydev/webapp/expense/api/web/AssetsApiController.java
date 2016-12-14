@@ -13,6 +13,7 @@ import ua.hobbydev.webapp.expense.EnumUtils.AssetEnums.AssetType;
 import ua.hobbydev.webapp.expense.EnumUtils.AssetEnums.PaymentSystemType;
 import ua.hobbydev.webapp.expense.api.model.AssetTypeViewModel;
 import ua.hobbydev.webapp.expense.api.model.AssetViewModel;
+import ua.hobbydev.webapp.expense.api.model.ExpenseViewModel;
 import ua.hobbydev.webapp.expense.business.DefaultServiceInterface;
 import ua.hobbydev.webapp.expense.business.ResourceNotFoundException;
 import ua.hobbydev.webapp.expense.config.CurrentUser;
@@ -208,5 +209,40 @@ public class AssetsApiController {
         }
 
         return new ResponseEntity<String>("Updated", HttpStatus.OK);
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @RequestMapping(path = "transfer", method = RequestMethod.POST)
+    public ResponseEntity<String> doAssetsTransfer(@ModelAttribute ExpenseViewModel expense, @CurrentUser User currentUser) {
+        Asset sender = null;
+        Asset recipient = null;
+
+        try {
+            sender = defaultService.get(Asset.class, expense.getFrom());
+            recipient = defaultService.get(Asset.class, expense.getTo());
+
+            if(!sender.getUser().equals(currentUser) || !recipient.getUser().equals(currentUser)) {
+                return new ResponseEntity<String>(HttpStatus.FORBIDDEN);
+            }
+
+            sender.extractFromAmount(expense.getAmount());
+            recipient.addToAmount(expense.getAmount());
+
+            Transaction t = new Transaction();
+            t.setTransactionDate(Calendar.getInstance(TimeZone.getTimeZone(ZoneOffset.UTC)));
+            t.setAmount(expense.getAmount());
+            t.setMessage(expense.getDescription());
+            t.setUser(currentUser);
+            t.setRecipient(recipient);
+            t.setSender(sender);
+
+            defaultService.update(sender);
+            defaultService.update(recipient);
+            defaultService.add(t);
+
+            return new ResponseEntity<String>(HttpStatus.OK);
+        } catch (ResourceNotFoundException e) {
+            return new ResponseEntity<String>(HttpStatus.NOT_FOUND);
+        }
     }
 }

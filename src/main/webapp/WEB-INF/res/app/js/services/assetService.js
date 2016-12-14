@@ -52,6 +52,14 @@
 				method: 'PUT',
 				data  : assetData
 			});
+		},
+		
+		transfer: function(expenseData) {
+			return $.ajax({
+				url     : $EX.WEB_API_ROOT + '/assets/transfer',
+				method  : 'POST',
+				data    : expenseData
+			});
 		}
 	}
 	
