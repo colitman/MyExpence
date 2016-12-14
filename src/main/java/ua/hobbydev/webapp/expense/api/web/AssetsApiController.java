@@ -225,6 +225,14 @@ public class AssetsApiController {
                 return new ResponseEntity<String>(HttpStatus.FORBIDDEN);
             }
 
+            if(!sender.getCurrency().equals(recipient.getCurrency())) {
+                return new ResponseEntity<String>(HttpStatus.FORBIDDEN);
+            }
+
+            if(sender.getAmount().compareTo(expense.getAmount()) < 0 || expense.getAmount().compareTo(BigDecimal.ZERO) < 0) { // i.e. sender lacks money or negative value was passed
+                return new ResponseEntity<String>(HttpStatus.FORBIDDEN);
+            }
+
             sender.extractFromAmount(expense.getAmount());
             recipient.addToAmount(expense.getAmount());
 

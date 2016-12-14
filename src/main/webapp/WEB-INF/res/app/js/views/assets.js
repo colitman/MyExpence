@@ -123,6 +123,7 @@ It should expose the following public access interfaces:
 		$(transferAction).attr('href', '#');
 		$(transferAction).addClass('c-js-transfer-action');
 		$(transferAction).data('sender', assetData.id);
+		$(transferAction).data('available', assetData.amount);
 		$(transferAction).html('<i class="fa fa-exchange"></i>');
 		$(tdActions).append(transferAction);
 		
@@ -130,6 +131,7 @@ It should expose the following public access interfaces:
 			event.preventDefault();
 			var senderData = {id:$(transferAction).data('sender')}
 			$('#from', transferModal).val(senderData.id);
+			$(transferForm).data('limit', $(transferAction).data('available'));
 			transferAttemptEvent.data = senderData;
 			assetsView.setChanged();
 			assetsView.notifyObservers(transferAttemptEvent);
@@ -220,6 +222,16 @@ It should expose the following public access interfaces:
 		event.preventDefault();
 		assetsView.setChanged();
 		assetsView.notifyObservers(transferDoEvent);
+	});
+	
+	$('input#amount', transferForm).keyup(function() {
+		var entered = $(this).val();
+		var limit = $(transferForm).data('limit');
+		if(entered > limit || entered < 0) {
+			$('[type="submit"][form="c-js-asset-transfer-form"]').prop('disabled', 'disabled');
+		} else {
+			$('[type="submit"][form="c-js-asset-transfer-form"]').prop('disabled','');
+		}
 	});
 		
 	aScope.assetsView = assetsView;

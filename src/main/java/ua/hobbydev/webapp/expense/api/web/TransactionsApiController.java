@@ -62,7 +62,7 @@ public class TransactionsApiController {
 
             Transaction t = new Transaction();
             t.setTransactionDate(Calendar.getInstance(TimeZone.getTimeZone(ZoneOffset.UTC)));
-            t.setAmount(CategoryType.INCOME.equals(type)? expense.getAmount(): expense.getAmount().negate());
+            t.setAmount(/*CategoryType.INCOME.equals(type)? */expense.getAmount()/*: expense.getAmount().negate()*/);
             t.setMessage(expense.getDescription());
             t.setUser(currentUser);
             t.setCategory(category);
