@@ -9,10 +9,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import ua.hobbydev.webapp.expense.EnumUtils.CategoryEnums.*;
+import ua.hobbydev.webapp.expense.api.model.ExpenseViewModel;
 import ua.hobbydev.webapp.expense.api.model.TransactionViewModel;
 import ua.hobbydev.webapp.expense.business.DefaultServiceInterface;
 import ua.hobbydev.webapp.expense.business.ResourceNotFoundException;
@@ -29,7 +28,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @RestController
-@RequestMapping(path = "/api/web/transactions")
+@RequestMapping(path = "/api/web/")
 public class TransactionsApiController {
 
     @Autowired
@@ -39,7 +38,50 @@ public class TransactionsApiController {
     private UserServiceInterface userService;
 
     @PreAuthorize("isAuthenticated()")
-    @RequestMapping(path = "", method = RequestMethod.GET)
+    @RequestMapping(path = "expenses", method = RequestMethod.POST)
+    public ResponseEntity<String> addExpense(@ModelAttribute ExpenseViewModel expense, @CurrentUser User currentUser) {
+
+        CategoryType type = CategoryType.valueOf(expense.getType());
+
+        Asset asset = null;
+        Category category = null;
+
+        try {
+            asset = defaultService.get(Asset.class, CategoryType.INCOME.equals(type)? expense.getTo(): expense.getFrom());
+            category = defaultService.get(Category.class, expense.getCategory());
+
+            if(!asset.getUser().equals(currentUser) || !category.getUser().equals(currentUser)) {
+                return new ResponseEntity<String>(HttpStatus.FORBIDDEN);
+            }
+
+            if(CategoryType.INCOME.equals(type)) {
+                asset.addToAmount(expense.getAmount());
+            } else if(CategoryType.OUTGOING.equals(type)) {
+                asset.extractFromAmount(expense.getAmount());
+            }
+
+            Transaction t = new Transaction();
+            t.setTransactionDate(Calendar.getInstance(TimeZone.getTimeZone(ZoneOffset.UTC)));
+            t.setAmount(CategoryType.INCOME.equals(type)? expense.getAmount(): expense.getAmount().negate());
+            t.setMessage(expense.getDescription());
+            t.setUser(currentUser);
+            t.setCategory(category);
+
+            if(CategoryType.INCOME.equals(type)) {
+                asset.addRecipientTransaction(t);
+            } else if(CategoryType.OUTGOING.equals(type)) {
+                asset.addSenderTransaction(t);
+            }
+
+            defaultService.update(asset);
+            return new ResponseEntity<String>(HttpStatus.OK);
+        } catch (ResourceNotFoundException e) {
+            return new ResponseEntity<String>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @RequestMapping(path = "transactions", method = RequestMethod.GET)
     public ResponseEntity<List<TransactionViewModel>> getTransactions(@RequestParam(required = false) Long sender,
                                                                 @RequestParam(required = false) Long recipient,
                                                                 @RequestParam(required = false) Long category,

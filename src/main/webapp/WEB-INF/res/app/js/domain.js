@@ -1,5 +1,19 @@
 "use strict";
 
+function Expense() {
+	var model = {
+		type:'',
+		amount:'',
+		category:'',
+		to:'',
+		from:'',
+		description:''
+	}
+	
+	Object.seal(this);
+	return model;
+}
+
 function Transaction() {
 	var model = {
 		id:'',

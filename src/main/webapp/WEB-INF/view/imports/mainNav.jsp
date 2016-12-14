@@ -2,6 +2,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%@ taglib uri="http://www.springframework.org/security/tags" prefix="sec" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 
 <c:set var="app" value="${pageContext.servletContext.contextPath}" />
 <sec:authorize access="isAuthenticated()" var="authenticated"></sec:authorize>
@@ -23,9 +24,18 @@
 				</button>
 			</c:if>
 		</div>
-
+		
 		<c:if test="${authenticated}">
 			<div class="collapse navbar-collapse" id="c-top-nav">
+				
+				<form class="navbar-form navbar-left" id="c-js-add-expense-form">
+					<div class="form-group">
+						<input id="amount" name="amount" type="number" class="form-control" placeholder="Amount">
+					</div>
+					<button type="button" class="btn btn-success" id="c-js-add-income-button"><i class="fa fa-plus"></i></button>
+					<button type="button" class="btn btn-danger" id="c-js-add-outgoing-button"><i class="fa fa-minus"></i></button>
+				</form>
+				
 				<ul class="nav navbar-nav navbar-right">
 					<li class="dropdown">
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown">

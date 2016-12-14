@@ -60,6 +60,7 @@ public class AssetsApiController {
             Calendar date = Calendar.getInstance(TimeZone.getTimeZone(ZoneOffset.UTC));
             t.setTransactionDate(date);
             t.setAmount(BigDecimal.ZERO);
+            t.setMessage("Asset created.");
 
             AssetConfiguration configuration = new AssetConfiguration();
 
@@ -140,8 +141,7 @@ public class AssetsApiController {
                 t.setUser(currentUser);
                 t.setTransactionDate(Calendar.getInstance(TimeZone.getTimeZone(ZoneOffset.UTC)));
                 t.setSender(asset);
-
-
+                t.setMessage("Asset deleted.");
 
                 defaultService.delete(Asset.class, id);
                 defaultService.delete(AssetConfiguration.class, asset.getConfiguration().getId());

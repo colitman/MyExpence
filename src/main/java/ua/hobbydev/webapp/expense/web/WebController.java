@@ -86,4 +86,10 @@ public class WebController {
         mv.setViewName("imports/modals/deleteConfirmationModal");
         return mv;
     }
+
+    @RequestMapping(path = "/imports/modals/addExpenseModal")
+    public ModelAndView addExpenseModal(ModelAndView mv) {
+        mv.setViewName("imports/modals/addExpenseModal");
+        return mv;
+    }
 }

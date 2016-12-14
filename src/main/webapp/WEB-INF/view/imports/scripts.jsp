@@ -5,6 +5,8 @@
 
 <c:set var="app" value="${pageContext.servletContext.contextPath}" />
 
+<c:import url="/imports/modals/addExpenseModal"></c:import>
+
 <script src="https://code.jquery.com/jquery-2.2.4.min.js"
 		integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="
 		crossorigin="anonymous"></script>
@@ -20,3 +22,13 @@
 <script src="${app}/res/app/js/app.js"></script>
 <script src="${app}/res/app/js/core.js"></script>
 <script src="${app}/res/app/js/domain.js"></script>
+
+<script src="${app}/res/app/js/services/categoryService.js"></script>
+<script src="${app}/res/app/js/services/assetService.js"></script>
+<script src="${app}/res/app/js/services/currencyService.js"></script>
+<script src="${app}/res/app/js/services/expenseService.js"></script>
+
+<script src="${app}/res/app/js/models/mainNav.js"></script>
+<script src="${app}/res/app/js/views/mainNav.js"></script>
+<script src="${app}/res/app/js/controllers/mainNav.js"></script>
+<script src="${app}/res/app/js/pages/mainNav.js"></script>

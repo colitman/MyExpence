@@ -88,11 +88,13 @@ public class Asset implements IdentifiedEntityInterface {
     }
 
     public BigDecimal addToAmount(BigDecimal addedAmount) {
-        return getAmount().add(addedAmount);
+        setAmount(getAmount().add(addedAmount));
+        return getAmount();
     }
 
     public BigDecimal extractFromAmount(BigDecimal extractedAmount) {
-        return getAmount().subtract(extractedAmount);
+        setAmount(getAmount().subtract(extractedAmount));
+        return getAmount();
     }
 
     public Currency getCurrency() {
