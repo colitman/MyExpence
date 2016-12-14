@@ -30,7 +30,7 @@ It should expose the following public access interfaces:
 		return date.toString('dd-MM-yyyy HH:mm:ss');
 	};
 	
-	var updateAssetFilters = function(assetsData, chosenSender, chosenRecipient) {
+	/*var updateAssetFilters = function(assetsData, chosenSender, chosenRecipient) {
 		var senderSelect = $('#sender', transactionsFilterForm);
 		var recipientSelect = $('#recipient', transactionsFilterForm);
 		$(senderSelect).html('');
@@ -58,7 +58,7 @@ It should expose the following public access interfaces:
 			$(senderSelect).append(option);
 			$(recipientSelect).append(option2);
 		}
-	}
+	}*/
 	
 	var updateTransactionsList = function(data) {
 		var oldTbody = $('tbody', transactionsTable);
@@ -76,11 +76,20 @@ It should expose the following public access interfaces:
 			var tdMessage = document.createElement('td');
 			
 			$(tdId).text(data[i].id);
+			
 			$(tdSender).text(data[i].sender);
+			$(tdSender).addClass('sender-data');
+			
 			$(tdRecipient).text(data[i].recipient);
+			$(tdRecipient).addClass('recipient-data');
+			
 			$(tdCategory).text(data[i].category);
+			$(tdCategory).addClass('category-data');
+			
 			$(tdAmount).text(data[i].amount);
+			
 			$(tdMessage).text(data[i].message);
+			$(tdMessage).addClass('message-data')
 			
 			$(tdTime).text(formatTime(data[i].transactionDate));
 			
@@ -98,6 +107,39 @@ It should expose the following public access interfaces:
 		
 		$(oldTbody).remove();
 		$('thead', transactionsTable).after(body);
+		initSearches();
+	}
+	
+	var initSearches = function() {
+		/*$('#c-js-transactions-table table').searchable({
+			searchField:'[type="search"]',
+			selector: 'tbody tr',
+			childSelector:'td.' + $()
+		});*/
+		
+		$('#c-js-transactions-table table').searchable({
+			searchField: '#sender[type="search"]',
+			selector: 'tbody tr',
+			childSelector: 'td.sender-data'
+		});
+		
+		$('#c-js-transactions-table table').searchable({
+			searchField: '#recipient[type="search"]',
+			selector: 'tbody tr',
+			childSelector: 'td.recipient-data'
+		});
+		
+		$('#c-js-transactions-table table').searchable({
+			searchField: '#category[type="search"]',
+			selector: 'tbody tr',
+			childSelector: 'td.category-data'
+		});
+		
+		$('#c-js-transactions-table table').searchable({
+			searchField: '#message[type="search"]',
+			selector: 'tbody tr',
+			childSelector: 'td.message-data'
+		});
 	}
 	
 	var observable = new Observable();
@@ -108,15 +150,15 @@ It should expose the following public access interfaces:
 		
 		update: function(model) {
 			
-			var filterData = {
+			/*var filterData = {
 				sender:transactionsFilterForm.find('#sender').val(),
 				recipient:transactionsFilterForm.find('#recipient').val(),
 				category:transactionsFilterForm.find('#category').val(),
 				startDate:transactionsFilterForm.find('#startDate').val(),
 				endDate:transactionsFilterForm.find('#endDate').val()
-			};
+			};*/
 			
-			model.getTransactions(filterData)
+			model.getTransactions(/*filterData*/)
 				.done(function(transactionsData) {
 					updateTransactionsList(transactionsData);
 				})
@@ -124,19 +166,43 @@ It should expose the following public access interfaces:
 					console.log(jqXHR.responseText);
 				});
 			
-			$EX.assetsModel.getAssets()
+			/*$EX.assetsModel.getAssets()
 				.done(function(assetsData) {
 					updateAssetFilters(assetsData, filterData.sender, filterData.recipient);
-				});
+				});*/
 		}
 	
 	};
 	
-	transactionsFilterForm.submit(function(event) {
+	/*transactionsFilterForm.submit(function(event) {
 		event.preventDefault();
 		transactionsView.setChanged();
 		transactionsView.notifyObservers(transactionsFilterChangedEvent);
+	});*/
+	
+	/*$('#c-js-transactions-table table').searchable({
+		searchField: '#sender[type="search"]',
+		selector: 'tbody tr',
+		childSelector: 'td.sender-data'
 	});
+	
+	$('#c-js-transactions-table table').searchable({
+		searchField: '#recipient[type="search"]',
+		selector: 'tbody tr',
+		childSelector: 'td.recipient-data'
+	});
+	
+	$('#c-js-transactions-table table').searchable({
+		searchField: '#category[type="search"]',
+		selector: 'tbody tr',
+		childSelector: 'td.category-data'
+	});
+	
+	$('#c-js-transactions-table table').searchable({
+		searchField: '#message[type="search"]',
+		selector: 'tbody tr',
+		childSelector: 'td.message-data'
+	});*/
 		
 	aScope.transactionsView = transactionsView;
 	

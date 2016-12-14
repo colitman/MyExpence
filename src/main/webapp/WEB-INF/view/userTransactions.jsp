@@ -29,29 +29,33 @@
 					</ol>
 				</header>
 				
-				<section id="c-js-transactions-filter-form">
-					<form action="" method="get" class="form-inline">
+				<section id="c-js-transactions-filter-form" class="row">
+					<form action="" method="get" class="">
 						<sec:csrfInput/>
-						<div class="form-group">
-							<label class="sr-only" for="sender">Sender</label>
-							<select class="form-control" name="sender" id="sender" placeholder="Sender">
-							</select>
+						<div class="form-group col-sm-3">
+							<label class="" for="sender">Sender</label>
+							<input type="search" class="form-control" name="sender" id="sender" placeholder="Sender" />
 						</div>
 						
-						<div class="form-group">
-							<label class="sr-only" for="recipient">Recipient</label>
-							<select class="form-control" name="recipient" id="recipient" placeholder="Recipient">
-							</select>
+						<div class="form-group col-sm-3">
+							<label class="" for="recipient">Recipient</label>
+							<input type="search" class="form-control" name="recipient" id="recipient" placeholder="Recipient" />
 						</div>
 						
-						<div class="form-group">
-							<label class="sr-only" for="category">Category</label>
-							<select class="form-control" name="category" id="category" placeholder="Category">
-							</select>
+						<div class="form-group col-sm-3">
+							<label class="" for="category">Category</label>
+							<input type="search" class="form-control" name="category" id="category" placeholder="Category">
 						</div>
 						
+						<div class="form-group col-sm-3">
+							<label class="" for="message">Message</label>
+							<input type="search" class="form-control" name="message" id="message" placeholder="Message">
+						</div>
+						
+						<%--
 						<button type="submit" class="btn btn-primary">Filter</button>
 						<button type="reset" class="btn btn-danger">Reset</button>
+						--%>
 					</form>
 				</section>
 				
@@ -92,6 +96,9 @@
 		</div>
 
 		<c:import url="/imports/scripts"></c:import>
+		
+		<script src="${app}/res/jquery-searchable/jquery.searchable.js" ></script>
+		
 		<script src="${app}/res/app/js/services/transactionService.js"></script>
 		<script src="${app}/res/app/js/services/assetService.js"></script>
 		<script src="${app}/res/app/js/models/userTransactions.js"></script>

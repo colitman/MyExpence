@@ -7,14 +7,14 @@
 	var transactionService = {
 		
 		getTransactions: function(
-			sender,
+			/*sender,
 			recipient,
 			category,
 			startDate,
-			endDate
+			endDate*/
 		) {
 			
-			var paramsString = '';
+			/*var paramsString = '';
 			
 			if(sender != null) {
 				paramsString += 'sender=' + sender + '&'
@@ -35,10 +35,10 @@
 				paramsString += 'endDate=' + endDate + '&'
 			}
 			
-			paramsString += 'user=' + $('meta[name="principal"]').attr('content');
+			paramsString += 'user=' + $('meta[name="principal"]').attr('content');*/
 			
 			return $.ajax({
-				url     : $EX.WEB_API_ROOT + '/transactions?' + paramsString,
+				url     : $EX.WEB_API_ROOT + '/transactions'/* + '?' + paramsString*/,
 				method  : 'GET',
 				dataType: 'json'
 			});
