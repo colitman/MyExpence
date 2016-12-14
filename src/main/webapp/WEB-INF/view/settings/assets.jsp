@@ -59,11 +59,11 @@
 						<table class="table table-hover">
 							<thead>
 								<tr>
-									<th class="col-sm-4">Name</th>
+									<th class="col-sm-3">Name</th>
 									<th class="col-sm-2">Type</th>
 									<th class="col-sm-2">Amount</th>
 									<th class="col-sm-3">Currency</th>
-									<th class="col-sm-1">Actions</th>
+									<th class="col-sm-2">Actions</th>
 								</tr>
 							</thead>
 							<tbody>

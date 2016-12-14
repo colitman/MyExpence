@@ -119,6 +119,11 @@ It should expose the following public access interfaces:
 	var createAssetActions = function(assetData) {
 		var tdActions = document.createElement('td');
 		
+		var seeTxAction = document.createElement('a');
+		$(seeTxAction).attr('href', $EX.APP_ROOT + '/settings/assets/' + assetData.id + '/transactions');
+		$(seeTxAction).html('<i class="fa fa-database"></i>');
+		$(tdActions).append(seeTxAction);
+		
 		var transferAction = document.createElement('a');
 		$(transferAction).attr('href', '#');
 		$(transferAction).addClass('c-js-transfer-action');

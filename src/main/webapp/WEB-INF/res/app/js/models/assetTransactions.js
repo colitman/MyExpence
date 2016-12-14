@@ -28,7 +28,9 @@ It also should have the following private methods:
 				assetId,
 				null,
 				null,
-				null);
+				null,
+				true
+			);
 		}
 	
 	};

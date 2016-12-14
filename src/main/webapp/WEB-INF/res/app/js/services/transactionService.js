@@ -11,7 +11,8 @@
 			recipient,
 			category,
 			startDate,
-			endDate
+			endDate,
+			useOrForSenderAndRecipient
 		) {
 			
 			var paramsString = '';
@@ -35,7 +36,11 @@
 				paramsString += 'endDate=' + endDate + '&'
 			}
 			
-			paramsString += 'user=' + $('meta[name="principal"]').attr('content');
+			if(useOrForSenderAndRecipient == null) {
+				useOrForSenderAndRecipient = false;
+			}
+			
+			paramsString += 'useOr=' + useOrForSenderAndRecipient + '&user=' + $('meta[name="principal"]').attr('content');
 			
 			return $.ajax({
 				url     : $EX.WEB_API_ROOT + '/transactions' + '?' + paramsString,

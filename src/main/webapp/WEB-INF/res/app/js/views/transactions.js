@@ -91,6 +91,8 @@ It should expose the following public access interfaces:
 				.fail(function(jqXHR) {
 					console.log(jqXHR.responseText);
 				});
+			
+			$EX.generateBreadcrumbs();
 		}
 	
 	};

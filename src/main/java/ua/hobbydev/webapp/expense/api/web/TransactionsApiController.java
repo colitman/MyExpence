@@ -83,12 +83,13 @@ public class TransactionsApiController {
     @PreAuthorize("isAuthenticated()")
     @RequestMapping(path = "transactions", method = RequestMethod.GET)
     public ResponseEntity<List<TransactionViewModel>> getTransactions(@RequestParam(required = false) Long sender,
-                                                                @RequestParam(required = false) Long recipient,
-                                                                @RequestParam(required = false) Long category,
-                                                                @RequestParam(required = false) Long startDate,
-                                                                @RequestParam(required = false) Long endDate,
-                                                                @RequestParam(required = false) String user,
-                                                                @CurrentUser User currentUser) {
+                                                                      @RequestParam(required = false) Long recipient,
+                                                                      @RequestParam(required = false) Long category,
+                                                                      @RequestParam(required = false) Long startDate,
+                                                                      @RequestParam(required = false) Long endDate,
+                                                                      @RequestParam(required = false) String user,
+                                                                      @RequestParam(required = false, defaultValue = "false") boolean useOr,
+                                                                      @CurrentUser User currentUser) {
         if(user != null) {
             try {
                 User requestingUser = userService.loadUserByUsername(user);
@@ -103,21 +104,53 @@ public class TransactionsApiController {
         List<Transaction> transactions = defaultService.list(Transaction.class);
         Stream<Transaction> stream = transactions.stream().filter((t) -> t.getUser().equals(currentUser));
 
-        if(sender != null) {
-            try {
-                Asset senderAsset = defaultService.get(Asset.class, sender);
-                stream = stream.filter((t) -> senderAsset.equals(t.getSender()));
-            } catch (ResourceNotFoundException e) {
-                // TODO add logging
-            }
-        }
+        if(useOr) {
+            if(sender == null && recipient == null) {
 
-        if(recipient != null) {
-            try {
-                Asset recipientAsset = defaultService.get(Asset.class, recipient);
-                stream = stream.filter((t) -> recipientAsset.equals(t.getRecipient()));
-            } catch (ResourceNotFoundException e) {
-                // TODO add logging
+            } else if (sender != null && recipient != null) {
+                try {
+                    Asset senderAsset = defaultService.get(Asset.class, sender);
+                    Asset recipientAsset = defaultService.get(Asset.class, recipient);
+
+                    stream = stream.filter(
+                            (t) -> senderAsset.equals(t.getSender()) || recipientAsset.equals(t.getRecipient())
+                    );
+                } catch (ResourceNotFoundException e) {
+                    // TODO add logging
+                }
+            } else if (sender == null && recipient != null) {
+                try {
+                    Asset recipientAsset = defaultService.get(Asset.class, recipient);
+                    stream = stream.filter((t) -> recipientAsset.equals(t.getRecipient()));
+                } catch (ResourceNotFoundException e) {
+                    // TODO add logging
+                }
+            } else if (sender != null && recipient == null) {
+                try {
+                    Asset senderAsset = defaultService.get(Asset.class, sender);
+                    stream = stream.filter((t) -> senderAsset.equals(t.getSender()));
+                } catch (ResourceNotFoundException e) {
+                    // TODO add logging
+                }
+            }
+        } else {
+
+            if (sender != null) {
+                try {
+                    Asset senderAsset = defaultService.get(Asset.class, sender);
+                    stream = stream.filter((t) -> senderAsset.equals(t.getSender()));
+                } catch (ResourceNotFoundException e) {
+                    // TODO add logging
+                }
+            }
+
+            if (recipient != null) {
+                try {
+                    Asset recipientAsset = defaultService.get(Asset.class, recipient);
+                    stream = stream.filter((t) -> recipientAsset.equals(t.getRecipient()));
+                } catch (ResourceNotFoundException e) {
+                    // TODO add logging
+                }
             }
         }
 

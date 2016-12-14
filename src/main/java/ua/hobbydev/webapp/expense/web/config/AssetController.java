@@ -22,4 +22,12 @@ public class AssetController {
         mv.setViewName("settings/assets/configure");
         return mv;
     }
+
+    @PreAuthorize("isAuthenticated()")
+    @RequestMapping(path = "{id}/transactions", method = RequestMethod.GET)
+    public ModelAndView assetTransactionsPage(@PathVariable Long id, ModelAndView mv) {
+        mv.addObject("id", id);
+        mv.setViewName("settings/assets/transactions");
+        return mv;
+    }
 }
