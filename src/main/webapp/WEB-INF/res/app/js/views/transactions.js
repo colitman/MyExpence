@@ -21,9 +21,9 @@ It should expose the following public access interfaces:
 (function(aScope, undefined){
 	
 	var transactionsTable = $('#c-js-transactions-table');
-	var transactionsFilterForm = $('#c-js-transactions-filter-form');
+	/*var transactionsFilterForm = $('#c-js-transactions-filter-form');*/
 	
-	var transactionsFilterChangedEvent = new ViewEvent('c.transactions.filterChanged');
+	/*var transactionsFilterChangedEvent = new ViewEvent('c.transactions.filterChanged');*/
 	
 	var formatTime = function(millis) {
 		var date = new Date(millis);
@@ -78,20 +78,21 @@ It should expose the following public access interfaces:
 			$(tdId).text(data[i].id);
 			
 			$(tdSender).text(data[i].sender);
-			$(tdSender).addClass('sender-data');
+			/*$(tdSender).addClass('sender-data');*/
 			
 			$(tdRecipient).text(data[i].recipient);
-			$(tdRecipient).addClass('recipient-data');
+			/*$(tdRecipient).addClass('recipient-data');*/
 			
 			$(tdCategory).text(data[i].category);
-			$(tdCategory).addClass('category-data');
+			/*$(tdCategory).addClass('category-data');*/
 			
 			$(tdAmount).text(data[i].amount);
 			
 			$(tdMessage).text(data[i].message);
-			$(tdMessage).addClass('message-data')
+			/*$(tdMessage).addClass('message-data')*/
 			
 			$(tdTime).text(formatTime(data[i].transactionDate));
+			$(tdTime).addClass('c-js-no-search');
 			
 			$(row).append(tdId);
 			$(row).append(tdTime);
@@ -107,15 +108,9 @@ It should expose the following public access interfaces:
 		
 		$(oldTbody).remove();
 		$('thead', transactionsTable).after(body);
-		initSearches();
 	}
 	
-	var initSearches = function() {
-		/*$('#c-js-transactions-table table').searchable({
-			searchField:'[type="search"]',
-			selector: 'tbody tr',
-			childSelector:'td.' + $()
-		});*/
+	/*var initSearches = function() {
 		
 		$('#c-js-transactions-table table').searchable({
 			searchField: '#sender[type="search"]',
@@ -140,6 +135,14 @@ It should expose the following public access interfaces:
 			selector: 'tbody tr',
 			childSelector: 'td.message-data'
 		});
+	}*/
+	
+	var updateSearchContext = function() {
+		$(transactionsTable).searchable({
+			searchField: '#tx-search',
+			selector: 'tbody tr',
+			childSelector: 'td:not(.c-js-no-search)'
+		});
 	}
 	
 	var observable = new Observable();
@@ -161,6 +164,7 @@ It should expose the following public access interfaces:
 			model.getTransactions(/*filterData*/)
 				.done(function(transactionsData) {
 					updateTransactionsList(transactionsData);
+					updateSearchContext();
 				})
 				.fail(function(jqXHR) {
 					console.log(jqXHR.responseText);
@@ -173,36 +177,6 @@ It should expose the following public access interfaces:
 		}
 	
 	};
-	
-	/*transactionsFilterForm.submit(function(event) {
-		event.preventDefault();
-		transactionsView.setChanged();
-		transactionsView.notifyObservers(transactionsFilterChangedEvent);
-	});*/
-	
-	/*$('#c-js-transactions-table table').searchable({
-		searchField: '#sender[type="search"]',
-		selector: 'tbody tr',
-		childSelector: 'td.sender-data'
-	});
-	
-	$('#c-js-transactions-table table').searchable({
-		searchField: '#recipient[type="search"]',
-		selector: 'tbody tr',
-		childSelector: 'td.recipient-data'
-	});
-	
-	$('#c-js-transactions-table table').searchable({
-		searchField: '#category[type="search"]',
-		selector: 'tbody tr',
-		childSelector: 'td.category-data'
-	});
-	
-	$('#c-js-transactions-table table').searchable({
-		searchField: '#message[type="search"]',
-		selector: 'tbody tr',
-		childSelector: 'td.message-data'
-	});*/
 		
 	aScope.transactionsView = transactionsView;
 	

@@ -29,34 +29,8 @@
 					</ol>
 				</header>
 				
-				<section id="c-js-transactions-filter-form" class="row">
-					<form action="" method="get" class="">
-						<sec:csrfInput/>
-						<div class="form-group col-sm-3">
-							<label class="" for="sender">Sender</label>
-							<input type="search" class="form-control" name="sender" id="sender" placeholder="Sender" />
-						</div>
-						
-						<div class="form-group col-sm-3">
-							<label class="" for="recipient">Recipient</label>
-							<input type="search" class="form-control" name="recipient" id="recipient" placeholder="Recipient" />
-						</div>
-						
-						<div class="form-group col-sm-3">
-							<label class="" for="category">Category</label>
-							<input type="search" class="form-control" name="category" id="category" placeholder="Category">
-						</div>
-						
-						<div class="form-group col-sm-3">
-							<label class="" for="message">Message</label>
-							<input type="search" class="form-control" name="message" id="message" placeholder="Message">
-						</div>
-						
-						<%--
-						<button type="submit" class="btn btn-primary">Filter</button>
-						<button type="reset" class="btn btn-danger">Reset</button>
-						--%>
-					</form>
+				<section id="c-js-transactions-search-form">
+					<input type="search" name="tx-search" id="tx-search" class="form-control" placeholder="Search..." autofocus="autofocus" />
 				</section>
 				
 				<section id="c-js-transactions-table">
@@ -100,9 +74,7 @@
 		<script src="${app}/res/jquery-searchable/jquery.searchable.js" ></script>
 		
 		<script src="${app}/res/app/js/services/transactionService.js"></script>
-		<script src="${app}/res/app/js/services/assetService.js"></script>
 		<script src="${app}/res/app/js/models/userTransactions.js"></script>
-		<script src="${app}/res/app/js/models/assets.js"></script>
 		<script src="${app}/res/app/js/views/transactions.js"></script>
 		<script src="${app}/res/app/js/controllers/transactions.js"></script>
 		<script src="${app}/res/app/js/pages/userTransactions.js"></script>

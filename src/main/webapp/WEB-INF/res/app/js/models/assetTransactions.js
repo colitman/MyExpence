@@ -22,13 +22,13 @@ It also should have the following private methods:
 	var assetTransactionsModel = {
 		__proto__: observable,
 		
-		getTransactions: function(filterData) {
+		getTransactions: function(/*filterData*/) {
 			return aScope.transactionService.getTransactions(
 				assetId,
 				assetId,
-				filterData.category,
-				filterData.startDate,
-				filterData.endDate);
+				/*filterData.category*/null,
+				/*filterData.startDate*/null,
+				/*filterData.endDate*/null);
 		}
 	
 	};
