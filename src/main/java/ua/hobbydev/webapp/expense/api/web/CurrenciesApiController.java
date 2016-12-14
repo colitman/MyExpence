@@ -57,7 +57,6 @@ public class CurrenciesApiController {
 
         if(oldDefaultCurrency != null) {
             try {
-                //oldDefaultCurrency = currencyService.get(Currency.class, oldDefaultCurrency.getId());
                 oldDefaultCurrency.setDefaultCurrency(false);
                 currencyService.update(oldDefaultCurrency);
             } catch (ResourceNotFoundException e) {

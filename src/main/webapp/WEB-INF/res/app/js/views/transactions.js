@@ -21,44 +21,11 @@ It should expose the following public access interfaces:
 (function(aScope, undefined){
 	
 	var transactionsTable = $('#c-js-transactions-table');
-	/*var transactionsFilterForm = $('#c-js-transactions-filter-form');*/
-	
-	var transactionsExportEvent = new ViewEvent('c.transactions.export');
 	
 	var formatTime = function(millis) {
 		var date = new Date(millis);
 		return date.toString('dd-MM-yyyy HH:mm:ss');
 	};
-	
-	/*var updateAssetFilters = function(assetsData, chosenSender, chosenRecipient) {
-		var senderSelect = $('#sender', transactionsFilterForm);
-		var recipientSelect = $('#recipient', transactionsFilterForm);
-		$(senderSelect).html('');
-		$(recipientSelect).html('');
-		
-		$(senderSelect).append('<option selected="selected" value="">Any</option>');
-		$(recipientSelect).append('<option selected="selected" value="">Any</option>');
-		
-		for(var i = 0; i < assetsData.length; i++) {
-			var option = $(document.createElement('option'));
-			
-			$(option).attr('value', assetsData[i].id);
-			$(option).text(assetsData[i].name);
-			
-			var option2 = $(option).clone();
-			
-			if(option.attr('value') === chosenSender) {
-				option.prop('selected', 'selected');
-			}
-			
-			if(option2.attr('value') === chosenRecipient) {
-				option2.prop('selected', 'selected');
-			}
-			
-			$(senderSelect).append(option);
-			$(recipientSelect).append(option2);
-		}
-	}*/
 	
 	var updateTransactionsList = function(data) {
 		var oldTbody = $('tbody', transactionsTable);
@@ -76,21 +43,11 @@ It should expose the following public access interfaces:
 			var tdMessage = document.createElement('td');
 			
 			$(tdId).text(data[i].id);
-			
 			$(tdSender).text(data[i].sender);
-			/*$(tdSender).addClass('sender-data');*/
-			
 			$(tdRecipient).text(data[i].recipient);
-			/*$(tdRecipient).addClass('recipient-data');*/
-			
 			$(tdCategory).text(data[i].category);
-			/*$(tdCategory).addClass('category-data');*/
-			
 			$(tdAmount).text(data[i].amount);
-			
 			$(tdMessage).text(data[i].message);
-			/*$(tdMessage).addClass('message-data')*/
-			
 			$(tdTime).text(formatTime(data[i].transactionDate));
 			$(tdTime).addClass('c-js-no-search');
 			
@@ -110,33 +67,6 @@ It should expose the following public access interfaces:
 		$('thead', transactionsTable).after(body);
 	}
 	
-	/*var initSearches = function() {
-		
-		$('#c-js-transactions-table table').searchable({
-			searchField: '#sender[type="search"]',
-			selector: 'tbody tr',
-			childSelector: 'td.sender-data'
-		});
-		
-		$('#c-js-transactions-table table').searchable({
-			searchField: '#recipient[type="search"]',
-			selector: 'tbody tr',
-			childSelector: 'td.recipient-data'
-		});
-		
-		$('#c-js-transactions-table table').searchable({
-			searchField: '#category[type="search"]',
-			selector: 'tbody tr',
-			childSelector: 'td.category-data'
-		});
-		
-		$('#c-js-transactions-table table').searchable({
-			searchField: '#message[type="search"]',
-			selector: 'tbody tr',
-			childSelector: 'td.message-data'
-		});
-	}*/
-	
 	var updateSearchContext = function() {
 		$(transactionsTable).searchable({
 			searchField: '#tx-search',
@@ -153,15 +83,7 @@ It should expose the following public access interfaces:
 		
 		update: function(model) {
 			
-			/*var filterData = {
-				sender:transactionsFilterForm.find('#sender').val(),
-				recipient:transactionsFilterForm.find('#recipient').val(),
-				category:transactionsFilterForm.find('#category').val(),
-				startDate:transactionsFilterForm.find('#startDate').val(),
-				endDate:transactionsFilterForm.find('#endDate').val()
-			};*/
-			
-			model.getTransactions(/*filterData*/)
+			model.getTransactions()
 				.done(function(transactionsData) {
 					updateTransactionsList(transactionsData);
 					updateSearchContext();
@@ -169,26 +91,10 @@ It should expose the following public access interfaces:
 				.fail(function(jqXHR) {
 					console.log(jqXHR.responseText);
 				});
-			
-			/*$EX.assetsModel.getAssets()
-				.done(function(assetsData) {
-					updateAssetFilters(assetsData, filterData.sender, filterData.recipient);
-				});*/
 		}
 	
 	};
 	
-	//$('#c-js-transactions-export-button').click(function(event) {
-		/*event.preventDefault();
-		transactionsExportEvent.data = {trigger: this, target: $(transactionsTable).attr('id')};
-		transactionsView.setChanged();
-		transactionsView.notifyObservers(transactionsExportEvent);*/
-		
-		/*var anchor = viewEvent.data.trigger;
-		var table = viewEvent.data.target;*/
-		/*return ExcellentExport.excel(this, transactionsTable.attr('id'), 'Transactions');*/
-	//});
-		
 	aScope.transactionsView = transactionsView;
 	
 })($EX);

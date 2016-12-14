@@ -108,7 +108,7 @@ public class AssetsApiController {
 
     @PreAuthorize("isAuthenticated()")
     @RequestMapping(path="{id}", method = RequestMethod.GET)
-    public ResponseEntity<AssetViewModel> getAssetById(@PathVariable Long id, /*@PathVariable String type,*/ @CurrentUser User currentUser) {
+    public ResponseEntity<AssetViewModel> getAssetById(@PathVariable Long id, @CurrentUser User currentUser) {
         Asset asset = null;
         AssetViewModel assetVm = null;
 

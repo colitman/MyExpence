@@ -29,8 +29,8 @@ It also should have the following private methods:
 			return aScope.assetService.getAssetTypes();
 		},
 		
-		getAsset: function(id/*, type*/) {
-			return aScope.assetService.getAssetById(id/*, type*/);
+		getAsset: function(id) {
+			return aScope.assetService.getAssetById(id);
 		},
 		
 		addAsset: function(assetData) {
@@ -45,9 +45,9 @@ It also should have the following private methods:
 				});
 		},
 		
-		deleteAsset: function(id/*, type*/) {
+		deleteAsset: function(id) {
 			var _this = this;
-			return aScope.assetService.deleteAsset(id/*, type*/)
+			return aScope.assetService.deleteAsset(id)
 				.done(function(data) {
 					_this.setChanged();
 					_this.notifyObservers(_this);

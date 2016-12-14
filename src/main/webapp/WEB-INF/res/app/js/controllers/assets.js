@@ -27,18 +27,10 @@ function AssetsController(model, undefined){
 				var id = viewEvent.data.id;
 				var deleteModal = $('#c-delete-confirmation-modal');
 				
-				assetsModel.getAsset(id/*, type*/)
+				assetsModel.getAsset(id)
 					.done(function(data) {
 						$('#c-delete-subject', deleteModal).html('<b>' + data.name + ' (' + data.label + ')</b> asset.');
 						$('#c-modal-delete-form #id', deleteModal).val(data.id);
-						
-						/*var typeInput = document.createElement('input');
-						$(typeInput).attr('type', 'hidden');
-						$(typeInput).attr('id', 'type');
-						$(typeInput).attr('name', 'type');
-						$(typeInput).val(data.type);
-						
-						$('#c-modal-delete-form #id', deleteModal).after(typeInput);*/
 						
 						$(deleteModal).modal('show');
 					})
@@ -51,8 +43,7 @@ function AssetsController(model, undefined){
 				
 				var deleteAssetForm = viewEvent.data;
 				var id = $('#id', deleteAssetForm).val();
-				/*var type = $('#type', deleteAssetForm).val();*/
-				assetsModel.deleteAsset(id/*, type*/)
+				assetsModel.deleteAsset(id)
 					.fail(function(jqXHR, textStatus, errorThrown) {
 						var deleteModal = $('#c-delete-confirmation-modal');
 						$('#c-delete-failure-message', deleteModal).text(jqXHR.responseText);

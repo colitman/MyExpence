@@ -21,13 +21,8 @@ It also should have the following private methods:
 	var userTransactionsModel = {
 		__proto__: observable,
 		
-		getTransactions: function(/*filterData*/) {
-			return aScope.transactionService.getTransactions(
-				/*filterData.sender,
-				filterData.recipient,
-				filterData.category,
-				filterData.startDate,
-				filterData.endDate*/);
+		getTransactions: function() {
+			return aScope.transactionService.getTransactions();
 		}
 	
 	};

@@ -154,8 +154,5 @@ public class DefaultDAO {
 			// TODO add logging
 			return;
 		}
-
-		//Session session = getSession();
-		//session.delete(entity);
 	}
 }

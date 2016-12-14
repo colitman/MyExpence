@@ -11,9 +11,7 @@ function TransactionsController(model, undefined){
 	var transactionsController = {
 		update: function(viewEvent) {
 			if(viewEvent.name === 'c.transactions.export') {
-				/*var anchor = viewEvent.data.trigger;
-				var table = viewEvent.data.target;
-				ExcellentExport.excel(anchor, table, 'Transactions');*/
+				
 			}
 		}
 	};

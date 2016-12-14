@@ -44,9 +44,6 @@ public class Asset implements IdentifiedEntityInterface {
     @OneToOne(mappedBy = "asset", cascade = CascadeType.ALL, orphanRemoval = true)
     private AssetConfiguration configuration;
 
-    /*@OneToMany(mappedBy = "asset", cascade =  CascadeType.ALL)
-    private List<Transaction> transactions = new ArrayList<Transaction>();*/
-
     @OneToMany(mappedBy = "sender", cascade =  CascadeType.ALL)
     private List<Transaction> senderTransactions = new ArrayList<Transaction>();
 
@@ -170,16 +167,6 @@ public class Asset implements IdentifiedEntityInterface {
         this.recipientTransactions.remove(transaction);
     }
 
-    /*public void addTransaction(Transaction transaction) {
-        transaction.setAsset(this);
-        this.transactions.add(transaction);
-    }
-
-    public void removeTransaction(Transaction transaction) {
-        transaction.setAsset(null);
-        this.transactions.remove(transaction);
-    }*/
-
     @Override
     public boolean isDeleted() {
         return deleted;
@@ -197,7 +184,7 @@ public class Asset implements IdentifiedEntityInterface {
         all.addAll(getRecipientTransactions());
         all.addAll(getSenderTransactions());
 
-        Collections.sort(all/*, (t1, t2) -> t1.getTransactionDate().compareTo(t2.getTransactionDate())*/);
+        Collections.sort(all);
 
         return all;
     }

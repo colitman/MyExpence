@@ -26,9 +26,6 @@ public class Transaction implements IdentifiedEntityInterface, Comparable<Transa
     @Temporal(TemporalType.TIMESTAMP)
     private Calendar transactionDate;
 
-    /*@ManyToOne
-    private Asset asset;*/
-
     @ManyToOne
     private Asset sender;
 
@@ -83,14 +80,6 @@ public class Transaction implements IdentifiedEntityInterface, Comparable<Transa
     public void setRecipient(Asset recipient) {
         this.recipient = recipient;
     }
-
-    /*public Asset getAsset() {
-        return asset;
-    }
-
-    public void setAsset(Asset asset) {
-        this.asset = asset;
-    }*/
 
     public BigDecimal getAmount() {
         return amount;
