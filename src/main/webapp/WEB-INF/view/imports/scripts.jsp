@@ -16,6 +16,9 @@
 		integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
 		crossorigin="anonymous"></script>
 
+<script src="https://cdn.datatables.net/1.10.13/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.13/js/dataTables.bootstrap.min.js"></script>
+
 <script src="${app}/res/jscookie/js.cookie.js"></script>
 <script src="${app}/res/datejs/date.js"></script>
 <script src="${app}/res/app/js/alerts.js"></script>

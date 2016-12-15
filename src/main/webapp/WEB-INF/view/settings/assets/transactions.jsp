@@ -32,11 +32,29 @@
 					</ol>
 				</header>
 				
-				<section id="c-js-transactions-search-form">
-					<div class="form-group">
-						<input type="search" name="tx-search" id="tx-search" class="form-control" placeholder="Search..." autofocus="autofocus" />
+				<div class="panel-group" id="c-js-transactions-tools">
+					<div class="panel panel-default">
+						<div class="panel-heading">
+							<h3 class="panel-title">
+								<a role="button" data-toggle="collapse" data-parent="#c-js-transactions-tools" href="#c-js-tx-filters">
+									Filter
+								</a>
+							</h3>
+						</div>
+						<div id="c-js-tx-filters" class="panel-collapse collapse" role="tabpanel">
+							<div class="panel-body">
+								
+								<section id="c-js-transactions-filters">
+								
+								</section>
+							
+							</div>
+						</div>
 					</div>
-					
+				</div>
+				
+				<section id="c-js-transactions-export">
+										
 					<div class="form-group row">
 						<div class="col-xs-12">
 							<div class="pull-right">
@@ -58,9 +76,9 @@
 									<th class="col-sm-2">Time</th>
 									<th class="col-sm-2">Sender</th>
 									<th class="col-sm-2">Recipient</th>
-									<th class="col-sm-2">Category</th>
+									<th class="col-sm-2 c-js-searchable">Category</th>
 									<th class="col-sm-1">Amount</th>
-									<th class="col-sm-2">Message</th>
+									<th class="col-sm-2 c-js-searchable">Message</th>
 								</tr>
 							</thead>
 							<tbody>

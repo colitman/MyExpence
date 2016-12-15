@@ -67,11 +67,48 @@ It should expose the following public access interfaces:
 		$('thead', transactionsTable).after(body);
 	}
 	
-	var updateSearchContext = function() {
-		$(transactionsTable).searchable({
-			searchField: '#tx-search',
-			selector: 'tbody tr',
-			childSelector: 'td:not(.c-js-no-search)'
+	var initDataTable = function() {
+		
+		var searchableColumns = $('#c-js-datatable thead th.c-js-searchable');
+		searchableColumns.each(function(index, column) {
+			$(column).data('index', index);
+			var input = $(document.createElement('input'));
+			input.attr('type', 'search');
+			input.attr('id', index);
+			input.addClass('form-control');
+			input.attr('placeholder', 'Search...');
+			input.data('target', index);
+			
+			var wrapper = $(document.createElement('div'))
+			wrapper.addClass('form-group col-sm-6 col-md-3');
+			wrapper.append(input);
+			input.before('<label for="'+index+'">' + $(column).text() + '</label>')
+			
+			$('#c-js-transactions-filters').append(wrapper);
+		});
+		
+		var txDataTable = $('#c-js-datatable').DataTable({
+			dom: 'rt<<"col-sm-6"li><"col-sm-6 text-right"p>>',
+			order: [[1,'desc']],
+			pagingType: 'full_numbers',
+			lengthMenu: [[10,25,50,-1],[10,25,50,'All']]
+		});
+		
+		txDataTable.columns(searchableColumns).every(function() {
+			var column = this;
+			var index = $(column.header()).data('index');
+			var searchField = $('#c-js-transactions-filters input#' + index);
+			
+			searchField.on('keyup change', function() {
+				var term = searchField.val();
+				var colsearch = column.search();
+				
+				if(colsearch !== term) {
+					var result = column.search(term);
+					result.draw();
+				}
+			});
+			
 		});
 	}
 	
@@ -86,7 +123,7 @@ It should expose the following public access interfaces:
 			model.getTransactions()
 				.done(function(transactionsData) {
 					updateTransactionsList(transactionsData);
-					updateSearchContext();
+					initDataTable();
 				})
 				.fail(function(jqXHR) {
 					console.log(jqXHR.responseText);

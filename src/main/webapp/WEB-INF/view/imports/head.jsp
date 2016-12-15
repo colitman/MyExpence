@@ -32,4 +32,6 @@
 		integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1"
 		crossorigin="anonymous">
 
+<link rel="stylesheet" href="https://cdn.datatables.net/1.10.13/css/dataTables.bootstrap.min.css">
+
 <link rel="stylesheet" href="${app}/res/app/css/main.css">
