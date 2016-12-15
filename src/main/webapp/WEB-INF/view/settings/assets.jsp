@@ -56,7 +56,7 @@
 				
 				<section id="c-js-added-assets-table">
 					<div class="table-responsive">
-						<table class="table table-hover">
+						<table class="table table-hover c-js-datatable">
 							<thead>
 								<tr>
 									<th class="col-sm-3">Name</th>

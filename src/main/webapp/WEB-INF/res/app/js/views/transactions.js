@@ -69,7 +69,7 @@ It should expose the following public access interfaces:
 	
 	var initDataTable = function() {
 		
-		var searchableColumns = $('#c-js-datatable thead th.c-js-searchable');
+		var searchableColumns = $('.c-js-datatable thead th.c-js-searchable');
 		searchableColumns.each(function(index, column) {
 			$(column).data('index', index);
 			var input = $(document.createElement('input'));
@@ -87,11 +87,12 @@ It should expose the following public access interfaces:
 			$('#c-js-transactions-filters').append(wrapper);
 		});
 		
-		var txDataTable = $('#c-js-datatable').DataTable({
+		var txDataTable = $('.c-js-datatable').DataTable({
 			dom: 'rt<<"col-sm-6"li><"col-sm-6 text-right"p>>',
 			order: [[1,'desc']],
 			pagingType: 'full_numbers',
-			lengthMenu: [[10,25,50,-1],[10,25,50,'All']]
+			lengthMenu: [[10,25,50,-1],[10,25,50,'All']],
+			destroy: true
 		});
 		
 		txDataTable.columns(searchableColumns).every(function() {

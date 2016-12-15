@@ -74,7 +74,7 @@
 						
 						<section id="c-js-income-categories-table">
 							<div class="table-responsive">
-								<table class="table table-hover">
+								<table class="table table-hover c-js-datatable">
 									<thead>
 										<tr>
 											<th class="col-sm-11">Name</th>
@@ -127,7 +127,7 @@
 						
 						<section id="c-js-outgoing-categories-table">
 							<div class="table-responsive">
-								<table class="table table-hover">
+								<table class="table table-hover c-js-datatable">
 									<thead>
 										<tr>
 											<th class="col-sm-11">Name</th>

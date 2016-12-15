@@ -95,7 +95,7 @@
 				
 				<section id="c-js-currencies-table">
 					<div class="table-responsive">
-						<table class="table table-hover">
+						<table class="table table-hover c-js-datatable">
 							<thead>
 								<tr>
 									<th class="col-sm-8">Name</th>

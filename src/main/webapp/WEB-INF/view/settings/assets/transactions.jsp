@@ -69,7 +69,7 @@
 				
 				<section id="c-js-transactions-table">
 					<div class="table-responsive">
-						<table class="table table-hover" id="c-js-datatable">
+						<table class="table table-hover c-js-datatable">
 							<thead>
 								<tr>
 									<th class="col-sm-1">ID</th>

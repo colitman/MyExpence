@@ -119,6 +119,16 @@ It should expose the following public access interfaces:
 		return tdActions;
 	}
 	
+	var initDataTable = function() {
+		
+		var txDataTable = $('.c-js-datatable').DataTable({
+			dom: 'rt<<"col-sm-6"li><"col-sm-6 text-right"p>>',
+			pagingType: 'full_numbers',
+			lengthMenu: [[10,25,50,-1],[10,25,50,'All']],
+			destroy: true
+		});
+	}
+	
 	var observable = new Observable();
 	
 	var currenciesView = {
@@ -134,6 +144,7 @@ It should expose the following public access interfaces:
 					$(editCurrencyForm).addClass('hidden');
 					updateDefaultCurrencySelect(currenciesData);
 					updateCurrenciesList(currenciesData);
+					initDataTable();
 				})
 				.fail(function(jqXHR) {
 					console.log(jqXHR.responseText);

@@ -165,6 +165,17 @@ It should expose the following public access interfaces:
 		return tdActions;
 	}
 	
+	var initDataTable = function() {
+		
+		var txDataTable = $('.c-js-datatable').DataTable({
+			dom: 'rt<<"col-sm-6"li><"col-sm-6 text-right"p>>',
+			order: [[0,'asc']],
+			pagingType: 'full_numbers',
+			lengthMenu: [[10,25,50,-1],[10,25,50,'All']],
+			destroy: true
+		});
+	}
+	
 	var observable = new Observable();
 	var currenciesModel = $EX.currenciesModel;
 	
@@ -191,6 +202,7 @@ It should expose the following public access interfaces:
 					subject.getAssets()
 						.done(function(assetData) {
 							updateAssetsList(assetData, currenciesData);
+							initDataTable();
 						})
 						.fail(function(jqXHR) {
 							console.log(jqXHR.responseText);
