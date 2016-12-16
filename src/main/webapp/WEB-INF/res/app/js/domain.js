@@ -1,5 +1,16 @@
 "use strict";
 
+function DashboardCurrencyStat() {
+	var model = {
+		currency: new Currency(),
+		totalAmountForCurrency: 0,
+		assets:[]
+	}
+	
+	Object.seal(this);
+	return model;
+}
+
 function Expense() {
 	var model = {
 		type:'',

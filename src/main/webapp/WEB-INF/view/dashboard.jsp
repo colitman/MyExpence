@@ -16,6 +16,18 @@
 			<c:import url="/imports/mainNav"></c:import>
 			
 			<main>
+				<header class="page-header">
+					<h2>Dashboard</h2>
+					<ol class="breadcrumb" id="c-js-crumbs">
+						<li class="active c-js-home-crumb">
+							<i class="fa fa-home"></i> Dashboard
+						</li>
+					</ol>
+				</header>
+				
+				<section id="c-js-stats-by-currencies" class="row">
+					
+				</section>
 				
 			</main>
 			
@@ -23,8 +35,43 @@
 		</div>
 
 		<div class="c-modals"></div>
+		
+		<div class="hidden templates">
+			
+			<div class="panel panel-info" id="c-js-currency-stat-template">
+				<div class="panel-heading">
+					<h3 class="panel-title">
+						<a role="button" href="#c-js-stat-details"></a>
+					</h3>
+				</div>
+				<div id="c-js-stat-details" class="panel-collapse collapse" role="tabpanel">
+					<table class="table table-condensed table-hover c-js-datatable">
+						<thead>
+							<tr>
+								<th>Asset</th>
+								<th>Type</th>
+								<th>Amount</th>
+							</tr>
+						</thead>
+						<tbody>
+							
+						</tbody>
+					</table>
+					<div class="panel-footer c-js-stat-chart">
+						
+					</div>
+				</div>
+				
+			</div>
+			
+		</div>
 
 		<c:import url="/imports/scripts"></c:import>
+		<script src="${app}/res/app/js/services/assetService.js"></script>
+		<script src="${app}/res/app/js/services/currencyService.js"></script>
+		<script src="${app}/res/app/js/models/dashboard.js"></script>
+		<script src="${app}/res/app/js/views/dashboard.js"></script>
+		<script src="${app}/res/app/js/pages/dashboard.js"></script>
 
 	</body>
 </html>
