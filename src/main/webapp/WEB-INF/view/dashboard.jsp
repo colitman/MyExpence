@@ -29,6 +29,33 @@
 					
 				</section>
 				
+				<section id="c-js-trend-charts" class="row">
+					<section id="c-js-income-trend" class="col-md-6">
+						<section class="c-js-trend-settings row">
+							<div class="form-grup  col-md-6">
+								<label for="startDate">Start Date</label>
+								<input type="date" class="form-control" name="startDate" id="startDate">
+							</div>
+							<div class="form-grup  col-md-6">
+								<label for="endDate">End Date</label>
+								<input type="date" class="form-control" name="endDate" id="endDate">
+							</div>
+						</section>
+					</section>
+					
+					<section id="c-js-outgoing-trend" class="col-md-6">
+						<section class="c-js-trend-settings row">
+							<div class="form-grup  col-md-6">
+								<label for="startDate">Start Date</label>
+								<input type="date" class="form-control" name="startDate" id="startDate">
+							</div>
+							<div class="form-grup  col-md-6">
+								<label for="endDate">End Date</label>
+								<input type="date" class="form-control" name="endDate" id="endDate">
+							</div>
+						</section>
+					</section>
+				</section>
 			</main>
 			
 			<c:import url="/imports/mainFooter"></c:import>
@@ -38,7 +65,7 @@
 		
 		<div class="hidden templates">
 			
-			<div class="panel panel-info" id="c-js-currency-stat-template">
+			<div class="panel panel-primary" id="c-js-currency-stat-template">
 				<div class="panel-heading" data-target="#c-js-stat-details">
 					<h3 class="panel-title">
 						<%--a role="button" href="#c-js-stat-details"></a--%>
