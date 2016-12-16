@@ -3,7 +3,7 @@
 function DashboardCurrencyStat() {
 	var model = {
 		currency: new Currency(),
-		totalAmountForCurrency: 0,
+		totalAmountForCurrency: new BigNumber(0),
 		assets:[]
 	}
 	

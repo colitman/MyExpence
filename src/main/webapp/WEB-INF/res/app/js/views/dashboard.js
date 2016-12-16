@@ -29,7 +29,6 @@ It should expose the following public access interfaces:
 		
 		update: function(data, message) {
 			if('c.currency.stats.update' === message) {
-				console.log(data);
 				updateStatsByCurrencies(data);
 				return;
 			}
@@ -45,24 +44,29 @@ It should expose the following public access interfaces:
 		var statTemplate = $('#c-js-currency-stat-template');
 		
 		for(var i = 0; i < data.length; i++) {
+			var chartValues = [];
+			var chartLabels = [];
+			var chartBGColors = [];
+			var chartHoverBGColors = [];
+			
 			var stat = data[i];
 			
 			var wrapperDiv = $(document.createElement('div'));
-			wrapperDiv.addClass('col-sm-4 col-md-3');
+			wrapperDiv.addClass('col-sm-6 col-md-4');
 			
 			var statDOM = statTemplate.clone();
 			wrapperDiv.append(statDOM);
 			statDOM.attr('id', 'c-js-currency-stat-' + stat.currency.id);
-			var a = $('.panel-title a', statDOM);
-			a.attr('href', a.attr('href') + '-' + stat.currency.id);
-			a.text(stat.currency.name + ' (' + stat.currency.code + '): ' + stat.currency.symbol + stat.totalAmountForCurrency);
+			var panelHeading = $('.panel-heading',statDOM);
+			panelHeading.data('target', panelHeading.data('target') + '-' + stat.currency.id);
+			$('h3', panelHeading).text(stat.currency.name + ' (' + stat.currency.code + '): ' + stat.currency.symbol + stat.totalAmountForCurrency.toNumber());
 			
 			var detailsDiv = $('#c-js-stat-details', statDOM);
-			detailsDiv.attr('id', a.attr('href').substring(1));
+			detailsDiv.attr('id', panelHeading.data('target').substring(1));
 			
-			a.click(function(event) {
+			panelHeading.click(function(event) {
 				event.preventDefault();
-				var targetSelector = $(this).attr('href');
+				var targetSelector = $(this).data('target');
 				var target = $(targetSelector);
 				target.collapse('toggle');
 			});
@@ -88,9 +92,37 @@ It should expose the following public access interfaces:
 				row.append(tdAmount);
 				
 				$('tbody', pTable).append(row);
+				
+				chartLabels.push(statAsset.name);
+				chartValues.push(statAsset.amount);
+				var color = randomColor({luminosity: 'light'});
+				chartBGColors.push(color);
+				chartHoverBGColors.push(color);
 			}
 			
-			targetSection.append(wrapperDiv);
+			if(stat.currency.defaultCurrency) {
+				targetSection.prepend(wrapperDiv);
+			} else {
+				targetSection.append(wrapperDiv);
+			}
+			
+			if(stat.assets.length !== 0) {
+				var chartJsCanvas = $(document.createElement('canvas'));
+				$('.c-js-stat-chart', wrapperDiv).append(chartJsCanvas);
+				var chartJsChart = new Chart(chartJsCanvas, {
+					type: 'doughnut',
+					data: {
+						labels  : chartLabels,
+						datasets: [
+							{
+								data                : chartValues,
+								backgroundColor     : chartBGColors,
+								hoverBackgroundColor: chartHoverBGColors
+							}
+						]
+					}
+				});
+			}
 		}
 		
 		$('.c-js-datatable').DataTable({

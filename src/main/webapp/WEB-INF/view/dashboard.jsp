@@ -39,9 +39,9 @@
 		<div class="hidden templates">
 			
 			<div class="panel panel-info" id="c-js-currency-stat-template">
-				<div class="panel-heading">
+				<div class="panel-heading" data-target="#c-js-stat-details">
 					<h3 class="panel-title">
-						<a role="button" href="#c-js-stat-details"></a>
+						<%--a role="button" href="#c-js-stat-details"></a--%>
 					</h3>
 				</div>
 				<div id="c-js-stat-details" class="panel-collapse collapse" role="tabpanel">
@@ -58,7 +58,6 @@
 						</tbody>
 					</table>
 					<div class="panel-footer c-js-stat-chart">
-						
 					</div>
 				</div>
 				

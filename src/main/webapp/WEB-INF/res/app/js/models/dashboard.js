@@ -52,7 +52,8 @@ It also should have the following private methods:
 			for(var a = 0; a < currencyAssets.length; a++) {
 				var currencyAsset = currencyAssets[a];
 				stat.assets.push(currencyAsset);
-				stat.totalAmountForCurrency += currencyAsset.amount;
+				
+				stat.totalAmountForCurrency = stat.totalAmountForCurrency.plus(currencyAsset.amount);
 			}
 			
 			result.push(stat);

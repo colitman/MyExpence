@@ -56,7 +56,7 @@
 					<div class="form-group">
 						<label for="amount" class="col-sm-3 control-label">Amount</label>
 						<div class="col-sm-4">
-							<input type="number"  class="form-control" name="amount" id="amount" placeholder="Amount">
+							<input type="number" step="any" class="form-control" name="amount" id="amount" placeholder="Amount">
 						</div>
 					</div>
 				

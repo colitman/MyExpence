@@ -19,8 +19,19 @@
 <script src="https://cdn.datatables.net/1.10.13/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/1.10.13/js/dataTables.bootstrap.min.js"></script>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/randomcolor/0.4.4/randomColor.js"
+		integrity="sha256-ZZPmD/jyjhl0iLBOrKiOgbMCVEoSC9px6yVIR4rm4Tc="
+		crossorigin="anonymous"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.js"
+		integrity="sha256-HptdWaetAoQSrTP9GZVVxKovdIq1C3MmKazLYQ7JnL4="
+		crossorigin="anonymous"></script>
+
 <script src="${app}/res/jscookie/js.cookie.js"></script>
 <script src="${app}/res/datejs/date.js"></script>
+<script src="${app}/res/sparkline/jquery.sparkline.js"></script>
+<script src="${app}/res/bignumber/bignumber.js"></script>
+
 <script src="${app}/res/app/js/alerts.js"></script>
 <script src="${app}/res/app/js/app.js"></script>
 <script src="${app}/res/app/js/core.js"></script>

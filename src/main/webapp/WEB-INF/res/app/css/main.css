@@ -33,6 +33,20 @@ option[value=""][disabled] {
     display: none;
 }
 
+/* Dashboard resets */
+
+@media(min-width: 768px) and (max-width: 991px) {
+    #c-js-stats-by-currencies div:nth-child(2n+3) {
+        clear: left;
+    }
+}
+
+@media(min-width: 992px) {
+    #c-js-stats-by-currencies div:nth-child(3n+4) {
+        clear: left;
+    }
+}
+
 /*
 body {
 	background-color: #eee;
