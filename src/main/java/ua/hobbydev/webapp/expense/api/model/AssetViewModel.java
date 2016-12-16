@@ -23,6 +23,7 @@ public class AssetViewModel implements ViewModelInterface<Asset> {
     private String paymentSystem;
     private String bankName;
     private BigDecimal limit;
+    private boolean showInTotals;
 
     public AssetViewModel() {}
 
@@ -37,6 +38,7 @@ public class AssetViewModel implements ViewModelInterface<Asset> {
         this.bankName = domain.getConfiguration().getBankName();
         this.paymentSystem = domain.getConfiguration().getPaymentSystem() == null? "": domain.getConfiguration().getPaymentSystem().name();
         this.limit = domain.getConfiguration().getLimit();
+        this.showInTotals = domain.isShowInTotals();
     }
 
     @Override
@@ -46,6 +48,7 @@ public class AssetViewModel implements ViewModelInterface<Asset> {
         domain.setName(name);
         domain.setType(AssetType.valueOf(type));
         domain.setAmount(amount);
+        domain.setShowInTotals(showInTotals);
 
         Currency assetCurrency = new Currency();
         assetCurrency.setId(currency);
@@ -132,5 +135,13 @@ public class AssetViewModel implements ViewModelInterface<Asset> {
 
     public void setLimit(BigDecimal limit) {
         this.limit = limit;
+    }
+
+    public boolean isShowInTotals() {
+        return showInTotals;
+    }
+
+    public void setShowInTotals(boolean showInTotals) {
+        this.showInTotals = showInTotals;
     }
 }

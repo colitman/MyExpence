@@ -69,6 +69,7 @@ It should expose the following public access interfaces:
 		$('#type', configureAssetForm).val(assetData.type);
 		$('#name', configureAssetForm).val(assetData.name);
 		$('#amount', configureAssetForm).val(assetData.amount);
+		$('#showInTotals', configureAssetForm).prop('checked', assetData.showInTotals);
 		
 		if(assetData.type === $EX.ASSET_TYPES.BANK_ACCOUNT ||
 			assetData.type === $EX.ASSET_TYPES.DEBIT_CARD ||
@@ -97,7 +98,8 @@ It should expose the following public access interfaces:
 			
 			bankNameInput.val(assetData.bankName);
 			
-			$('.form-group:nth-last-child(2)', configureAssetForm).after(formGroupDiv);
+			$('.form-group:nth-last-child(3)', configureAssetForm).after(formGroupDiv);
+			//$('.form-group.c-js-always-last-but-one', configureAssetForm).before(formGroupDiv);
 			
 			if(assetData.type === $EX.ASSET_TYPES.DEBIT_CARD ||
 				assetData.type === $EX.ASSET_TYPES.CREDIT_CARD) {
@@ -122,7 +124,7 @@ It should expose the following public access interfaces:
 				paymentSystemSelect.attr('placeholder', 'Payment System');
 				inputDiv2.append(paymentSystemSelect);
 				
-				$('.form-group:nth-last-child(2)', configureAssetForm).after(formGroupDiv2);
+				$('.form-group:nth-last-child(3)', configureAssetForm).after(formGroupDiv2);
 				
 				if(assetData.type === $EX.ASSET_TYPES.CREDIT_CARD) {
 					
@@ -149,7 +151,7 @@ It should expose the following public access interfaces:
 					
 					limitInput.val(assetData.limit);
 					
-					$('.form-group:nth-last-child(2)', configureAssetForm).after(formGroupDiv3);
+					$('.form-group:nth-last-child(3)', configureAssetForm).after(formGroupDiv3);
 				}
 			}
 		}

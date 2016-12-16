@@ -59,6 +59,17 @@
 							<input type="number" step="any" class="form-control" name="amount" id="amount" placeholder="Amount">
 						</div>
 					</div>
+					
+					<div class="form-group c-js-always-last-but-one">
+						<div class="col-sm-offset-3 col-sm-4">
+							<div class="checkbox pull-right">
+								<label>
+									<input type="checkbox" name="showInTotals" id="showInTotals">
+									Show in Dashboard totals
+								</label>
+							</div>
+						</div>
+					</div>
 				
 				    <div class="form-group">
 				        <div class="col-sm-4 col-sm-offset-3">

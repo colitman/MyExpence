@@ -23,6 +23,7 @@ function AssetConfigController(model, undefined){
 				assetData.paymentSystem = $('#paymentSystem', changedAssetForm).val();
 				assetData.bankName = $('#bankName', changedAssetForm).val();
 				assetData.limit = $('#limit', changedAssetForm).val();
+				assetData.showInTotals = $('#showInTotals', changedAssetForm).prop('checked');
 				
 				assetModel.updateAsset(assetData)
 					.fail(function(jqXHR, textStatus, errorThrown) {

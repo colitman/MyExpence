@@ -44,6 +44,9 @@ public class Asset implements IdentifiedEntityInterface {
     @OneToOne(mappedBy = "asset", cascade = CascadeType.ALL, orphanRemoval = true)
     private AssetConfiguration configuration;
 
+    @Column(name = "showInTotals")
+    private boolean showInTotals;
+
     @OneToMany(mappedBy = "sender", cascade =  CascadeType.ALL)
     private List<Transaction> senderTransactions = new ArrayList<Transaction>();
 
@@ -177,6 +180,14 @@ public class Asset implements IdentifiedEntityInterface {
     @Override
     public void setDeleted(boolean deleted) {
         this.deleted = deleted;
+    }
+
+    public boolean isShowInTotals() {
+        return showInTotals;
+    }
+
+    public void setShowInTotals(boolean showInTotals) {
+        this.showInTotals = showInTotals;
     }
 
     @Transient

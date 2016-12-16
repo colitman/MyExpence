@@ -46,8 +46,12 @@ It also should have the following private methods:
 			stat.currency = currency;
 			
 			var currencyAssets = assetsData.filter(function(asset) {
-				return asset.currency === currency.id;
+				return asset.currency === currency.id && asset.showInTotals;
 			});
+			
+			if(currencyAssets.length === 0) {
+				continue;
+			}
 			
 			for(var a = 0; a < currencyAssets.length; a++) {
 				var currencyAsset = currencyAssets[a];

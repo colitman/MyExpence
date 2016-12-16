@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+		xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      		http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+	
+	<changeSet id="add_showInTotals_property_to_assets_161220161922" author="romenskyi" dbms="postgresql">
+		<addColumn tableName="assets">
+			<column name="showintotals"
+					afterColumn="deleted"
+					type="boolean"
+					defaultValueBoolean="true">
+				<constraints nullable="false"></constraints>
+			</column>
+		</addColumn>
+		
+		<update tableName="assets">
+			<column name="showintotals" valueBoolean="true"></column>
+		</update>
+	</changeSet>
+</databaseChangeLog>

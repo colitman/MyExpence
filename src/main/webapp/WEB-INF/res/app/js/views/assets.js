@@ -108,6 +108,10 @@ It should expose the following public access interfaces:
 			$(row).append(tdCurrency);
 			$(row).append(createAssetActions(assetData[i]));
 			
+			if(!assetData[i].showInTotals) {
+				$(row).addClass('text-muted');
+			}
+			
 			$(body).append(row);
 		}
 		

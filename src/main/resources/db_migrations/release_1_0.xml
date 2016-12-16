@@ -19,6 +19,7 @@
 	<include file="migration_files/add_fks_to_transactions_131220161522.xml" relativeToChangelogFile="true" />
 	<include file="migration_files/add_message_column_to_transactions_131220161544.xml" relativeToChangelogFile="true" />
 	<include file="migration_files/remove_asset_id_column_from_transactions_131220161547.xml" relativeToChangelogFile="true" />
+	<include file="migration_files/add_showInTotals_property_to_assets_161220161922.xml" relativeToChangelogFile="true" />
 	
 	
 	<include file="data_init_files/seed_data_051220161332.xml" relativeToChangelogFile="true"></include>

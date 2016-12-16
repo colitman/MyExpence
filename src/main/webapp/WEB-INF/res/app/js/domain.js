@@ -83,7 +83,8 @@ function Asset() {
 		amount:'',
 		paymentSystem:'',
 		bankName:'',
-		limit:''
+		limit:'',
+		showInTotals: true
 	}
 	
 	Object.seal(model);

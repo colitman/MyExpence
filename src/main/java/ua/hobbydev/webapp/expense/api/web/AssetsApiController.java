@@ -54,6 +54,7 @@ public class AssetsApiController {
             asset.setType(enumType);
             asset.setCurrency(currency);
             asset.setAmount(BigDecimal.ZERO);
+            asset.setShowInTotals(true);
 
             Transaction t = new Transaction();
             t.setUser(currentUser);
@@ -184,6 +185,7 @@ public class AssetsApiController {
             }
 
             asset.setAmount(assetVm.getAmount());
+            asset.setShowInTotals(assetVm.isShowInTotals());
 
             if(asset.getType() == AssetType.BANK_ACCOUNT ||
                     asset.getType() == AssetType.DEBIT_CARD ||
