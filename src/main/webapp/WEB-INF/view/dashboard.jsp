@@ -25,37 +25,108 @@
 					</ol>
 				</header>
 				
-				<section id="c-js-stats-by-currencies" class="row">
+				<div class="row">
+					<section id="c-js-stats-by-currencies">
 					
-				</section>
+					</section>
+				</div>
 				
-				<section id="c-js-trend-charts" class="row">
-					<section id="c-js-income-trend" class="col-md-6">
-						<section class="c-js-trend-settings row">
-							<div class="form-grup  col-md-6">
-								<label for="startDate">Start Date</label>
-								<input type="date" class="form-control" name="startDate" id="startDate">
+				<div class="row">
+					<section id="c-js-trend-charts">
+						<section class="col-md-6 c-js-trend">
+							<div class="panel panel-success" id="c-js-income-trend-panel" >
+								<div class="panel-heading">
+									<h3 class="panel-title">Income Trend</h3>
+								</div>
+								<div class="panel-collapse collapse in">
+									<div class="panel-body c-js-trend-settings" id="c-js-income-trend-settings">
+										<div class="row">
+											<div class="form-group  col-md-6">
+												<label for="startDate">Start Date</label>
+												<input type="date" class="form-control" name="startDate" id="startDate">
+											</div>
+											<div class="form-group  col-md-6">
+												<label for="endDate">End Date</label>
+												<input type="date" class="form-control" name="endDate" id="endDate">
+											</div>
+										</div>
+										<div class="row">
+											<div class="form-group  col-xs-12">
+												<label class="radio-inline">
+													<input type="radio" name="period" value="daily"> Daily
+												</label>
+												<label class="radio-inline">
+													<input type="radio" name="period" value="weekly"> Weekly
+												</label>
+												<label class="radio-inline">
+													<input type="radio" name="period" value="monthly"> Monthly
+												</label>
+												<label class="radio-inline">
+													<input type="radio" name="period" value="yearly"> Yearly
+												</label>
+											</div>
+										</div>
+										<div class="row">
+											<div class="form-group col-xs-12">
+												<button type="button" class="btn btn-primary">Refresh</button>
+											</div>
+										</div>
+									</div>
+									<div class="panel-footer c-js-trend-canvas" id="c-js-income-trend-canvas">
+										
+									</div>
+								</div>
 							</div>
-							<div class="form-grup  col-md-6">
-								<label for="endDate">End Date</label>
-								<input type="date" class="form-control" name="endDate" id="endDate">
+						</section>
+						
+						<section class="col-md-6 c-js-trend">
+							<div class="panel panel-warning" id="c-js-outgoing-trend-panel" >
+								<div class="panel-heading">
+									<h3 class="panel-title">Outgoing Trend</h3>
+								</div>
+								
+								<div class="panel-collapse collapse in">
+									<div class="panel-body c-js-trend-settings" id="c-js-outgoing-trend-settings">
+										<div class="row">
+											<div class="form-group  col-md-6">
+												<label for="startDate">Start Date</label>
+												<input type="date" class="form-control" name="startDate" id="startDate">
+											</div>
+											<div class="form-group  col-md-6">
+												<label for="endDate">End Date</label>
+												<input type="date" class="form-control" name="endDate" id="endDate">
+											</div>
+										</div>
+										<div class="row">
+											<div class="form-group  col-xs-12">
+												<label class="radio-inline">
+													<input type="radio" name="period" value="daily"> Daily
+												</label>
+												<label class="radio-inline">
+													<input type="radio" name="period" value="weekly"> Weekly
+												</label>
+												<label class="radio-inline">
+													<input type="radio" name="period" value="monthly"> Monthly
+												</label>
+												<label class="radio-inline">
+													<input type="radio" name="period" value="yearly"> Yearly
+												</label>
+											</div>
+										</div>
+										<div class="row">
+											<div class="form-group col-xs-12">
+												<button type="button" class="btn btn-primary">Refresh</button>
+											</div>
+										</div>
+									</div>
+									<div class="panel-footer c-js-trend-canvas" id="c-js-outgoing-trend-canvas">
+									
+									</div>
+								</div>
 							</div>
 						</section>
 					</section>
-					
-					<section id="c-js-outgoing-trend" class="col-md-6">
-						<section class="c-js-trend-settings row">
-							<div class="form-grup  col-md-6">
-								<label for="startDate">Start Date</label>
-								<input type="date" class="form-control" name="startDate" id="startDate">
-							</div>
-							<div class="form-grup  col-md-6">
-								<label for="endDate">End Date</label>
-								<input type="date" class="form-control" name="endDate" id="endDate">
-							</div>
-						</section>
-					</section>
-				</section>
+				</div>
 			</main>
 			
 			<c:import url="/imports/mainFooter"></c:import>
@@ -68,7 +139,6 @@
 			<div class="panel panel-primary" id="c-js-currency-stat-template">
 				<div class="panel-heading" data-target="#c-js-stat-details">
 					<h3 class="panel-title">
-						<%--a role="button" href="#c-js-stat-details"></a--%>
 					</h3>
 				</div>
 				<div id="c-js-stat-details" class="panel-collapse collapse" role="tabpanel">

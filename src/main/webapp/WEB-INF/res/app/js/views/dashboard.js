@@ -33,10 +33,54 @@ It should expose the following public access interfaces:
 				return;
 			}
 			
+			if('c.trend.income.update' === message) {
+				updateIncomeTrend(data);
+				return;
+			}
+			
 			data.getStatsByCurrencies();
+			data.getIncomeTrendData();
 		}
 	
 	};
+	
+	var updateIncomeTrend = function(data) {
+		var chartJsCanvas = $(document.createElement('canvas'));
+		$('#c-js-income-trend-canvas').html('');
+		$('#c-js-income-trend-canvas').append(chartJsCanvas);
+		
+		var chartJsChart = new Chart(chartJsCanvas, {
+			type: 'line',
+			data: data
+			/*data: {
+				labels: ["January", "February", "March", "April", "May", "June", "July"], // Period points
+				datasets: [
+					{
+						label: "My First dataset", // Asset name
+						fill: false,
+						lineTension: 0.1,
+						backgroundColor: "rgba(75,192,192,0.4)", // line BG color
+						borderColor: "rgba(75,192,192,1)", // line FG color
+						borderCapStyle: 'butt',
+						borderDash: [],
+						borderDashOffset: 0.0,
+						borderJoinStyle: 'miter',
+						pointBorderColor: "rgba(75,192,192,1)", // line point color
+						pointBackgroundColor: "#ccc",
+						pointBorderWidth: 1,
+						pointHoverRadius: 5,
+						pointHoverBackgroundColor: "rgba(75,192,192,1)",
+						pointHoverBorderColor: "rgba(220,220,220,1)",
+						pointHoverBorderWidth: 2,
+						pointRadius: 1,
+						pointHitRadius: 10,
+						data: [65, 59, null, 81, 56, 55, 40],
+						spanGaps: true
+					}
+				]
+			}*/
+		});
+	}
 	
 	var updateStatsByCurrencies = function(data) {
 		

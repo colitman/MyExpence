@@ -1,5 +1,43 @@
 "use strict";
 
+function DashboardTrendData() {
+	var model = {
+		labels: [],
+		datasets:[]
+	}
+	
+	Object.seal(this);
+	return model;
+}
+
+function DashboardTrendLineData() {
+	var model = {
+		label: '', // Asset name
+		fill: false,
+		lineTension: 0.1,
+		backgroundColor: '', // line BG color
+		borderColor: '', // line FG color
+		borderCapStyle: 'butt',
+		borderDash: [],
+		borderDashOffset: 0.0,
+		borderJoinStyle: 'miter',
+		pointBorderColor: '', // line point color
+		pointBackgroundColor: '',
+		pointBorderWidth: 1,
+		pointHoverRadius: 5,
+		pointHoverBackgroundColor: '',
+		pointHoverBorderColor: '',
+		pointHoverBorderWidth: 2,
+		pointRadius: 1,
+		pointHitRadius: 10,
+		data: [], // numbers
+		spanGaps: true
+	}
+	
+	Object.seal(this);
+	return model;
+}
+
 function DashboardCurrencyStat() {
 	var model = {
 		currency: new Currency(),

@@ -32,9 +32,57 @@ It also should have the following private methods:
 							_this.notifyObservers(statsByCurrency, 'c.currency.stats.update');
 						})
 				});
+		},
+		
+		getIncomeTrendData: function(startDate, endDate, period) {
+			if(startDate == null && endDate == null && period == null) {
+				startDate = Date.today().set({day:1, hour:0, minute:0, second:0});
+				startDate.add(-6).months();
+				
+				endDate = Date.today().moveToLastDayOfMonth().add(1).days();
+				
+				period = 'monthly';
+			}
+			
+			var _this = this;
+			
+			aScope.transactionService.getTransactions(null, null, null, startDate.getTime(), endDate.getTime(), null)
+				.done(function(data) {
+					var trendData = buildIncomeTrendData(data, period);
+					_this.setChanged();
+					_this.notifyObservers(trendData, 'c.trend.income.update');
+				});
 		}
 	
 	};
+	
+	var buildIncomeTrendData = function(transactionsData, period) {
+		if(period === 'monthly') {
+			return buildIncomeMonthlyTrendData(transactionsData);
+		}
+		return {};
+	}
+	
+	var buildIncomeMonthlyTrendData = function(data) {
+		var result = new DashboardTrendData();
+		var txMonths = new Map();
+		
+		for(var i = 0; i < data.length; i++) {
+			var tx = data[i];
+			var txDate = new Date(tx.transactionDate);
+			var monthName = txDate.getMonthName();
+			
+			if(txMonths.has(monthName)) {
+				
+			} else {
+				txMonths.set(monthName, new BigNumber(tx.amount));
+				txMonths.get(monthName).push();
+			}
+			
+		}
+		
+		return result;
+	}
 	
 	var buildStatsByCurrency = function(currenciesData, assetsData) {
 		var result = [];

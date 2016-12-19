@@ -41,6 +41,7 @@
 <script src="${app}/res/app/js/services/assetService.js"></script>
 <script src="${app}/res/app/js/services/currencyService.js"></script>
 <script src="${app}/res/app/js/services/expenseService.js"></script>
+<script src="${app}/res/app/js/services/transactionService.js"></script>
 
 <script src="${app}/res/app/js/models/mainNav.js"></script>
 <script src="${app}/res/app/js/views/mainNav.js"></script>
