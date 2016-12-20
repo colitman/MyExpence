@@ -1,6 +1,6 @@
 "use strict";
 
-$(function() {
+/*$(function() {
 	var m = $EX.currenciesModel;
 	var v = $EX.currenciesView;
 	var c = new CurrenciesController(m);
@@ -11,4 +11,4 @@ $(function() {
 	m.setChanged();
 	m.notifyObservers(m);
 	
-})
+})*/
