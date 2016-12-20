@@ -1,26 +1,138 @@
 "use strict";
 
-/*
-View is an observer object.
-It should expose the following public access interfaces:
-- update(object)
- 
- View is also an observable object.
- It should expose the following public access interfaces:
- - subscribe
- 
- It also should have the following private methods:
- - countObservers
- - isChanged
- - setChanged
- - clearChanged
- - notifyObservers
- - deleteObservers
-*/
+/**
+ * <b>Currency List view</b>
+ *
+ * <p>Represents view for a page with a list of currencies, together with
+ * actions that may be applied to either a list or separate currency</p>
+ *
+ * <p>This view acts as observer object, registered to listen to model change notifications.
+ * Obsrvable object calls the <b>.update(subject, message)</b> method of observer to notify about changes.
+ * </p>
+ *
+ * @param aScope global application scope object
+ */
 
 (function(aScope, undefined){
 	
+	var observer = new Observer();
+	
+	var currencyView = {
+		__proto__: observer,
+		
+		/**
+		 * This method is called by observed model when it is changed.
+		 *
+		 * @param {*} subject - reference to VM object in global application scope with model data
+		 * @param {string} [message=undefined] - additional message that model may send
+		 */
+		update: function(subject, message) {
+			resetForms();
+			hideModals();
+			setDefaultCurrencySelectOptions(subject);
+			buildCurrenciesList(subject);
+			initDataTable();
+		}
+	};
+	
+	aScope.currenciesView = currencyView;
+	
+	/* Private fields */
 	var addCurrencyForm = $('#c-js-add-currency-form');
+	var editCurrencyForm = $('#c-js-edit-currency-form');
+	var chooseDefaultCurrencyForm = $('#c-js-choose-default-currency-form');
+	
+	var currenciesTable = $('#c-js-currencies-table');
+	
+	var deleteModal = $('#c-delete-confirmation-modal');
+	
+	/* Private methods */
+	var resetForms = function() {
+		$('button[type="reset"]', addCurrencyForm).click();
+		
+		$('button[type="reset"]', editCurrencyForm).click();
+		$(editCurrencyForm).addClass('hidden');
+	};
+	
+	var hideModals = function() {
+		$(deleteModal).modal('hide');
+	};
+	
+	var setDefaultCurrencySelectOptions = function(vm) {
+		var select = $('#id', chooseDefaultCurrencyForm);
+		$(select).html('');
+		
+		var currencies = vm.listData;
+		
+		for(var i = 0; i < currencies.length; i++) {
+			var currency = currencies[i];
+			var option = jQueryDomBuilder.getOption(currency.id, currency.toString(), currency.defaultCurrency);
+			$(select).append(option);
+		}
+	};
+	
+	var buildCurrenciesList = function(vm) {
+		var currencies = vm.listData;
+		var body = $('tbody', currenciesTable);
+		body.html('');
+		
+		for(var i = 0; i < currencies.length; i++) {
+			var currency = currencies[i];
+			var row = jQueryDomBuilder.getTableRow([currency.name, currency.symbol, currency.code,''], body);
+			
+			var actionsColumn = row.find('td:last');
+			var editAction = jQueryDomBuilder.getAnchor('#','',[['target',currency.id]], actionsColumn);
+			
+			if(!currency.defaultCurrency) {
+				var deleteAction = jQueryDomBuilder.getAnchor('#','',[['target',currency.id]], actionsColumn);
+				deleteAction.addClass('c-js-delete-action');
+			} else {
+				$(row).addClass('success');
+			}
+			
+			/*
+			 var editAction = document.createElement('a');
+			 $(editAction).attr('href', '#');
+			 $(editAction).html('<i class="fa fa-pencil"></i>');
+			 $(editAction).data('target', currencyData.id);
+			 $(tdActions).append(editAction);
+			 
+			 $(editAction).click(function(event) {
+			 event.preventDefault();
+			 currencyChangeEvent.data = $(editAction).data('target');
+			 currenciesView.setChanged();
+			 currenciesView.notifyObservers(currencyChangeEvent);
+			 });
+			 
+			 if(!currencyData.defaultCurrency) {
+			 var deleteAction = document.createElement('a');
+			 $(deleteAction).attr('href', '#');
+			 $(deleteAction).addClass('c-js-delete-action');
+			 $(deleteAction).html('<i class="fa fa-remove"></i>');
+			 $(deleteAction).data('target', currencyData.id);
+			 $(tdActions).append(deleteAction);
+			 
+			 $(deleteAction).click(function(event) {
+			 event.preventDefault();
+			 currencyDeleteEvent.data = $(deleteAction).data('target');
+			 currenciesView.setChanged();
+			 currenciesView.notifyObservers(currencyDeleteEvent);
+			 });
+			 }
+			 */
+		}
+	};
+	
+	var initDataTable = function() {
+		var txDataTable = $('.c-js-datatable').DataTable({
+			dom: 'rt<<"col-sm-6"li><"col-sm-6 text-right"p>>',
+			pagingType: 'full_numbers',
+			lengthMenu: [[10,25,50,-1],[10,25,50,'All']],
+			destroy: true
+		});
+	};
+	
+	/*var addCurrencyForm = $('#c-js-add-currency-form');
 	var chooseDefaultCurrencyForm = $('#c-js-choose-default-currency-form');
 	var editCurrencyForm = $('#c-js-edit-currency-form');
 	var currenciesTable = $('#c-js-currencies-table');
@@ -192,6 +304,6 @@ It should expose the following public access interfaces:
 		currenciesView.notifyObservers(currencyDeletedEvent);
 	});
 		
-	aScope.currenciesView = currenciesView;
+	aScope.currenciesView = currenciesView;*/
 	
 })($EX);

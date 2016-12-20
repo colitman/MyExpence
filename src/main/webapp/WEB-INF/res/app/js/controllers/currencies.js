@@ -3,6 +3,7 @@
 (function(aScope, undefined) {
 	var model = aScope.currenciesModel;
 	var view = aScope.currenciesView;
+	
 	var controller = {
 		
 	};
