@@ -89,13 +89,9 @@
 		</div>
 
 		<c:import url="/imports/scripts"></c:import>
-		<script src="${app}/res/app/js/services/assetService.js"></script>
-		<script src="${app}/res/app/js/services/currencyService.js"></script>
-		<script src="${app}/res/app/js/models/currencies.js"></script>
 		<script src="${app}/res/app/js/models/assets.js"></script>
 		<script src="${app}/res/app/js/views/assets.js"></script>
 		<script src="${app}/res/app/js/controllers/assets.js"></script>
-		<script src="${app}/res/app/js/pages/assets.js"></script>
 
 	</body>
 </html>

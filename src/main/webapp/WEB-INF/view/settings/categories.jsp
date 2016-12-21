@@ -157,12 +157,10 @@
 		</div>
 
 		<c:import url="/imports/scripts"></c:import>
-		<script src="${app}/res/app/js/services/categoryService.js"></script>
 		<script src="${app}/res/app/js/models/categories.js"></script>
 		<script src="${app}/res/app/js/views/incomeCategories.js"></script>
 		<script src="${app}/res/app/js/views/outgoingCategories.js"></script>
 		<script src="${app}/res/app/js/controllers/categories.js"></script>
-		<script src="${app}/res/app/js/pages/categories.js"></script>
 
 	</body>
 </html>

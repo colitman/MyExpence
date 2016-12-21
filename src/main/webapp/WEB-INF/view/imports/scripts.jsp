@@ -27,9 +27,7 @@
 		integrity="sha256-HptdWaetAoQSrTP9GZVVxKovdIq1C3MmKazLYQ7JnL4="
 		crossorigin="anonymous"></script>
 
-<script src="${app}/res/jscookie/js.cookie.js"></script>
 <script src="${app}/res/datejs/date.js"></script>
-<script src="${app}/res/sparkline/jquery.sparkline.js"></script>
 <script src="${app}/res/bignumber/bignumber.js"></script>
 
 <script src="${app}/res/app/js/alerts.js"></script>

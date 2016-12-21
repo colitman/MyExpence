@@ -90,14 +90,10 @@
 		</div>
 
 		<c:import url="/imports/scripts"></c:import>
-		<script src="${app}/res/app/js/services/assetService.js"></script>
-		<script src="${app}/res/app/js/services/currencyService.js"></script>
-		<script src="${app}/res/app/js/services/paymentSystemService.js"></script>
-		<script src="${app}/res/app/js/models/currencies.js"></script>
+		
 		<script src="${app}/res/app/js/models/assetConfig.js"></script>
 		<script src="${app}/res/app/js/views/assetConfig.js"></script>
 		<script src="${app}/res/app/js/controllers/assetConfig.js"></script>
-		<script src="${app}/res/app/js/pages/assetConfig.js"></script>
 
 	</body>
 </html>

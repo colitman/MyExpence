@@ -105,14 +105,11 @@
 
 		<c:import url="/imports/scripts"></c:import>
 		
-		<script src="${app}/res/jquery-searchable/jquery.searchable.js" ></script>
 		<script src="${app}/res/excellentexport/excellentexport.js" ></script>
 		
-		<script src="${app}/res/app/js/services/transactionService.js"></script>
 		<script src="${app}/res/app/js/models/assetTransactions.js"></script>
 		<script src="${app}/res/app/js/views/transactions.js"></script>
 		<script src="${app}/res/app/js/controllers/transactions.js"></script>
-		<script src="${app}/res/app/js/pages/assetTransactions.js"></script>
 
 	</body>
 </html>

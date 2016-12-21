@@ -66,11 +66,8 @@
 		</div>
 
 		<c:import url="/imports/scripts"></c:import>
-		<script src="${app}/res/app/js/services/assetService.js"></script>
-		<script src="${app}/res/app/js/services/currencyService.js"></script>
 		<script src="${app}/res/app/js/models/dashboard.js"></script>
 		<script src="${app}/res/app/js/views/dashboard.js"></script>
-		<script src="${app}/res/app/js/pages/dashboard.js"></script>
 
 	</body>
 </html>
