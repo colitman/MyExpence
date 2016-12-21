@@ -6,6 +6,7 @@
 	
 	var myExpense = {
 	
+		VM:{},
 		APP_ROOT: appRoot,
 		WEB_API_ROOT: appRoot + '/api/web',
 		PAGES : {

@@ -48,7 +48,6 @@
 	
 	transferForm.submit(function(event) {
 		event.preventDefault();
-		assetsView.setChanged();
 		$(assetsView).trigger('assets:transfered', [transferForm]);
 	});
 	

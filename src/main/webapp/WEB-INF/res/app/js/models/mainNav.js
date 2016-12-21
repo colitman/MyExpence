@@ -1,19 +1,5 @@
 "use strict";
 
-/*
-Model is an observable object.
-It should expose the following public access interfaces:
-- subscribe
-
-It also should have the following private methods:
-- countObservers
-- isChanged
-- setChanged
-- clearChanged
-- notifyObservers
-- deleteObservers
- */
-
 (function(aScope, undefined){
 	
 	var observable = new Observable();
@@ -21,34 +7,35 @@ It also should have the following private methods:
 	var navModel = {
 		__proto__: observable,
 		
+		updateData: function() {
+			var _this = this;
+			
+			var vm = {
+				
+			};
+			
+			aScope.VM.misc.mainNav = vm;
+			
+			_this.setChanged();
+			_this.notifyObservers(aScope.VM, 'misc:mainNavDataUpdated');
+		},
+		
 		addExpense: function(expenseData) {
 			var _this = this;
 			aScope.expenseService.createExpense(expenseData)
 				.done(function(data) {
-					_this.setChanged();
-					_this.notifyObservers(_this);
-				})
-				.fail(function(jqXHR, textStatus, errorThrown) {
-					console.log(jqXHR.responseText);
+					_this.updateData();
 				});
 		},
 		
 		getIncomeCategories: function() {
 			var _this = this;
-			return aScope.categoryService.getIncomeCategories()
-				.done(function(data) {
-					_this.setChanged();
-					_this.notifyObservers(data, 'category');
-				});
+			return aScope.categoryService.getIncomeCategories();
 		},
 		
 		getOutgoingCategories: function() {
 			var _this = this;
-			return aScope.categoryService.getOutgoingCategories()
-				.done(function(data) {
-					_this.setChanged();
-					_this.notifyObservers(data, 'category');
-				});
+			return aScope.categoryService.getOutgoingCategories();
 		},
 		
 		getAssets: function() {
