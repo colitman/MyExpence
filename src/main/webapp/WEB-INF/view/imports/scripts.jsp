@@ -36,6 +36,7 @@
 <script src="${app}/res/app/js/app.js"></script>
 <script src="${app}/res/app/js/core.js"></script>
 <script src="${app}/res/app/js/domain.js"></script>
+<script src="${app}/res/app/js/jQueryDomBuilder.js"></script>
 
 <script src="${app}/res/app/js/services/categoryService.js"></script>
 <script src="${app}/res/app/js/services/assetService.js"></script>

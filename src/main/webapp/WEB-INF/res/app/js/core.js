@@ -101,10 +101,57 @@ function Observable() {
 	return observable;
 }
 
+function  Stringifier() {
+	var model = {
+		
+		/**
+		 * Converts the provided data to string value, using the provided pattern
+		 * @param {Array} data - array of data to convert to one string
+		 * @param {string} pattern - pattern to use. Indexes of data array are used for parts placing, prepended with '%'
+		 * @example
+		 * // will produce - 'first second (last) - 30%'
+		 * .stringify(['last', 'first', 30, 'second'], '%1 %3 (%0) - %2%%')
+		 * @returns {string} resulting string
+		 */
+		stringify: function(data, pattern) {
+			var result = '';
+			
+			for(var i = 0; i < pattern.length; i++) {
+				var character = pattern[i];
+				
+				if('%' === character) {
+					if('%' === pattern[i-1]) {
+						result += character;
+						continue;
+					} else {
+						continue;
+					}
+				}
+				
+				if(isNaN(character) || character.trim().length === 0) {
+					result += character;
+				} else {
+					if('%' === pattern[i-1] && '%' !== pattern[i-2]) {
+						result += data[character];
+					} else {
+						result += character;
+					}
+					
+				}
+			}
+			
+			return result;
+		}
+	}
+	
+	Object.seal(this);
+	return model;
+}
 
 
 
-/*function ViewEvent(name, data) {
+
+function ViewEvent(name, data) {
  var viewEvent = {
  name:name,
  data:data
@@ -112,4 +159,4 @@ function Observable() {
  
  Object.seal(viewEvent);
  return viewEvent;
- }*/
+ }

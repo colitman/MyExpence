@@ -17,6 +17,17 @@
 		 */
 		getAnchor: function(href, text, data, parent,isPrepend) {
 			var a = $(document.createElement('a'));
+			a.attr('href', href);
+			a.text(text);
+			
+			for(var i = 0; i < data.length; i++) {
+				var dataItem = data[i];
+				a.data(dataItem[0], dataItem[1]);
+			}
+			
+			if(parent != undefined) {
+				isPrepend? parent.prepend(a): parent.append(a);
+			}
 			
 			return a;
 		},

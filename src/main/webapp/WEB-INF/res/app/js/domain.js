@@ -53,7 +53,7 @@ function Currency() {
 		symbol:'',
 		defaultCurrency:'',
 		
-		toString: function() {
+		toCurrencyString: function() {
 			return symbol + ' ' + name + ' (' + code + ')';
 		}
 	}
