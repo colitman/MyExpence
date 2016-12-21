@@ -128,7 +128,6 @@
 			
 			if(!currency.defaultCurrency) {
 				var deleteAction = jQueryDomBuilder.getAnchor('#','',[['target',currency.id]], actionsColumn);
-				deleteAction.addClass('c-js-delete-action');
 				deleteAction.html('<i class="fa fa-remove"></i>');
 			} else {
 				$(row).addClass('success');

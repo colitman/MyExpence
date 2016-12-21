@@ -77,7 +77,6 @@ It should expose the following public access interfaces:
 		
 		var deleteAction = document.createElement('a');
 		$(deleteAction).attr('href', '#');
-		$(deleteAction).addClass('c-js-delete-action');
 		$(deleteAction).html('<i class="fa fa-remove"></i>');
 		$(deleteAction).data('target', categoryData.id);
 		$(tdActions).append(deleteAction);

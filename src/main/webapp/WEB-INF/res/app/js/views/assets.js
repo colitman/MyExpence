@@ -18,6 +18,9 @@
 		update: function(subject, message) {
 			resetForms();
 			hideModals();
+			setAssetTypesSelectOptions(subject);
+			setCurrenciesSelectOptions(subject);
+			buildAssetsList(subject);
 			initDataTable();
 		}
 	};
@@ -25,10 +28,165 @@
 	aScope.assetsView = assetsView;
 	
 	/* Private fields */
+	var addAssetForm = $('#c-js-add-asset-form');
+	var assetsTable = $('#c-js-added-assets-table');
+	var deleteModal = $('#c-delete-confirmation-modal');
+	var deleteAssetForm = $('#c-modal-delete-form');
+	var transferModal = $('#c-js-asset-transfer-modal');
+	var transferForm = $('#c-js-asset-transfer-form');
 	
 	/* View events triggers */
+	addAssetForm.submit(function(event) {
+		event.preventDefault();
+		$(assetsView).trigger('assets:added', [addAssetForm]);
+	});
+	
+	deleteAssetForm.submit(function(event) {
+		event.preventDefault();
+		$(assetsView).trigger('assets:deleted', [$('#id', deleteAssetForm), deleteModal]);
+	});
+	
+	transferForm.submit(function(event) {
+		event.preventDefault();
+		assetsView.setChanged();
+		$(assetsView).trigger('assets:transfered', [transferForm]);
+	});
+	
+	$('input#amount', transferForm).keyup(function() {
+		var entered = new BigNumber($(this).val());
+		var limit = new BigNumber($(transferForm).data('limit'));
+		
+		if(entered.greaterThan(limit) || entered.lessThan(new BigNumber(0))) {
+			$('[type="submit"][form="' + transferForm.attr('id') + '"]').prop('disabled', 'disabled');
+		} else {
+			$('[type="submit"][form="' + transferForm.attr('id') + '"]').prop('disabled','');
+		}
+	});
 	
 	/* Private methods */
+	var resetForms = function() {
+		$('button[type="reset"]', addAssetForm).click();
+	};
+	
+	var hideModals = function() {
+		$(deleteModal).modal('hide');
+		$(transferModal).modal('hide');
+	};
+	
+	var setAssetTypesSelectOptions = function(vm) {
+		var data = vm.assetTypes;
+		
+		var select = $('#type', addAssetForm);
+		$(select).html('');
+		
+		var assetTypes = data.listData;
+		
+		for(var i = 0; i < assetTypes.length; i++) {
+			var assetType = assetTypes[i];
+			var option = jQueryDomBuilder.getOption(assetType.name, assetType.label);
+			$(select).append(option);
+		}
+	};
+	
+	var setCurrenciesSelectOptions = function(vm) {
+		var data = vm.currencies;
+		
+		var select = $('#currency', addAssetForm);
+		$(select).html('');
+		
+		var currencies = data.listData;
+		
+		for(var i = 0; i < currencies.length; i++) {
+			var currency = currencies[i];
+			var sCurrency = new Stringifier().stringify([currency.symbol, currency.name, currency.code], '%0 %1 (%2)');
+			var option = jQueryDomBuilder.getOption(currency.id, sCurrency, currency.defaultCurrency);
+			$(select).append(option);
+		}
+	};
+	
+	var buildAssetsList = function(vm) {
+		var data = vm.assets;
+		
+		$('.c-js-datatable').each(function(index, table) {
+			if ( $.fn.dataTable.isDataTable( table ) ) {
+				$(table).DataTable().destroy();
+			}
+		});
+		
+		var body = $('tbody', assetsTable);
+		body.html('');
+		
+		var assets = data.listData;
+		
+		for (var i = 0; i < assets.length; i++) {
+			var asset = assets[i];
+			var row = jQueryDomBuilder.getTableRow(
+				[
+					asset.name,
+					asset.type.label,
+					new BigNumber(asset.amount).toNumber(),
+					new Stringifier().stringify(
+						[
+							asset.currency.symbol,
+							asset.currency.name,
+							asset.currency.code
+						],
+						'%0 %1 (%2)'
+					),
+					''
+				],
+				body
+			);
+			
+			var actionsColumn = row.find('td:last');
+			var seeTxAction = jQueryDomBuilder.getAnchor(
+				$EX.APP_ROOT + '/settings/assets/' + asset.id + '/transactions',
+				'',
+				[[]],
+				actionsColumn
+			);
+			seeTxAction.html('<i class="fa fa-database"></i>');
+			
+			var transferAction = jQueryDomBuilder.getAnchor(
+				'#',
+				'',
+				[['sender',asset.id]],
+				actionsColumn
+			);
+			transferAction.html('<i class="fa fa-exchange"></i>');
+			
+			var editAction = jQueryDomBuilder.getAnchor(
+				$EX.APP_ROOT + '/settings/assets/' + asset.id + '/configure',
+				'',
+				[[]],
+				actionsColumn
+			);
+			editAction.html('<i class="fa fa-cog"></i>');
+			
+			var deleteAction = jQueryDomBuilder.getAnchor(
+				'#',
+				'',
+				[['target',asset.id]],
+				actionsColumn
+			);
+			deleteAction.html('<i class="fa fa-remove"></i>');
+			
+			if(!asset.showInTotals) {
+				$(row).addClass('text-muted');
+			}
+			
+			transferAction.click(function(event) {
+				event.preventDefault();
+				$(assetsView).trigger('assets:transfer', [$(this).data('sender'), transferModal]);
+			});
+			
+			deleteAction.click(function(event) {
+				event.preventDefault();
+				$(assetsView).trigger('assets:delete', [$(this).data('target'), deleteModal]);
+			});
+		}
+	};
+	
 	var initDataTable = function() {
 		
 		var table = $('.c-js-datatable');
@@ -37,232 +195,6 @@
 			pagingType: 'full_numbers',
 			lengthMenu: [[10,25,50,-1],[10,25,50,'All']]
 		});
-	}
-	
-	/*
-	var addAssetForm = $('#c-js-add-asset-form');
-	var assetsTable = $('#c-js-added-assets-table');
-	var deleteModal = $('#c-delete-confirmation-modal');
-	var deleteAssetForm = $('#c-modal-delete-form');
-	var transferModal = $('#c-js-asset-transfer-modal');
-	var transferForm = $('#c-js-asset-transfer-form');
-	
-	var assetAddedEvent = new ViewEvent('c.asset.added',addAssetForm);
-	var assetDeleteEvent = new ViewEvent('c.asset.delete');
-	var assetDeletedEvent = new ViewEvent('c.asset.deleted');
-	var transferAttemptEvent = new ViewEvent('c.asset.transfer.attempt');
-	var transferDoEvent = new ViewEvent('c.asset.transfer.do', transferForm);
-	
-	var updateAssetTypesSelect = function(data) {
-		var select = $('#type', addAssetForm);
-		$(select).html('');
-		
-		for(var i = 0; i < data.length; i++) {
-			var option = document.createElement('option');
-			
-			$(option).attr('value', data[i].name);
-			$(option).text(data[i].label);
-			
-			$(select).append(option);
-		}
-	}
-	
-	var updateCurrenciesSelect = function(data) {
-		var select = $('#currency', addAssetForm);
-		$(select).html('');
-		
-		for(var i = 0; i < data.length; i++) {
-			var option = document.createElement('option');
-			
-			$(option).attr('value', data[i].id);
-			$(option).text(data[i].symbol + ' ' + data[i].name + ' (' + data[i].code + ')');
-			if(data[i].defaultCurrency) {
-				$(option).prop('selected', 'selected');
-			}
-			
-			$(select).append(option);
-		}
 	};
 	
-	var fillInTransferTargets = function(data) {
-		var select = $('select#to', transferModal);
-		$(select).html('');
-		
-		for(var i = 0; i < data.length; i++) {
-			var option = document.createElement('option');
-			
-			$(option).attr('value', data[i].id);
-			$(option).text(data[i].name);
-			
-			$(select).append(option);
-		}
-	};
-	
-	var updateAssetsList = function(assetData, currencyData) {
-		var oldTbody = $('tbody', assetsTable);
-		var body = document.createElement('tbody');
-		
-		for(var i = 0; i < assetData.length; i++) {
-			var row = document.createElement('tr');
-			
-			var tdName = document.createElement('td');
-			var tdType = document.createElement('td');
-			var tdAmount = document.createElement('td');
-			var tdCurrency = document.createElement('td');
-			
-			$(tdName).text(assetData[i].name);
-			$(tdType).text(assetData[i].label);
-			$(tdAmount).text(assetData[i].amount);
-			
-			for(var j = 0; j < currencyData.length; j++) {
-				var currency = currencyData[j];
-				if(currency.id === assetData[i].currency) {
-					$(tdCurrency).text(currency.symbol + ' ' + currency.name + ' (' + currency.code + ')');
-					break;
-				}
-			}
-			
-			$(row).append(tdName);
-			$(row).append(tdType);
-			$(row).append(tdAmount);
-			$(row).append(tdCurrency);
-			$(row).append(createAssetActions(assetData[i]));
-			
-			if(!assetData[i].showInTotals) {
-				$(row).addClass('text-muted');
-			}
-			
-			$(body).append(row);
-		}
-		
-		
-		$(oldTbody).remove();
-		$('thead', assetsTable).after(body)
-	}
-	
-	var createAssetActions = function(assetData) {
-		var tdActions = document.createElement('td');
-		
-		var seeTxAction = document.createElement('a');
-		$(seeTxAction).attr('href', $EX.APP_ROOT + '/settings/assets/' + assetData.id + '/transactions');
-		$(seeTxAction).html('<i class="fa fa-database"></i>');
-		$(tdActions).append(seeTxAction);
-		
-		var transferAction = document.createElement('a');
-		$(transferAction).attr('href', '#');
-		$(transferAction).addClass('c-js-transfer-action');
-		$(transferAction).data('sender', assetData.id);
-		$(transferAction).data('available', assetData.amount);
-		$(transferAction).html('<i class="fa fa-exchange"></i>');
-		$(tdActions).append(transferAction);
-		
-		$(transferAction).click(function(event) {
-			event.preventDefault();
-			var senderData = {id:$(transferAction).data('sender')}
-			//$('#from', transferModal).val(senderData.id);
-			//$(transferForm).data('limit', $(transferAction).data('available'));
-			transferAttemptEvent.data = senderData;
-			assetsView.setChanged();
-			assetsView.notifyObservers(transferAttemptEvent);
-		});
-		
-		var editAction = document.createElement('a');
-		$(editAction).attr('href', $EX.APP_ROOT + '/settings/assets/' + assetData.id + '/configure');
-		$(editAction).html('<i class="fa fa-cog"></i>');
-		$(tdActions).append(editAction);
-		
-		var deleteAction = document.createElement('a');
-		$(deleteAction).attr('href', '#');
-		$(deleteAction).addClass('c-js-delete-action');
-		$(deleteAction).html('<i class="fa fa-remove"></i>');
-		$(deleteAction).data('target', assetData.id);
-		$(tdActions).append(deleteAction);
-		
-		$(deleteAction).click(function(event) {
-			event.preventDefault();
-			var deleteAssetData = {id:$(deleteAction).data('target')}
-			assetDeleteEvent.data = deleteAssetData;
-			assetsView.setChanged();
-			assetsView.notifyObservers(assetDeleteEvent);
-		});
-		
-		return tdActions;
-	}
-	
-	
-	var observable = new Observable();
-	var currenciesModel = $EX.currenciesModel;
-	
-	var assetsView = {
-		
-		__proto__: observable,
-		
-		update: function(subject, message) {
-			
-			if('transferAttempt' === message) {
-				fillInTransferTargets(subject);
-				$(transferModal).modal('show');
-				return;
-			}
-			
-			$('button[type="reset"]', addAssetForm).click();
-			$(deleteModal).modal('hide');
-			$(transferModal).modal('hide');
-			
-			currenciesModel.getCurrencies()
-				.done(function(currenciesData) {
-					updateCurrenciesSelect(currenciesData);
-					
-					subject.getAssets()
-						.done(function(assetData) {
-							updateAssetsList(assetData, currenciesData);
-						})
-						.fail(function(jqXHR) {
-							console.log(jqXHR.responseText);
-						});
-				})
-				.fail(function(jqXHR) {
-					console.log(jqXHR.responseText);
-				});
-			
-			subject.getAssetTypes()
-				.done(function(assetTypesData) {
-					updateAssetTypesSelect(assetTypesData);
-				})
-				.fail(function(jqXHR) {
-					console.log(jqXHR.responseText);
-				});
-		}
-	};
-	
-	addAssetForm.submit(function(event) {
-		event.preventDefault();
-		assetsView.setChanged();
-		assetsView.notifyObservers(assetAddedEvent);
-	});
-	
-	deleteAssetForm.submit(function(event) {
-		event.preventDefault();
-		assetDeletedEvent.data = $(deleteAssetForm);
-		assetsView.setChanged();
-		assetsView.notifyObservers(assetDeletedEvent);
-	});
-	
-	transferForm.submit(function(event) {
-		event.preventDefault();
-		assetsView.setChanged();
-		assetsView.notifyObservers(transferDoEvent);
-	});
-	
-	$('input#amount', transferForm).keyup(function() {
-		var entered = $(this).val();
-		var limit = $(transferForm).data('limit');
-		if(entered > limit || entered < 0) {
-			$('[type="submit"][form="c-js-asset-transfer-form"]').prop('disabled', 'disabled');
-		} else {
-			$('[type="submit"][form="c-js-asset-transfer-form"]').prop('disabled','');
-		}
-	});
-		
-	*/
 })($EX);

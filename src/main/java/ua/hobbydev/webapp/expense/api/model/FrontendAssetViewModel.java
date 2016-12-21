@@ -12,7 +12,7 @@ import ua.hobbydev.webapp.expense.domain.currency.Currency;
 
 import java.math.BigDecimal;
 
-public class AssetViewModel implements ViewModelInterface<Asset> {
+public class FrontendAssetViewModel implements ViewModelInterface<Asset> {
 
     private Long id;
     private String name;
@@ -25,9 +25,9 @@ public class AssetViewModel implements ViewModelInterface<Asset> {
     private BigDecimal limit;
     private boolean showInTotals;
 
-    public AssetViewModel() {}
+    public FrontendAssetViewModel() {}
 
-    public AssetViewModel(Asset domain) {
+    public FrontendAssetViewModel(Asset domain) {
         this.id = domain.getId();
         this.name = domain.getName();
         this.type = domain.getType().toString();

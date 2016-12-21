@@ -9,21 +9,60 @@
 		
 		updateData: function() {
 			var _this = this;
-			_this.getAssets()
-				.done(function(assetsData) {
-					var vm = {};
-					vm.total = assetsData.length;
-					vm.listData = assetsData;
+			
+			var vm = {
+				assetTypes:{
+					total:0,
+					listData:[]
+				},
+				currencies: {
+					total:0,
+					listData:[],
+					defaultCurrency:{}
+				},
+				assets: {
+					total:0,
+					listData:[]
+				}
+			};
+			
+			_this.getAssetTypes()
+				.done(function(assetTypesData) {
+					vm.assetTypes.total = assetTypesData.length;
+					vm.assetTypes.listData = assetTypesData;
 					
-					aScope.VM = vm;
-					
-					_this.setChanged();
-					_this.notifyObservers(aScope.VM, 'assets:dataUpdated');
+					_this.getCurrencies()
+						.done(function(currenciesData) {
+							vm.currencies.total = currenciesData.length;
+							vm.currencies.listData = currenciesData;
+							vm.currencies.defaultCurrency = currenciesData.filter(function(currency) {
+								return currency.defaultCurrency;
+							})[0];
+							
+							_this.getAssets()
+								.done(function(assetsData) {
+									vm.assets.total = assetsData.length;
+									vm.assets.listData = assetsData;
+									
+									aScope.VM = vm;
+									
+									_this.setChanged();
+									_this.notifyObservers(aScope.VM, 'assets:dataUpdated');
+								});
+						});
 				});
 		},
 		
 		getAssets: function() {
 			return aScope.assetService.getAssets();
+		},
+		
+		/**
+		 * Gets a list of currencies from DB
+		 * @returns {jqXHR} promise with an array of {@link Currency} objects.
+		 */
+		getCurrencies: function() {
+			return aScope.currencyService.getCurrencies();
 		},
 		
 		getAssetTypes: function() {
