@@ -4,17 +4,11 @@
 	
 	var observable = new Observable();
 	
-	var navModel = {
+	var mainNavModel = {
 		__proto__: observable,
 		
 		updateData: function() {
 			var _this = this;
-			
-			var vm = {
-				
-			};
-			
-			aScope.VM.misc.mainNav = vm;
 			
 			_this.setChanged();
 			_this.notifyObservers(aScope.VM, 'misc:mainNavDataUpdated');
@@ -22,7 +16,7 @@
 		
 		addExpense: function(expenseData) {
 			var _this = this;
-			aScope.expenseService.createExpense(expenseData)
+			return aScope.expenseService.createExpense(expenseData)
 				.done(function(data) {
 					_this.updateData();
 				});
@@ -41,16 +35,11 @@
 		getAssets: function() {
 			var _this = this;
 			return aScope.assetService.getAssets();
-		},
-		
-		getCurrencies: function() {
-			var _this = this;
-			return aScope.currencyService.getCurrencies();
 		}
 	
 	};
 	
 	
-	aScope.navModel = navModel;
+	aScope.mainNavModel = mainNavModel;
 	
 })($EX);

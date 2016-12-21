@@ -5,6 +5,7 @@
 	var view = aScope.currenciesView;
 	
 	model.subscribe(view);
+	aScope.primaryModel = model;
 	model.updateData();
 	
 	/* Event listeners */

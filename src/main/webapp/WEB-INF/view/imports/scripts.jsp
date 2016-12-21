@@ -46,4 +46,3 @@
 <script src="${app}/res/app/js/models/mainNav.js"></script>
 <script src="${app}/res/app/js/views/mainNav.js"></script>
 <script src="${app}/res/app/js/controllers/mainNav.js"></script>
-<script src="${app}/res/app/js/pages/mainNav.js"></script>

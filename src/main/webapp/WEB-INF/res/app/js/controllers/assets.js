@@ -5,6 +5,7 @@
 	var view = aScope.assetsView;
 	
 	model.subscribe(view);
+	aScope.primaryModel = model;
 	model.updateData();
 	
 	/* Event listeners */
