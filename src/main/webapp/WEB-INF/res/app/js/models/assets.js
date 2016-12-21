@@ -39,9 +39,6 @@ It also should have the following private methods:
 				.done(function(data) {
 					_this.setChanged();
 					_this.notifyObservers(_this);
-				})
-				.fail(function(jqXHR, textStatus, errorThrown) {
-					console.log(jqXHR.responseText);
 				});
 		},
 		
@@ -60,9 +57,6 @@ It also should have the following private methods:
 				.done(function(data) {
 					_this.setChanged();
 					_this.notifyObservers(_this);
-				})
-				.fail(function(jqXHR, textStatus, errorThrown) {
-					console.log(jqXHR.responseText);
 				});
 		}
 	

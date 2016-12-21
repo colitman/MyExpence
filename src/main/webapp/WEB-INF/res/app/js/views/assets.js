@@ -64,7 +64,7 @@ It should expose the following public access interfaces:
 		}
 	};
 	
-	var fillInTransferTargets = function(data) {
+	/*var fillInTransferTargets = function(data) {
 		var select = $('select#to', transferModal);
 		$(select).html('');
 		
@@ -76,7 +76,7 @@ It should expose the following public access interfaces:
 			
 			$(select).append(option);
 		}
-	};
+	};*/
 	
 	var updateAssetsList = function(assetData, currencyData) {
 		var oldTbody = $('tbody', assetsTable);
@@ -139,8 +139,8 @@ It should expose the following public access interfaces:
 		$(transferAction).click(function(event) {
 			event.preventDefault();
 			var senderData = {id:$(transferAction).data('sender')}
-			$('#from', transferModal).val(senderData.id);
-			$(transferForm).data('limit', $(transferAction).data('available'));
+			//$('#from', transferModal).val(senderData.id);
+			//$(transferForm).data('limit', $(transferAction).data('available'));
 			transferAttemptEvent.data = senderData;
 			assetsView.setChanged();
 			assetsView.notifyObservers(transferAttemptEvent);

@@ -1,96 +1,96 @@
 "use strict";
 
-/*
-Controller - Observer
-*/
-
-function AssetsController(model, undefined){
+(function(aScope, undefined) {
+	var model = aScope.assetsModel;
+	var view = aScope.assetsView;
 	
-	var assetsModel = model;
+	model.subscribe(view);
+	model.updateData();
 	
-	var assetsController = {
-		update: function(viewEvent) {
-			if(viewEvent.name === 'c.asset.added') {
-				
-				var newAssetForm = viewEvent.data;
-				
-				var assetData = new Asset();
-				assetData.name = $('#name', newAssetForm).val();
-				assetData.type = $('#type', newAssetForm).val();
-				assetData.currency = $('#currency', newAssetForm).val();
-				
-				assetsModel.addAsset(assetData);
-			}
+	/* Event listeners */
+	$(view)
+		.on('assets:added', function(event, form) {
+			var assetData = new Asset();
+			assetData.name = $('#name', form).val();
+			assetData.type = $('#type', form).val();
+			assetData.currency = $('#currency', form).val();
 			
-			if(viewEvent.name === 'c.asset.delete') {
-				
-				var id = viewEvent.data.id;
-				var deleteModal = $('#c-delete-confirmation-modal');
-				
-				assetsModel.getAsset(id)
-					.done(function(data) {
-						$('#c-delete-subject', deleteModal).html('<b>' + data.name + ' (' + data.label + ')</b> asset.');
-						$('#c-modal-delete-form #id', deleteModal).val(data.id);
-						
-						$(deleteModal).modal('show');
-					})
-					.fail(function(jqXHR) {
-						console.log(jqXHR.responseText);
-					});
-			}
+			model.addAsset(assetData)
+				.fail(function(jqXHR, textStatus, errorThrown) {
+					new Alert('danger', 'Oops!', 'Failed to add asset.').show();
+					console.log(jqXHR.responseText);
+				});
+		})
+		.on('assets:transfer', function(event, assetId, transferModal) {
 			
-			if(viewEvent.name === 'c.asset.deleted') {
-				
-				var deleteAssetForm = viewEvent.data;
-				var id = $('#id', deleteAssetForm).val();
-				assetsModel.deleteAsset(id)
-					.fail(function(jqXHR, textStatus, errorThrown) {
-						var deleteModal = $('#c-delete-confirmation-modal');
-						$('#c-delete-failure-message', deleteModal).text(jqXHR.responseText);
-						$('#c-delete-failure-alert', deleteModal).removeClass('hidden');
-					});
-			}
-			
-			if(viewEvent.name === 'c.asset.transfer.attempt') {
-				
-				var sender = viewEvent.data.id;
-				
-				assetsModel.getAsset(sender)
-					.done(function(senderData) {
-						
-						assetsModel.getAssets()
-							.done(function(assetsData) {
-								var filteredAssets = assetsData.filter(function(asset) {
-									return asset.currency === senderData.currency && asset.id !== senderData.id;
-								});
-								
-								assetsModel.setChanged();
-								assetsModel.notifyObservers(filteredAssets, 'transferAttempt');
-								
-							})
-							.fail(function(jqXHR) {
-								console.log(jqXHR.responseText);
+			model.getAsset(assetId)
+				.done(function(senderData) {
+					
+					$('#from', transferModal).val(senderData.id);
+					$('form', transferModal).data('limit', new BigNumber(senderData.amount));
+					
+					model.getAssets()
+						.done(function(assetsData) {
+							var filteredAssets = assetsData.filter(function(asset) {
+								return asset.currency === senderData.currency && asset.id !== senderData.id;
 							});
-					})
-					.fail(function(jqXHR) {
-						console.log(jqXHR.responseText);
-					});
-			}
+							
+							var select = $('select#to', transferModal);
+							$(select).html('');
+							
+							for(var i = 0; i < filteredAssets.length; i++) {
+								var asset = filteredAssets[i];
+								var sAsset = new Stringifier().stringify([asset.name, asset.label], '%0 (%1)');
+								var option = jQueryDomBuilder.getOption(asset.id, sAsset);
+								
+								$(select).append(option);
+							}
+							
+							$(transferModal).modal('show');
+							
+						})
+						.fail(function(jqXHR) {
+							new Alert('danger', 'Oops!', 'Failed to get a list of recipients.').show();
+							console.log(jqXHR.responseText);
+						});
+				})
+				.fail(function(jqXHR) {
+					new Alert('danger', 'Oops!', 'Failed to get asset.').show();
+					console.log(jqXHR.responseText);
+				});
+		})
+		.on('assets:transfered', function(event, form) {
 			
-			if(viewEvent.name === 'c.asset.transfer.do') {
-				var transferForm = viewEvent.data;
-				
-				var expenseData = new Expense();
-				expenseData.amount = $('#amount', transferForm).val();
-				expenseData.to = $('#to', transferForm).val();
-				expenseData.from = $('#from', transferForm).val();
-				expenseData.description = $('#description', transferForm).val();
-				
-				assetsModel.transfer(expenseData);
-			}
-		}
-	};
-	
-	return assetsController;
-	
-}
+			var expenseData = new Expense();
+			expenseData.amount = new BigNumber($('#amount', form).val());
+			expenseData.to = $('#to', form).val();
+			expenseData.from = $('#from', form).val();
+			expenseData.description = $('#description', form).val();
+			
+			assetsModel.transfer(expenseData)
+				.fail(function(jqXHR, textStatus, errorThrown) {
+					new Alert('danger', 'Oops!', 'Failed to perform a transfer.').show();
+					console.log(jqXHR.responseText);
+				});
+		})
+		.on('assets:delete', function(event, assetId, deleteModal) {
+			
+			model.getAsset(assetId)
+				.done(function(assetData) {
+					$('#c-delete-subject', deleteModal).html('<b>' + assetData.name + ' (' + assetData.label + ')</b> asset.');
+					$('#c-modal-delete-form #id', deleteModal).val(assetData.id);
+					$(deleteModal).modal('show');
+				})
+				.fail(function(jqXHR) {
+					new Alert('danger', 'Oops!', 'Failed to get asset.').show();
+					console.log(jqXHR.responseText);
+				});
+		})
+		.on('assets:deleted', function(event, assetId, deleteModal) {
+			model.deleteAsset(assetId)
+				.fail(function(jqXHR, textStatus, errorThrown) {
+					$('#c-delete-failure-message', modal).text(jqXHR.responseText);
+					$('#c-delete-failure-alert', modal).removeClass('hidden');
+				});
+		});
+})($EX);
