@@ -1,25 +1,26 @@
 "use strict";
 
-/*
-Model is an observable object.
-It should expose the following public access interfaces:
-- subscribe
-
-It also should have the following private methods:
-- countObservers
-- isChanged
-- setChanged
-- clearChanged
-- notifyObservers
-- deleteObservers
- */
-
 (function(aScope, undefined){
 	
 	var observable = new Observable();
 	
 	var assetsModel = {
 		__proto__: observable,
+		
+		updateData: function() {
+			var _this = this;
+			_this.getAssets()
+				.done(function(assetsData) {
+					var vm = {};
+					vm.total = assetsData.length;
+					vm.listData = assetsData;
+					
+					aScope.VM = vm;
+					
+					_this.setChanged();
+					_this.notifyObservers(aScope.VM, 'assets:dataUpdated');
+				});
+		},
 		
 		getAssets: function() {
 			return aScope.assetService.getAssets();
@@ -37,8 +38,7 @@ It also should have the following private methods:
 			var _this = this;
 			aScope.assetService.createAsset(assetData)
 				.done(function(data) {
-					_this.setChanged();
-					_this.notifyObservers(_this);
+					_this.updateData();
 				});
 		},
 		
@@ -46,8 +46,7 @@ It also should have the following private methods:
 			var _this = this;
 			return aScope.assetService.deleteAsset(id)
 				.done(function(data) {
-					_this.setChanged();
-					_this.notifyObservers(_this);
+					_this.updateData();
 				});
 		},
 		
@@ -55,8 +54,7 @@ It also should have the following private methods:
 			var _this = this;
 			aScope.assetService.transfer(expenseData)
 				.done(function(data) {
-					_this.setChanged();
-					_this.notifyObservers(_this);
+					_this.updateData();
 				});
 		}
 	
