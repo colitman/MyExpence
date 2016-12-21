@@ -32,7 +32,7 @@
 					model.getAssets()
 						.done(function(assetsData) {
 							var filteredAssets = assetsData.filter(function(asset) {
-								return asset.currency === senderData.currency && asset.id !== senderData.id;
+								return asset.currency.id === senderData.currency.id && asset.id !== senderData.id;
 							});
 							
 							var select = $('select#to', transferModal);
@@ -40,7 +40,7 @@
 							
 							for(var i = 0; i < filteredAssets.length; i++) {
 								var asset = filteredAssets[i];
-								var sAsset = new Stringifier().stringify([asset.name, asset.label], '%0 (%1)');
+								var sAsset = new Stringifier().stringify([asset.name, asset.type.label], '%0 (%1)');
 								var option = jQueryDomBuilder.getOption(asset.id, sAsset);
 								
 								$(select).append(option);
@@ -77,7 +77,7 @@
 			
 			model.getAsset(assetId)
 				.done(function(assetData) {
-					$('#c-delete-subject', deleteModal).html('<b>' + assetData.name + ' (' + assetData.label + ')</b> asset.');
+					$('#c-delete-subject', deleteModal).html('<b>' + assetData.name + ' (' + assetData.type.label + ')</b> asset.');
 					$('#c-modal-delete-form #id', deleteModal).val(assetData.id);
 					$(deleteModal).modal('show');
 				})

@@ -75,7 +75,7 @@
 		
 		addAsset: function(assetData) {
 			var _this = this;
-			aScope.assetService.createAsset(assetData)
+			return aScope.assetService.createAsset(assetData)
 				.done(function(data) {
 					_this.updateData();
 				});
@@ -91,7 +91,7 @@
 		
 		transfer: function(expenseData) {
 			var _this = this;
-			aScope.assetService.transfer(expenseData)
+			return aScope.assetService.transfer(expenseData)
 				.done(function(data) {
 					_this.updateData();
 				});

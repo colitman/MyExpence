@@ -43,7 +43,7 @@
 	
 	deleteAssetForm.submit(function(event) {
 		event.preventDefault();
-		$(assetsView).trigger('assets:deleted', [$('#id', deleteAssetForm), deleteModal]);
+		$(assetsView).trigger('assets:deleted', [$('#id', deleteAssetForm).val(), deleteModal]);
 	});
 	
 	transferForm.submit(function(event) {
@@ -53,7 +53,12 @@
 	});
 	
 	$('input#amount', transferForm).keyup(function() {
-		var entered = new BigNumber($(this).val());
+		var typed = $(this).val();
+		if(isNaN(typed) || typed.trim().length === 0) {
+			return;
+		}
+		
+		var entered = new BigNumber(typed);
 		var limit = new BigNumber($(transferForm).data('limit'));
 		
 		if(entered.greaterThan(limit) || entered.lessThan(new BigNumber(0))) {
