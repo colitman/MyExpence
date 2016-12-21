@@ -1,25 +1,45 @@
 "use strict";
 
-/*
-View is an observer object.
-It should expose the following public access interfaces:
-- update(object)
- 
- View is also an observable object.
- It should expose the following public access interfaces:
- - subscribe
- 
- It also should have the following private methods:
- - countObservers
- - isChanged
- - setChanged
- - clearChanged
- - notifyObservers
- - deleteObservers
-*/
+
 
 (function(aScope, undefined){
 	
+	var observer = new Observer();
+	
+	var assetsView = {
+		__proto__: observer,
+		
+		/**
+		 * This method is called by observed model when it is changed.
+		 *
+		 * @param {*} subject - reference to VM object in global application scope with model data
+		 * @param {string} [message=undefined] - additional message that model may send
+		 */
+		update: function(subject, message) {
+			resetForms();
+			hideModals();
+			initDataTable();
+		}
+	};
+	
+	aScope.assetsView = assetsView;
+	
+	/* Private fields */
+	
+	/* View events triggers */
+	
+	/* Private methods */
+	var initDataTable = function() {
+		
+		var table = $('.c-js-datatable');
+		var txDataTable = table.DataTable({
+			dom: 'rt<<"col-sm-6"li><"col-sm-6 text-right"p>>',
+			pagingType: 'full_numbers',
+			lengthMenu: [[10,25,50,-1],[10,25,50,'All']]
+		});
+	}
+	
+	/*
 	var addAssetForm = $('#c-js-add-asset-form');
 	var assetsTable = $('#c-js-added-assets-table');
 	var deleteModal = $('#c-delete-confirmation-modal');
@@ -64,7 +84,7 @@ It should expose the following public access interfaces:
 		}
 	};
 	
-	/*var fillInTransferTargets = function(data) {
+	var fillInTransferTargets = function(data) {
 		var select = $('select#to', transferModal);
 		$(select).html('');
 		
@@ -76,7 +96,7 @@ It should expose the following public access interfaces:
 			
 			$(select).append(option);
 		}
-	};*/
+	};
 	
 	var updateAssetsList = function(assetData, currencyData) {
 		var oldTbody = $('tbody', assetsTable);
@@ -169,16 +189,6 @@ It should expose the following public access interfaces:
 		return tdActions;
 	}
 	
-	var initDataTable = function() {
-		
-		var txDataTable = $('.c-js-datatable').DataTable({
-			dom: 'rt<<"col-sm-6"li><"col-sm-6 text-right"p>>',
-			order: [[0,'asc']],
-			pagingType: 'full_numbers',
-			lengthMenu: [[10,25,50,-1],[10,25,50,'All']],
-			destroy: true
-		});
-	}
 	
 	var observable = new Observable();
 	var currenciesModel = $EX.currenciesModel;
@@ -206,7 +216,6 @@ It should expose the following public access interfaces:
 					subject.getAssets()
 						.done(function(assetData) {
 							updateAssetsList(assetData, currenciesData);
-							initDataTable();
 						})
 						.fail(function(jqXHR) {
 							console.log(jqXHR.responseText);
@@ -255,6 +264,5 @@ It should expose the following public access interfaces:
 		}
 	});
 		
-	aScope.assetsView = assetsView;
-	
+	*/
 })($EX);
