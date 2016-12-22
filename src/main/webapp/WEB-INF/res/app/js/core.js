@@ -148,6 +148,62 @@ function  Stringifier() {
 	return model;
 }
 
+function jsMap() {
+	
+	var size = 0;
+	
+	var data = {};
+	
+	var map = {
+		put: function(key, value) {
+			if(this.hasKey(key)) {
+				var prevValue = this.get(key);
+				data[key] = value;
+				return prevValue;
+			} else {
+				data[key] = value;
+				size++;
+				return null;
+			}
+		},
+		
+		get: function(key) {
+			if(this.hasKey(key)) {
+				return data[key];
+			} else {
+				return null;
+			}
+		},
+		
+		remove: function(key) {
+			if(this.hasKey(key)) {
+				var prevValue = this.get(key);
+				delete data[key];
+				size--;
+				return prevValue;
+			} else {
+				return null;
+			}
+		},
+		
+		hasKey: function(key) {
+			if(this.isEmpty()) return false;
+			return key in data;
+		},
+		
+		size: function() {
+			return size;
+		},
+		
+		isEmpty: function() {
+			return this.size() === 0;
+		}
+	};
+	
+	Object.seal(map);
+	return map;
+}
+
 
 
 

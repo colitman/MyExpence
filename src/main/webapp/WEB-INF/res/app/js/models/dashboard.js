@@ -1,19 +1,5 @@
 "use strict";
 
-/*
-Model is an observable object.
-It should expose the following public access interfaces:
-- subscribe
-
-It also should have the following private methods:
-- countObservers
-- isChanged
-- setChanged
-- clearChanged
-- notifyObservers
-- deleteObservers
- */
-
 (function(aScope, undefined){
 	
 	var observable = new Observable();
@@ -21,46 +7,59 @@ It also should have the following private methods:
 	var dashboardModel = {
 		__proto__: observable,
 		
-		getStatsByCurrencies: function() {
+		updateData: function() {
 			var _this = this;
-			aScope.assetService.getAssets()
+			
+			var vm = {
+				statsByCurrency: {
+					total:0,
+					listData:[]
+				}
+			}
+			
+			_this.getAssets()
 				.done(function(assetsData) {
-					aScope.currencyService.getCurrencies()
-						.done(function(currenciesData) {
-							var statsByCurrency = buildStatsByCurrency(currenciesData, assetsData);
-							_this.setChanged();
-							_this.notifyObservers(statsByCurrency, 'c.currency.stats.update');
+					var statsByCurrency = buildStatsByCurrency(
+						assetsData.filter(function(asset) {
+							return asset.showInTotals
 						})
+					);
+					vm.statsByCurrency.total = statsByCurrency.length;
+					vm.statsByCurrency.listData = statsByCurrency;
+					
+					aScope.VM = vm;
+					
+					_this.setChanged();
+					_this.notifyObservers(aScope.VM, 'dashboard:dataUpdated');
+				})
+				.fail(function(jqXHR, textStatus, errorThrown) {
+					new Alert('danger', 'Oops!', 'Failed to get assets.').show();
+					console.log(jqXHR.responseText);
 				});
 		}
 	
 	};
 	
-	var buildStatsByCurrency = function(currenciesData, assetsData) {
+	/* Private methods */
+	var buildStatsByCurrency = function(assetsData) {
 		var result = [];
+		var map = new jsMap();
 		
-		for(var c = 0; c < currenciesData.length; c++) {
-			var stat = new DashboardCurrencyStat();
-					
-			var currency = currenciesData[c];
-			stat.currency = currency;
+		for(var i = 0; i < assetsData.length; i++) {
+			var asset = assetsData[i];
+			var assetCurrency = asset.currency;
+			var stat = null;
 			
-			var currencyAssets = assetsData.filter(function(asset) {
-				return asset.currency === currency.id && asset.showInTotals;
-			});
-			
-			if(currencyAssets.length === 0) {
-				continue;
+			if(!map.hasKey(assetCurrency.id)) {
+				stat = new DashboardCurrencyStat();
+				stat.currency = assetCurrency;
+				map.put(assetCurrency.id, stat);
+			} else {
+				stat = map.get(assetCurrency.id);
 			}
 			
-			for(var a = 0; a < currencyAssets.length; a++) {
-				var currencyAsset = currencyAssets[a];
-				stat.assets.push(currencyAsset);
-				
-				stat.totalAmountForCurrency = stat.totalAmountForCurrency.plus(currencyAsset.amount);
-			}
-			
-			result.push(stat);
+			stat.assets.push(asset);
+			stat.totalAmountForCurrency = stat.totalAmountForCurrency.plus(new BigNumber(asset.amount));
 		}
 		
 		return result;
