@@ -1,64 +1,139 @@
 "use strict";
 
-/*
-View is an observer object.
-It should expose the following public access interfaces:
-- update(object)
- 
- View is also an observable object.
- It should expose the following public access interfaces:
- - subscribe
- 
- It also should have the following private methods:
- - countObservers
- - isChanged
- - setChanged
- - clearChanged
- - notifyObservers
- - deleteObservers
-*/
-
 (function(aScope, undefined){
 	
+	var observable = new Observable();
+	
+	var assetView = {
+		
+		__proto__: observable,
+		
+		/**
+		 * This method is called by observed model when it is changed.
+		 *
+		 * @param {*} subject - reference to VM object in global application scope with model data
+		 * @param {string} [message=undefined] - additional message that model may send
+		 */
+		update: function(subject, message) {
+			hideModals();
+			setCurrenciesSelectOptions(subject.currencies);
+			fillInAssetConfigureForm(subject.asset);
+			setPaymentSystemsSelectOptions(subject.paymentSystems);
+			aScope.generateBreadcrumbs(subject.asset.name);
+		}
+	};
+	
+	aScope.assetView = assetView;
+	
+	/* Private fields */
 	var configureAssetForm = $('#c-js-configure-asset-form');
 	
-	var assetChangedEvent = new ViewEvent('c.asset.changed',configureAssetForm);
+	/* View events triggers */
+	configureAssetForm.submit(function(event) {
+		event.preventDefault();
+		$(assetView).trigger('asset:changed', [configureAssetForm]);
+	});
 	
-	var updatePaymentSystemsSelect = function(paymentSystemsData, currentSystem) {
+	/* Private methods */
+	var hideModals = function() {
+		
+	};
+	
+	var setPaymentSystemsSelectOptions = function(paymentSystemsVm) {
 		var select = $('#paymentSystem', configureAssetForm);
+		
+		if(select.length === 0) return;
+		
 		$(select).html('');
 		
-		for(var i = 0; i < paymentSystemsData.length; i++) {
-			var option = document.createElement('option');
-			
-			$(option).attr('value', paymentSystemsData[i].name);
-			$(option).text(paymentSystemsData[i].label);
-			
-			if(paymentSystemsData[i].name === currentSystem) {
-				$(option).prop('selected', 'selected');
-			}
-			
+		var systems = paymentSystemsVm.listData;
+		
+		for(var i = 0; i < systems.length; i++) {
+			var system = systems[i];
+			var option = jQueryDomBuilder.getOption(system.name, system.label, system.name === paymentSystemsVm.currentPaymentSystem.name);
 			$(select).append(option);
 		}
 	}
 	
-	var updateCurrenciesSelect = function(currencyData, currentCurrency) {
+	var setCurrenciesSelectOptions = function(currenciesVm) {
 		var select = $('#currency', configureAssetForm);
 		$(select).html('');
 		
-		for(var i = 0; i < currencyData.length; i++) {
-			var option = document.createElement('option');
-			
-			$(option).attr('value', currencyData[i].id);
-			$(option).text(currencyData[i].symbol + ' ' + currencyData[i].name + ' (' + currencyData[i].code + ')');
-			
-			if(currencyData[i].id === currentCurrency) {
-				$(option).prop('selected', 'selected');
-			}
-			
+		var currencies = currenciesVm.listData;
+		
+		for(var i = 0; i < currencies.length; i++) {
+			var currency = currencies[i];
+			var sCurrency = new Stringifier().stringify([currency.symbol, currency.name, currency.code], '%0 %1 (%2)');
+			var option = jQueryDomBuilder.getOption(currency.id, sCurrency);
 			$(select).append(option);
 		}
 	}
+	
+	var buildBankNameInput = function(asset) {
+		var formGroupDiv = jQueryDomBuilder.getDiv('form-group c-js-generated');
+		var label = jQueryDomBuilder.getLabel('bankName', 'Bank Name', formGroupDiv);
+		label.addClass('col-sm-3 control-label');
+		
+		var inputDiv = jQueryDomBuilder.getDiv('col-sm-4', formGroupDiv);
+		
+		var bankNameInput = jQueryDomBuilder.getInput(
+			[
+				['type', 'text'],
+				['name', 'bankName'],
+				['id', 'bankName'],
+				['placeholder', 'Bank Name']
+			],
+			asset.bankName,
+			inputDiv
+		);
+		bankNameInput.addClass('form-control');
+		
+		$('.form-group:nth-last-child(3)', configureAssetForm).after(formGroupDiv);
+	};
+	
+	var buildPaymentSystemInput = function() {
+		var formGroupDiv = jQueryDomBuilder.getDiv('form-group c-js-generated');
+		var label = jQueryDomBuilder.getLabel('paymentSystem', 'Payment System', formGroupDiv);
+		label.addClass('col-sm-3 control-label');
+		
+		var inputDiv = jQueryDomBuilder.getDiv('col-sm-4', formGroupDiv);
+		
+		var paymentSystemSelect = jQueryDomBuilder.getSelect(
+			[
+				['name', 'paymentSystem'],
+				['id', 'paymentSystem'],
+				['placeholder', 'Payment System']
+			],
+			[],
+			inputDiv
+		);
+		paymentSystemSelect.addClass('form-control');
+		
+		$('.form-group:nth-last-child(3)', configureAssetForm).after(formGroupDiv);
+	};
+	
+	var buildLimitInput = function(asset) {
+		var formGroupDiv = jQueryDomBuilder.getDiv('form-group c-js-generated');
+		var label = jQueryDomBuilder.getLabel('limit', 'Credit Limit', formGroupDiv);
+		label.addClass('col-sm-3 control-label');
+		
+		var inputDiv = jQueryDomBuilder.getDiv('col-sm-4', formGroupDiv);
+		
+		var limitInput = jQueryDomBuilder.getInput(
+			[
+				['type', 'number'],
+				['step', 'any'],
+				['name', 'limit'],
+				['id', 'limit'],
+				['placeholder', 'Credit Limit']
+			],
+			new BigNumber(asset.limit).toNumber(),
+			inputDiv
+		);
+		limitInput.addClass('form-control');
+		
+		$('.form-group:nth-last-child(3)', configureAssetForm).after(formGroupDiv);
+	};
 	
 	var fillInAssetConfigureForm = function(assetData) {
 		
@@ -66,146 +141,29 @@ It should expose the following public access interfaces:
 		$('legend', configureAssetForm).text(assetData.name);
 		
 		$('#id', configureAssetForm).val(assetData.id);
-		$('#type', configureAssetForm).val(assetData.type);
+		$('#type', configureAssetForm).val(assetData.type.name);
 		$('#name', configureAssetForm).val(assetData.name);
-		$('#amount', configureAssetForm).val(assetData.amount);
+		$('#amount', configureAssetForm).val(new BigNumber(assetData.amount).toNumber());
 		$('#showInTotals', configureAssetForm).prop('checked', assetData.showInTotals);
 		
-		if(assetData.type === $EX.ASSET_TYPES.BANK_ACCOUNT ||
-			assetData.type === $EX.ASSET_TYPES.DEBIT_CARD ||
-			assetData.type === $EX.ASSET_TYPES.CREDIT_CARD) {
+		$('#currency option[value="' + assetData.currency.id + '"]', configureAssetForm).prop('selected', 'selected');
+		
+		if(assetData.type.name === $EX.ASSET_TYPES.BANK_ACCOUNT ||
+			assetData.type.name === $EX.ASSET_TYPES.DEBIT_CARD ||
+			assetData.type.name === $EX.ASSET_TYPES.CREDIT_CARD) {
 			
-			var formGroupDiv = $(document.createElement('div'));
-			formGroupDiv.addClass('form-group c-js-generated');
+			buildBankNameInput(assetData);
 			
-			var label = $(document.createElement('label'));
-			label.attr('for', 'bankName');
-			label.addClass('col-sm-3 control-label');
-			label.text('Bank Name');
-			formGroupDiv.append(label);
-			
-			var inputDiv = $(document.createElement('div'));
-			inputDiv.addClass('col-sm-4');
-			formGroupDiv.append(inputDiv);
-			
-			var bankNameInput = $(document.createElement('input'));
-			bankNameInput.attr('type', 'text');
-			bankNameInput.addClass('form-control');
-			bankNameInput.attr('name', 'bankName');
-			bankNameInput.attr('id', 'bankName');
-			bankNameInput.attr('placeholder', 'Bank Name');
-			inputDiv.append(bankNameInput);
-			
-			bankNameInput.val(assetData.bankName);
-			
-			$('.form-group:nth-last-child(3)', configureAssetForm).after(formGroupDiv);
-			//$('.form-group.c-js-always-last-but-one', configureAssetForm).before(formGroupDiv);
-			
-			if(assetData.type === $EX.ASSET_TYPES.DEBIT_CARD ||
-				assetData.type === $EX.ASSET_TYPES.CREDIT_CARD) {
+			if(assetData.type.name === $EX.ASSET_TYPES.DEBIT_CARD ||
+				assetData.type.name === $EX.ASSET_TYPES.CREDIT_CARD) {
 				
-				var formGroupDiv2 = $(document.createElement('div'));
-				formGroupDiv2.addClass('form-group c-js-generated');
+				buildPaymentSystemInput();
 				
-				var label2 = $(document.createElement('label'));
-				label2.attr('for', 'paymentSystem');
-				label2.addClass('col-sm-3 control-label');
-				label2.text('Payment System');
-				formGroupDiv2.append(label2);
-				
-				var inputDiv2 = $(document.createElement('div'));
-				inputDiv2.addClass('col-sm-4');
-				formGroupDiv2.append(inputDiv2);
-				
-				var paymentSystemSelect = $(document.createElement('select'));
-				paymentSystemSelect.addClass('form-control');
-				paymentSystemSelect.attr('name', 'paymentSystem');
-				paymentSystemSelect.attr('id', 'paymentSystem');
-				paymentSystemSelect.attr('placeholder', 'Payment System');
-				inputDiv2.append(paymentSystemSelect);
-				
-				$('.form-group:nth-last-child(3)', configureAssetForm).after(formGroupDiv2);
-				
-				if(assetData.type === $EX.ASSET_TYPES.CREDIT_CARD) {
+				if(assetData.type.name === $EX.ASSET_TYPES.CREDIT_CARD) {
 					
-					var formGroupDiv3 = $(document.createElement('div'));
-					formGroupDiv3.addClass('form-group c-js-generated');
-					
-					var label3 = $(document.createElement('label'));
-					label3.attr('for', 'limit');
-					label3.addClass('col-sm-3 control-label');
-					label3.text('Credit Limit');
-					formGroupDiv3.append(label3);
-					
-					var inputDiv3 = $(document.createElement('div'));
-					inputDiv3.addClass('col-sm-4');
-					formGroupDiv3.append(inputDiv3);
-					
-					var limitInput = $(document.createElement('input'));
-					limitInput.attr('type', 'number');
-					limitInput.addClass('form-control');
-					limitInput.attr('name', 'limit');
-					limitInput.attr('id', 'limit');
-					limitInput.attr('placeholder', 'Credit Limit');
-					inputDiv3.append(limitInput);
-					
-					limitInput.val(assetData.limit);
-					
-					$('.form-group:nth-last-child(3)', configureAssetForm).after(formGroupDiv3);
+					buildLimitInput(assetData);
 				}
 			}
 		}
 	}
-	
-	var observable = new Observable();
-	var currenciesModel = $EX.currenciesModel;
-	
-	var assetView = {
-		
-		__proto__: observable,
-		
-		update: function(assetModel, message) {
-			
-			if('updated' === message) {
-				new Alert('success', 'Success!', 'Asset has been successfully updated.').show();
-			}
-			
-			assetModel.getAsset()
-				.done(function(assetData) {
-					
-					fillInAssetConfigureForm(assetData);
-					
-					currenciesModel.getCurrencies()
-						.done(function(currenciesData) {
-							updateCurrenciesSelect(currenciesData, assetData.currency);
-						})
-						.fail(function(jqXHR) {
-							console.log(jqXHR.responseText);
-						});
-					
-					assetModel.getPaymentSystems()
-						.done(function(paymentSystemsData) {
-							updatePaymentSystemsSelect(paymentSystemsData, assetData.paymentSystem);
-						})
-						.fail(function(jqXHR) {
-							console.log(jqXHR.responseText);
-						});
-					
-					$EX.generateBreadcrumbs(assetData.name);
-				})
-				.fail(function(jqXHR) {
-					console.log(jqXHR.responseText);
-				});
-			
-		}
-	};
-	
-	configureAssetForm.submit(function(event) {
-		event.preventDefault();
-		assetView.setChanged();
-		assetView.notifyObservers(assetChangedEvent)
-	});
-		
-	aScope.assetView = assetView;
-	
 })($EX);

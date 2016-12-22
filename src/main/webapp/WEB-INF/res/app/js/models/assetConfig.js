@@ -18,7 +18,8 @@
 				},
 				paymentSystems: {
 					total:0,
-					listData:[]
+					listData:[],
+					currentPaymentSystem:{}
 				}
 			};
 			
@@ -30,6 +31,7 @@
 						.done(function(paymentSystemsData) {
 							vm.paymentSystems.total = paymentSystemsData.length;
 							vm.paymentSystems.listData = paymentSystemsData;
+							vm.paymentSystems.currentPaymentSystem = assetData.paymentSystem;
 							
 							aScope.currencyService.getCurrencies()
 								.done(function(currenciesData) {

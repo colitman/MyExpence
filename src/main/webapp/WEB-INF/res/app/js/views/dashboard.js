@@ -8,6 +8,12 @@
 		
 		__proto__: observer,
 		
+		/**
+		 * This method is called by observed model when it is changed.
+		 *
+		 * @param {*} subject - reference to VM object in global application scope with model data
+		 * @param {string} [message=undefined] - additional message that model may send
+		 */
 		update: function(subject, message) {
 			resetForms();
 			hideModals();

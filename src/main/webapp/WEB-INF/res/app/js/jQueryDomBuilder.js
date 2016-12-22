@@ -87,6 +87,81 @@
 			}
 			
 			return div;
+		},
+		
+		/**
+		 * Builds the "label" DOM element
+		 * @param {string} forAttr - value for "for" attribute
+		 * @param {string} text - value for label display text
+		 * @param {jQuery} [parent=undefined] - jQuery object to place the "label" into
+		 * @param {boolean} [isPrepend=false] - if true, "label" will be prepended to provided "parent"; if false - appended.
+		 * @returns {jQuery}
+		 */
+		getLabel: function(forAttr, text, parent, isPrepend) {
+			var label = $(document.createElement('label'));
+			label.attr('for', forAttr);
+			label.text(text);
+			
+			if(parent != undefined) {
+				isPrepend? parent.prepend(label): parent.append(label);
+			}
+			
+			return label;
+		},
+		
+		/**
+		 * Builds the "input" DOM element
+		 * @param {string[][]} attrs - two-dimensional array of key-value pairs for input attributes.
+		 * @example
+		 * // will produce <input type="text" id="comments" name="comments />
+		 * .getInput([['type', 'text'],['id', 'comments'], ['name', 'comments]])
+		 * @param {string} value - value for input
+		 * @param {jQuery} [parent=undefined] - jQuery object to place the "input" into
+		 * @param {boolean} [isPrepend=false] - if true, "input" will be prepended to provided "parent"; if false - appended.
+		 * @returns {jQuery}
+		 */
+		getInput: function(attrs, value, parent, isPrepend) {
+			var input = $(document.createElement('input'));
+			input.val(value);
+			
+			for(var i = 0; i < attrs.length; i++) {
+				var attrItem = attrs[i];
+				input.attr(attrItem[0], attrItem[1]);
+			}
+			
+			if(parent != undefined) {
+				isPrepend? parent.prepend(input): parent.append(input);
+			}
+			
+			return input;
+		},
+		
+		/**
+		 * Builds the "select" DOM element
+		 * @param {string[][]} attrs - two-dimensional array of key-value pairs for select attributes.
+		 * @example
+		 * // will produce <select id="comments" name="comments ></select>
+		 * .getSelect([['id', 'comments'], ['name', 'comments]])
+		 * @param {Array} [options=undefined] - select options array
+		 * @param {jQuery} [parent=undefined] - jQuery object to place the "select" into
+		 * @param {boolean} [isPrepend=false] - if true, "select" will be prepended to provided "parent"; if false - appended.
+		 * @returns {jQuery}
+		 */
+		getSelect: function(attrs, options, parent, isPrepend) {
+			var select = $(document.createElement('select'));
+			
+			for(var i = 0; i < attrs.length; i++) {
+				var attrItem = attrs[i];
+				select.attr(attrItem[0], attrItem[1]);
+			}
+			
+			// TODO implement options building
+			
+			if(parent != undefined) {
+				isPrepend? parent.prepend(select): parent.append(select);
+			}
+			
+			return select;
 		}
 	};
 	
