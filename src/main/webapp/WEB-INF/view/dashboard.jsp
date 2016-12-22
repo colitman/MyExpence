@@ -38,7 +38,7 @@
 		
 		<div class="hidden templates">
 			
-			<div class="panel panel-info" id="c-js-currency-stat-template">
+			<div class="panel panel-info c-js-currency-stat-panel" id="c-js-currency-stat-template">
 				<div class="panel-heading" data-target="#c-js-stat-details">
 					<h3 class="panel-title">
 						<%--a role="button" href="#c-js-stat-details"></a--%>
@@ -68,6 +68,7 @@
 		<c:import url="/imports/scripts"></c:import>
 		<script src="${app}/res/app/js/models/dashboard.js"></script>
 		<script src="${app}/res/app/js/views/dashboard.js"></script>
+		<script src="${app}/res/app/js/controllers/dashboard.js"></script>
 
 	</body>
 </html>

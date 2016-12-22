@@ -69,6 +69,24 @@
 			}
 			
 			return tr;
+		},
+		
+		/**
+		 * Builds the "div" DOM element
+		 * @param {string} classes - value for "class" attribute
+		 * @param {jQuery} [parent=undefined] - jQuery object to place the "div" into
+		 * @param {boolean} [isPrepend=false] - if true, "div" will be prepended to provided "parent"; if false - appended.
+		 * @returns {jQuery}
+		 */
+		getDiv: function(classes, parent, isPrepend) {
+			var div = $(document.createElement('div'));
+			div.addClass(classes);
+			
+			if(parent != undefined) {
+				isPrepend? parent.prepend(div): parent.append(div);
+			}
+			
+			return div;
 		}
 	};
 	

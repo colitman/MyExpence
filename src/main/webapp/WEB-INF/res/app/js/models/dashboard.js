@@ -17,7 +17,7 @@
 				}
 			}
 			
-			_this.getAssets()
+			aScope.assetService.getAssets()
 				.done(function(assetsData) {
 					var statsByCurrency = buildStatsByCurrency(
 						assetsData.filter(function(asset) {
@@ -54,6 +54,7 @@
 				stat = new DashboardCurrencyStat();
 				stat.currency = assetCurrency;
 				map.put(assetCurrency.id, stat);
+				result.push(stat);
 			} else {
 				stat = map.get(assetCurrency.id);
 			}
