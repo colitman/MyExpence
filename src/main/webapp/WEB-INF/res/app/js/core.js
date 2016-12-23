@@ -58,6 +58,13 @@ function Observable() {
 			}
 			
 			clearChanged();
+		},
+		
+		/**
+		 * Unsubscribes all observers from the current object
+		 */
+		deleteObservers: function() {
+			observers.length = 0;
 		}
 	};
 	
@@ -89,13 +96,6 @@ function Observable() {
 	 */
 	var clearChanged = function() {
 		changed = false;
-	};
-	
-	/**
-	 * Unsubscribes all observers from the current object
-	 */
-	var deleteObservers = function() {
-		observers.length = 0;
 	};
 	
 	return observable;
