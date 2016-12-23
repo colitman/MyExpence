@@ -1,21 +1,11 @@
 "use strict";
 
-/*
-Controller - Observer
-*/
-
-function TransactionsController(model, undefined){
+(function(aScope, undefined) {
+	var model = aScope.transactionsModel;
+	var view = aScope.transactionsView;
 	
-	var transactionsModel = model;
+	model.subscribe(view);
+	aScope.primaryModel = model;
+	model.updateData();
 	
-	var transactionsController = {
-		update: function(viewEvent) {
-			if(viewEvent.name === 'c.transactions.export') {
-				
-			}
-		}
-	};
-	
-	return transactionsController;
-	
-}
+})($EX);
