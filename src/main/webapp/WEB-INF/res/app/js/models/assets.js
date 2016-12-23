@@ -48,8 +48,20 @@
 									
 									_this.setChanged();
 									_this.notifyObservers(aScope.VM, 'assets:dataUpdated');
+								})
+								.fail(function(jqXHR, textStatus, errorThrown) {
+									new Alert('danger', 'Oops!', 'Failed to get assets.').show();
+									console.log(jqXHR.responseText);
 								});
+						})
+						.fail(function(jqXHR, textStatus, errorThrown) {
+							new Alert('danger', 'Oops!', 'Failed to get currencies.').show();
+							console.log(jqXHR.responseText);
 						});
+				})
+				.fail(function(jqXHR, textStatus, errorThrown) {
+					new Alert('danger', 'Oops!', 'Failed to get asset types.').show();
+					console.log(jqXHR.responseText);
 				});
 		},
 		

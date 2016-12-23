@@ -38,6 +38,10 @@
 					
 					_this.setChanged();
 					_this.notifyObservers(aScope.VM, 'transactions:dataUpdated');
+				})
+				.fail(function(jqXHR, textStatus, errorThrown) {
+					new Alert('danger', 'Oops!', 'Failed to get transactions.').show();
+					console.log(jqXHR.responseText);
 				});
 		},
 		

@@ -36,6 +36,10 @@
 					
 					_this.setChanged();
 					_this.notifyObservers(aScope.VM, 'currencies:dataUpdated');
+				})
+				.fail(function(jqXHR, textStatus, errorThrown) {
+					new Alert('danger', 'Oops!', 'Failed to get currencies.').show();
+					console.log(jqXHR.responseText);
 				});
 		},
 		
