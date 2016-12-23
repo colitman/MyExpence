@@ -1,7 +1,5 @@
 "use strict";
 
-"use strict";
-
 (function(aScope, undefined){
 	
 	var observable = new Observable();

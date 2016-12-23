@@ -1,33 +1,43 @@
 "use strict";
 
-/*
-Model is an observable object.
-It should expose the following public access interfaces:
-- subscribe
-
-It also should have the following private methods:
-- countObservers
-- isChanged
-- setChanged
-- clearChanged
-- notifyObservers
-- deleteObservers
- */
-
 (function(aScope, undefined){
 	
 	var observable = new Observable();
+	var categoryId = $('meta[name="target_id"]').attr('content');
 	
 	var userTransactionsModel = {
 		__proto__: observable,
 		
+		/**
+		 * Reloads model data and notify observers about change
+		 */
+		updateData: function() {
+			var _this = this;
+			
+			var vm = {
+				total: 0,
+				listData: []
+			};
+			
+			_this.getTransactions()
+				.done(function(transactionsData) {
+					
+					vm.total = transactionsData.length;
+					vm.listData = transactionsData;
+					
+					aScope.VM = vm;
+					
+					_this.setChanged();
+					_this.notifyObservers(aScope.VM, 'transactions:dataUpdated');
+				});
+		},
+		
 		getTransactions: function() {
 			return aScope.transactionService.getTransactions();
 		}
-	
+		
 	};
 	
-	
-	aScope.userTransactionsModel = userTransactionsModel;
+	aScope.transactionsModel = userTransactionsModel;
 	
 })($EX);
