@@ -1,144 +1,56 @@
 "use strict";
 
-/*
-View is an observer object.
-It should expose the following public access interfaces:
-- update(object)
- 
- View is also an observable object.
- It should expose the following public access interfaces:
- - subscribe
- 
- It also should have the following private methods:
- - countObservers
- - isChanged
- - setChanged
- - clearChanged
- - notifyObservers
- - deleteObservers
-*/
-
 (function(aScope, undefined){
 	
+	var observer = new Observer();
+	
+	var outgoingCategoriesView = {
+		
+		__proto__: observer,
+		
+		/**
+		 * This method is called by observed model when it is changed.
+		 *
+		 * @param {*} subject - reference to VM object in global application scope with model data
+		 * @param {string} [message=undefined] - additional message that model may send
+		 */
+		update: function(subject, message) {
+			resetForms();
+			hideModals();
+			buildOutgoingCategoriesList(subject);
+			initDataTable();
+		}
+		
+	};
+	
+	aScope.outgoingCategoriesView = outgoingCategoriesView;
+	
+	/* Private fields */
 	var addCategoryForm = $('#c-js-add-outgoing-category-form');
 	var editCategoryForm = $('#c-js-edit-outgoing-category-form');
 	var categoriesTable = $('#c-js-outgoing-categories-table');
 	var deleteModal = $('#c-delete-confirmation-modal');
 	var deleteOutgoingCategoryForm = $('#c-modal-delete-form');
 	
-	var categoryAddedEvent = new ViewEvent('c.category.added',{form: addCategoryForm, type: $EX.CATEGORY_TYPES.OUTGOING});
-	var categoryChangeEvent = new ViewEvent('c.category.change');
-	var categoryChangedEvent = new ViewEvent('c.category.changed',editCategoryForm);
-	var categoryDeleteEvent = new ViewEvent('c.category.delete');
-	var categoryDeletedEvent = new ViewEvent('c.category.deleted');
-	
-	var updateOutgoingCategoriesList = function(data) {
-		var oldTbody = $('tbody', categoriesTable);
-		var body = document.createElement('tbody');
-		
-		for(var i = 0; i < data.length; i++) {
-			var row = document.createElement('tr');
-			
-			var tdName = document.createElement('td');
-			
-			$(tdName).text(data[i].name);
-			
-			$(row).append(tdName);
-			$(row).append(createOutgoingCategoryActions(data[i]));
-			
-			$(body).append(row);
-		}
-		
-		
-		$(oldTbody).remove();
-		$('thead', categoriesTable).after(body)
-	}
-	
-	var createOutgoingCategoryActions = function(categoryData) {
-		var tdActions = document.createElement('td');
-		
-		var seeTxAction = document.createElement('a');
-		$(seeTxAction).attr('href', $EX.APP_ROOT + '/settings/categories/' + categoryData.id + '/transactions');
-		$(seeTxAction).html('<i class="fa fa-database"></i>');
-		$(tdActions).append(seeTxAction);
-		
-		var editAction = document.createElement('a');
-		$(editAction).attr('href', '#');
-		$(editAction).html('<i class="fa fa-pencil"></i>');
-		$(editAction).data('target', categoryData.id);
-		$(tdActions).append(editAction);
-		
-		$(editAction).click(function(event) {
-			event.preventDefault();
-			categoryChangeEvent.data = {id: $(editAction).data('target'), form:editCategoryForm};
-			outgoingCategoriesView.setChanged();
-			outgoingCategoriesView.notifyObservers(categoryChangeEvent);
-		});
-		
-		var deleteAction = document.createElement('a');
-		$(deleteAction).attr('href', '#');
-		$(deleteAction).html('<i class="fa fa-remove"></i>');
-		$(deleteAction).data('target', categoryData.id);
-		$(tdActions).append(deleteAction);
-		
-		$(deleteAction).click(function(event) {
-			event.preventDefault();
-			categoryDeleteEvent.data = $(deleteAction).data('target');
-			outgoingCategoriesView.setChanged();
-			outgoingCategoriesView.notifyObservers(categoryDeleteEvent);
-		});
-		
-		return tdActions;
-	}
-	
-	var initDataTable = function() {
-		
-		var txDataTable = $('.c-js-datatable').DataTable({
-			dom: 'rt<<"col-sm-6"li><"col-sm-6 text-right"p>>',
-			order: [[0,'asc']],
-			pagingType: 'full_numbers',
-			lengthMenu: [[10,25,50,-1],[10,25,50,'All']],
-			destroy: true
-		});
-	}
-	
-	var observable = new Observable();
-	
-	var outgoingCategoriesView = {
-		
-		__proto__: observable,
-		
-		update: function(categoriesModel) {
-			categoriesModel.getOutgoingCategories()
-				.done(function(categoriesData) {
-					$('button[type="reset"]', addCategoryForm).click();
-					$(deleteModal).modal('hide');
-					$('[type="reset"]', editCategoryForm).click();
-					$(editCategoryForm).addClass('hidden');
-					updateOutgoingCategoriesList(categoriesData);
-					initDataTable();
-				})
-				.fail(function(jqXHR) {
-					console.log(jqXHR.responseText);
-				});
-		}
-	
-	};
-	
+	/* View events triggers */
 	addCategoryForm.submit(function(event) {
 		event.preventDefault();
-		outgoingCategoriesView.setChanged();
-		outgoingCategoriesView.notifyObservers(categoryAddedEvent)
+		$(outgoingCategoriesView).trigger('category:added', [$EX.CATEGORY_TYPES.OUTGOING, addCategoryForm]);
 	});
 	
 	editCategoryForm.submit(function(event) {
 		event.preventDefault();
-		outgoingCategoriesView.setChanged();
-		outgoingCategoriesView.notifyObservers(categoryChangedEvent)
+		$(outgoingCategoriesView).trigger('category:changed', [editCategoryForm]);
 	});
 	
+	// TODO think on better solution for mitigating the double delete request
+	/*deleteOutgoingCategoryForm.submit(function(event) {
+		event.preventDefault();
+		$(outgoingCategoriesView).trigger('category:deleted', [$('#id', deleteOutgoingCategoryForm).val(), deleteModal])
+	});*/
+	
 	$('[type="reset"]', editCategoryForm).click(function(event) {
-		$('[type="hidden"]', editCategoryForm).each(function(undex, hiddenInput) {
+		$('[type="hidden"]', editCategoryForm).each(function(index, hiddenInput) {
 			$(hiddenInput).val('');
 		});
 		editCategoryForm.addClass('hidden');
@@ -146,18 +58,96 @@ It should expose the following public access interfaces:
 	
 	$('#c-js-cancel-edit-outgoing-category-button', editCategoryForm).click(function(event) {
 		event.preventDefault();
-		categoryChangeEvent.data = {id: $('#id', editCategoryForm).val(), form:editCategoryForm};
-		outgoingCategoriesView.setChanged();
-		outgoingCategoriesView.notifyObservers(categoryChangeEvent);
+		$(outgoingCategoriesView).trigger('category:change', [$('#id', editCategoryForm).val(), editCategoryForm]);
 	});
 	
-	deleteOutgoingCategoryForm.submit(function(event) {
-		event.preventDefault();
-		categoryDeletedEvent.data = $(deleteOutgoingCategoryForm);
-		outgoingCategoriesView.setChanged();
-		outgoingCategoriesView.notifyObservers(categoryDeletedEvent);
-	});
+	/* Private methods */
+	var resetForms = function() {
+		$('button[type="reset"]', addCategoryForm).click();
+		$('[type="reset"]', editCategoryForm).click();
+		$(editCategoryForm).addClass('hidden');
+	};
+	
+	var hideModals = function() {
+		$(deleteModal).modal('hide');
+	};
+	
+	var initDataTable = function() {
 		
-	aScope.outgoingCategoriesView = outgoingCategoriesView;
+		var txDataTable = $('#c-js-outgoing-categories .c-js-datatable').DataTable({
+			dom: 'rt<<"col-sm-6"li><"col-sm-6 text-right"p>>',
+			order: [[0,'asc']],
+			pagingType: 'full_numbers',
+			lengthMenu: [[10,25,50,-1],[10,25,50,'All']]
+		});
+	};
+	
+	var buildOutgoingCategoriesList = function(vm) {
+		var categories = vm.outgoing.listData;
+		
+		$('#c-js-outgoing-categories .c-js-datatable').each(function(index, table) {
+			if ( $.fn.dataTable.isDataTable( table ) ) {
+				$(table).DataTable().destroy();
+			}
+		});
+		
+		var body = $('tbody', categoriesTable);
+		body.html('');
+		
+		for(var i = 0; i < categories.length; i++) {
+			var category = categories[i];
+			
+			var row = jQueryDomBuilder.getTableRow(
+				[
+					category.name,
+					''
+				],
+				body
+			);
+			
+			var actionsColumn = row.find('td:last');
+			var seeTxAction = jQueryDomBuilder.getAnchor(
+				$EX.APP_ROOT + '/settings/categories/' + category.id + '/transactions',
+				'',
+				[
+					['target',category.id]
+				],
+				actionsColumn
+			);
+			$(seeTxAction).html('<i class="fa fa-database"></i>');
+			
+			var editAction = jQueryDomBuilder.getAnchor(
+				'#',
+				'',
+				[
+					['target',category.id]
+				],
+				actionsColumn
+			);
+			editAction.html('<i class="fa fa-pencil"></i>');
+			
+			var deleteAction = jQueryDomBuilder.getAnchor(
+				'#',
+				'',
+				[
+					['target',category.id]
+				],
+				actionsColumn
+			);
+			deleteAction.html('<i class="fa fa-remove"></i>');
+			
+			$(editAction).click(function(event) {
+				event.preventDefault();
+				$(outgoingCategoriesView).trigger('category:change', [$(this).data('target'), editCategoryForm]);
+			});
+			
+			
+			
+			$(deleteAction).click(function(event) {
+				event.preventDefault();
+				$(outgoingCategoriesView).trigger('category:delete', [$(this).data('target'), deleteModal]);
+			});
+		}
+	};
 	
 })($EX);

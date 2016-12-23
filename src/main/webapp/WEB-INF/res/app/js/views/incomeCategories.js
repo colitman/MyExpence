@@ -45,7 +45,7 @@
 	
 	deleteIncomeCategoryForm.submit(function(event) {
 		event.preventDefault();
-		$(incomeCategoriesView).trigger('category:deleted', [$('#id', deleteIncomeCategoryForm), deleteModal])
+		$(incomeCategoriesView).trigger('category:deleted', [$('#id', deleteIncomeCategoryForm).val(), deleteModal])
 	});
 	
 	$('[type="reset"]', editCategoryForm).click(function(event) {
@@ -73,7 +73,7 @@
 	
 	var initDataTable = function() {
 		
-		var txDataTable = $('.c-js-datatable').DataTable({
+		var txDataTable = $('#c-js-income-categories .c-js-datatable').DataTable({
 			dom: 'rt<<"col-sm-6"li><"col-sm-6 text-right"p>>',
 			order: [[0,'asc']],
 			pagingType: 'full_numbers',
@@ -96,7 +96,7 @@
 		for(var i = 0; i < categories.length; i++) {
 			var category = categories[i];
 			
-			var row = jQueryDomBuilder(
+			var row = jQueryDomBuilder.getTableRow(
 				[
 					category.name,
 					''

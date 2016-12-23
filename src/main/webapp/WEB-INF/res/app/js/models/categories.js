@@ -100,7 +100,7 @@
 		var _this = this;
 		return aScope.categoryService.createCategory(categoryData)
 			.done(function(data) {
-				_this.updateData();
+				categoriesModel.updateData();
 			});
 	}
 	

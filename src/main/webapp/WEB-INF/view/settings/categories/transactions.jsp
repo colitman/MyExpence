@@ -28,7 +28,7 @@
 						</li>
 						<li class="active">Settings</li>
 						<li>categoriesSettings</li>
-						<li class="active">Category Transactions</li>
+						<li class="active"></li>
 					</ol>
 				</header>
 				

@@ -25,7 +25,7 @@
 					
 					vm.total = transactionsData.length;
 					vm.listData = transactionsData;
-					vm.name = transactionsData[0].category;
+					if(vm.total !== 0) vm.name = transactionsData[0].category;
 					
 					aScope.VM = vm;
 					
