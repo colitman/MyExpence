@@ -104,7 +104,6 @@
 				['id', 'paymentSystem'],
 				['placeholder', 'Payment System']
 			],
-			[],
 			inputDiv
 		);
 		paymentSystemSelect.addClass('form-control');

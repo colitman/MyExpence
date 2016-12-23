@@ -142,20 +142,17 @@
 		 * @example
 		 * // will produce <select id="comments" name="comments ></select>
 		 * .getSelect([['id', 'comments'], ['name', 'comments]])
-		 * @param {Array} [options=undefined] - select options array
 		 * @param {jQuery} [parent=undefined] - jQuery object to place the "select" into
 		 * @param {boolean} [isPrepend=false] - if true, "select" will be prepended to provided "parent"; if false - appended.
 		 * @returns {jQuery}
 		 */
-		getSelect: function(attrs, options, parent, isPrepend) {
+		getSelect: function(attrs, parent, isPrepend) {
 			var select = $(document.createElement('select'));
 			
 			for(var i = 0; i < attrs.length; i++) {
 				var attrItem = attrs[i];
 				select.attr(attrItem[0], attrItem[1]);
 			}
-			
-			// TODO implement options building
 			
 			if(parent != undefined) {
 				isPrepend? parent.prepend(select): parent.append(select);
