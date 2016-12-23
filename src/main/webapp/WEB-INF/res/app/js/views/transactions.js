@@ -18,7 +18,8 @@
 			
 			buildTransactionsList(subject);
 			initDataTable();
-			$EX.generateBreadcrumbs();
+			initExport();
+			$EX.generateBreadcrumbs(subject.name);
 		}
 		
 	};
@@ -82,7 +83,7 @@
 			);
 			input.addClass('form-control');
 			input.data('target', index);
-			jQueryDomBuilder.getLabel(index, $(column).text(), wrapper);
+			jQueryDomBuilder.getLabel(index, $(column).text(), wrapper, true);
 		});
 		
 		var txDataTable = $('.c-js-datatable').DataTable({
@@ -107,6 +108,12 @@
 				}
 			});
 			
+		});
+	};
+	
+	var initExport = function() {
+		$('#c-js-transactions-export-button').click(function() {
+			return ExcellentExport.excel(this, 'c-js-transactions-datatable', 'Transactions');
 		});
 	}
 	

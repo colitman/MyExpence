@@ -16,7 +16,8 @@
 			
 			var vm = {
 				total: 0,
-				listData: []
+				listData: [],
+				name: ''
 			};
 			
 			_this.getTransactions()
@@ -24,6 +25,7 @@
 					
 					vm.total = transactionsData.length;
 					vm.listData = transactionsData;
+					vm.name = transactionsData[0].category;
 					
 					aScope.VM = vm;
 					

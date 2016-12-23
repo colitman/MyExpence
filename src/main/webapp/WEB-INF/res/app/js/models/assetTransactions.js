@@ -16,7 +16,8 @@
 			
 			var vm = {
 				total: 0,
-				listData: []
+				listData: [],
+				name:''
 			};
 			
 			_this.getTransactions()
@@ -24,6 +25,14 @@
 					
 					vm.total = transactionsData.length;
 					vm.listData = transactionsData;
+					
+					for(var i = 0; i < transactionsData.length; i++) {
+						var tx = transactionsData[i];
+						if(tx.recipient != undefined && tx.recipient.trim().length !== 0) {
+							vm.name = tx.recipient;
+							break;
+						}
+					}
 					
 					aScope.VM = vm;
 					

@@ -57,8 +57,7 @@
 							<div class="pull-right">
 								<a id="c-js-transactions-export-button"
 										class="btn btn-primary"
-										download="${username}_transactions.xls"
-										onclick="return ExcellentExport.excel(this, 'c-js-datatable', 'Transactions');">Export</a>
+										download="${username}_transactions.xls">Export</a>
 							</div>
 						</div>
 					</div>
@@ -67,7 +66,7 @@
 				
 				<section id="c-js-transactions-table">
 					<div class="table-responsive">
-						<table class="table table-hover c-js-datatable">
+						<table id="c-js-transactions-datatable" class="table table-hover c-js-datatable">
 							<thead>
 								<tr>
 									<th class="col-sm-1">ID</th>
