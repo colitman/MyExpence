@@ -29,6 +29,16 @@
 			OUTGOING: 'OUTGOING'
 		},
 		
+		TRANSACTION_TYPES: {
+			ISSUE: 'ISSUE',
+			WITHHOLD: 'WITHHOLD',
+			INCOME: 'INCOME',
+			OUTGOING: 'OUTGOING',
+			TRANSFER: 'TRANSFER',
+			UNDEFINED: 'NA',
+			NOT_SET: 'NOT_SET'
+		},
+		
 		markRequiredFields: function(){
 			$('form').each(function(index, form) {
 				$('[required="required"]', form).each(function(index, control) {

@@ -28,6 +28,7 @@ function Expense() {
 function Transaction() {
 	var model = {
 		id:'',
+		type:'',
 		transactionDate:'',
 		sender:'',
 		recipient:'',

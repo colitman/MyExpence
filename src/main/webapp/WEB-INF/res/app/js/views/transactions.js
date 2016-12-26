@@ -54,6 +54,7 @@
 			var row = jQueryDomBuilder.getTableRow(
 				[
 					transaction.id,
+					transaction.type,
 					formatTime(transaction.transactionDate),
 					transaction.sender,
 					transaction.recipient,
@@ -88,7 +89,7 @@
 		
 		var txDataTable = $('.c-js-datatable').DataTable({
 			dom: 'rt<<"col-sm-6"li><"col-sm-6 text-right"p>>',
-			order: [[1,'desc']],
+			order: [[2,'desc']],
 			pagingType: 'full_numbers',
 			lengthMenu: [[10,25,50,-1],[10,25,50,'All']]
 		});

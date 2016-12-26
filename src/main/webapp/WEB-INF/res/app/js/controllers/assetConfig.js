@@ -20,7 +20,8 @@
 			assetData.amount = new BigNumber($('#amount', form).val()).toNumber();
 			assetData.paymentSystem = $('#paymentSystem', form).val();
 			assetData.bankName = $('#bankName', form).val();
-			assetData.limit = new BigNumber($('#limit', form).val()).toNumber();
+			var limitValue = $('#limit', form).val();
+			if(limitValue != undefined) assetData.limit = new BigNumber().toNumber();
 			assetData.showInTotals = $('#showInTotals', form).prop('checked');
 			
 			model.updateAsset(assetData)

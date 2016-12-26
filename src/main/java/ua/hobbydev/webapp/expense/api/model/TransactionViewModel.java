@@ -11,6 +11,7 @@ import java.math.BigDecimal;
 public class TransactionViewModel implements ViewModelInterface<Transaction> {
 
     private Long id;
+    private String type;
     private Long transactionDate;
     private String sender;
     private String recipient;
@@ -22,6 +23,7 @@ public class TransactionViewModel implements ViewModelInterface<Transaction> {
 
     public TransactionViewModel(Transaction transaction) {
         this.id = transaction.getId();
+        this.type = transaction.getType().getLabel();
         this.transactionDate = transaction.getTransactionDate().getTimeInMillis();
         this.sender = transaction.getSender() == null? "": transaction.getSender().getName();
         this.recipient = transaction.getRecipient() == null? "": transaction.getRecipient().getName();
@@ -41,6 +43,14 @@ public class TransactionViewModel implements ViewModelInterface<Transaction> {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
     public Long getTransactionDate() {

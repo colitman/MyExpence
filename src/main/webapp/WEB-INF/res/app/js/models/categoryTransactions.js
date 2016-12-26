@@ -42,6 +42,7 @@
 			return aScope.transactionService.getTransactions(
 				null,
 				null,
+				null,
 				categoryId,
 				null,
 				null

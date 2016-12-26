@@ -63,12 +63,12 @@
 		.on('assets:transfered', function(event, form) {
 			
 			var expenseData = new Expense();
-			expenseData.amount = new BigNumber($('#amount', form).val());
+			expenseData.amount = new BigNumber($('#amount', form).val()).toNumber();
 			expenseData.to = $('#to', form).val();
 			expenseData.from = $('#from', form).val();
 			expenseData.description = $('#description', form).val();
 			
-			assetsModel.transfer(expenseData)
+			model.transfer(expenseData)
 				.fail(function(jqXHR, textStatus, errorThrown) {
 					new Alert('danger', 'Oops!', 'Failed to perform a transfer.').show();
 					console.log(jqXHR.responseText);

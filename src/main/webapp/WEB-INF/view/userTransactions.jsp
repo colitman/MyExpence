@@ -70,7 +70,8 @@
 							<thead>
 								<tr>
 									<th class="col-sm-1">ID</th>
-									<th class="col-sm-2">Time</th>
+									<th class="col-sm-1 c-js-searchable">Type</th>
+									<th class="col-sm-1">Time</th>
 									<th class="col-sm-2 c-js-searchable">Sender</th>
 									<th class="col-sm-2 c-js-searchable">Recipient</th>
 									<th class="col-sm-2 c-js-searchable">Category</th>
