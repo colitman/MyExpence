@@ -9,6 +9,22 @@ package ua.hobbydev.webapp.expense;
  */
 public class EnumUtils {
 
+    public static class TransactionEnums {
+        public enum TransactionType {
+            ISSUE("Issue"),
+            WITHHOLD("Withhold"),
+            INCOME("Income"),
+            OUTGOING("Outgoing"),
+            TRANSFER("Transfer"),
+            UNDEFINED("NA"),
+            NOT_SET("Not set");
+
+            private final String label;
+            private TransactionType(String label) {this.label = label;}
+            public String getLabel(){return label;}
+        }
+    }
+
     public static class CategoryEnums {
         public enum CategoryType {
             INCOME,

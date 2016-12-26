@@ -1,19 +1,5 @@
 "use strict";
 
-/*
-Model is an observable object.
-It should expose the following public access interfaces:
-- subscribe
-
-It also should have the following private methods:
-- countObservers
-- isChanged
-- setChanged
-- clearChanged
-- notifyObservers
-- deleteObservers
- */
-
 (function(aScope, undefined){
 	
 	var observable = new Observable();
@@ -22,6 +8,43 @@ It also should have the following private methods:
 	var assetTransactionsModel = {
 		__proto__: observable,
 		
+		/**
+		 * Reloads model data and notify observers about change
+		 */
+		updateData: function() {
+			var _this = this;
+			
+			var vm = {
+				total: 0,
+				listData: [],
+				name:''
+			};
+			
+			_this.getTransactions()
+				.done(function(transactionsData) {
+					
+					vm.total = transactionsData.length;
+					vm.listData = transactionsData;
+					
+					for(var i = 0; i < transactionsData.length; i++) {
+						var tx = transactionsData[i];
+						if(tx.recipient != undefined && tx.recipient.trim().length !== 0) {
+							vm.name = tx.recipient;
+							break;
+						}
+					}
+					
+					aScope.VM = vm;
+					
+					_this.setChanged();
+					_this.notifyObservers(aScope.VM, 'transactions:dataUpdated');
+				})
+				.fail(function(jqXHR, textStatus, errorThrown) {
+					new Alert('danger', 'Oops!', 'Failed to get transactions.').show();
+					console.log(jqXHR.responseText);
+				});
+		},
+		
 		getTransactions: function() {
 			return aScope.transactionService.getTransactions(
 				assetId,
@@ -29,13 +52,13 @@ It also should have the following private methods:
 				null,
 				null,
 				null,
+				null,
 				true
 			);
 		}
-	
+		
 	};
 	
-	
-	aScope.assetTransactionsModel = assetTransactionsModel;
+	aScope.transactionsModel = assetTransactionsModel;
 	
 })($EX);

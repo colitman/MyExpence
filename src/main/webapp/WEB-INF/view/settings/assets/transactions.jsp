@@ -60,7 +60,7 @@
 							<div class="pull-right">
 								<a id="c-js-transactions-export-button"
 										class="btn btn-primary"
-										download="${username}_transactions.xls" onclick="return ExcellentExport.excel(this, 'c-js-datatable', 'Transactions');">Export</a>
+										download="${username}_transactions.xls">Export</a>
 							</div>
 						</div>
 					</div>
@@ -69,11 +69,12 @@
 				
 				<section id="c-js-transactions-table">
 					<div class="table-responsive">
-						<table class="table table-hover c-js-datatable">
+						<table id="c-js-transactions-datatable" class="table table-hover c-js-datatable">
 							<thead>
 								<tr>
 									<th class="col-sm-1">ID</th>
-									<th class="col-sm-2">Time</th>
+									<th class="col-sm-1 c-js-searchable">Type</th>
+									<th class="col-sm-1">Time</th>
 									<th class="col-sm-2">Sender</th>
 									<th class="col-sm-2">Recipient</th>
 									<th class="col-sm-2 c-js-searchable">Category</th>
@@ -105,14 +106,11 @@
 
 		<c:import url="/imports/scripts"></c:import>
 		
-		<script src="${app}/res/jquery-searchable/jquery.searchable.js" ></script>
 		<script src="${app}/res/excellentexport/excellentexport.js" ></script>
 		
-		<script src="${app}/res/app/js/services/transactionService.js"></script>
 		<script src="${app}/res/app/js/models/assetTransactions.js"></script>
 		<script src="${app}/res/app/js/views/transactions.js"></script>
 		<script src="${app}/res/app/js/controllers/transactions.js"></script>
-		<script src="${app}/res/app/js/pages/assetTransactions.js"></script>
 
 	</body>
 </html>

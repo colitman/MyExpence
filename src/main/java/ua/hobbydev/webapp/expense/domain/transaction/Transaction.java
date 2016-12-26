@@ -4,6 +4,7 @@
  */
 package ua.hobbydev.webapp.expense.domain.transaction;
 
+import ua.hobbydev.webapp.expense.EnumUtils.TransactionEnums.*;
 import ua.hobbydev.webapp.expense.domain.IdentifiedEntityInterface;
 import ua.hobbydev.webapp.expense.domain.asset.Asset;
 import ua.hobbydev.webapp.expense.domain.category.Category;
@@ -21,6 +22,10 @@ public class Transaction implements IdentifiedEntityInterface, Comparable<Transa
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "type")
+    private TransactionType type;
 
     @Column(name = "transactionDate")
     @Temporal(TemporalType.TIMESTAMP)
@@ -55,6 +60,14 @@ public class Transaction implements IdentifiedEntityInterface, Comparable<Transa
     @Override
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public TransactionType getType() {
+        return type;
+    }
+
+    public void setType(TransactionType type) {
+        this.type = type;
     }
 
     public Calendar getTransactionDate() {

@@ -1,19 +1,5 @@
 "use strict";
 
-/*
-Model is an observable object.
-It should expose the following public access interfaces:
-- subscribe
-
-It also should have the following private methods:
-- countObservers
-- isChanged
-- setChanged
-- clearChanged
-- notifyObservers
-- deleteObservers
- */
-
 (function(aScope, undefined){
 	
 	var observable = new Observable();
@@ -21,8 +7,74 @@ It also should have the following private methods:
 	var assetsModel = {
 		__proto__: observable,
 		
+		updateData: function() {
+			var _this = this;
+			
+			var vm = {
+				assetTypes:{
+					total:0,
+					listData:[]
+				},
+				currencies: {
+					total:0,
+					listData:[],
+					defaultCurrency:{}
+				},
+				assets: {
+					total:0,
+					listData:[]
+				}
+			};
+			
+			_this.getAssetTypes()
+				.done(function(assetTypesData) {
+					vm.assetTypes.total = assetTypesData.length;
+					vm.assetTypes.listData = assetTypesData;
+					
+					_this.getCurrencies()
+						.done(function(currenciesData) {
+							vm.currencies.total = currenciesData.length;
+							vm.currencies.listData = currenciesData;
+							vm.currencies.defaultCurrency = currenciesData.filter(function(currency) {
+								return currency.defaultCurrency;
+							})[0];
+							
+							_this.getAssets()
+								.done(function(assetsData) {
+									vm.assets.total = assetsData.length;
+									vm.assets.listData = assetsData;
+									
+									aScope.VM = vm;
+									
+									_this.setChanged();
+									_this.notifyObservers(aScope.VM, 'assets:dataUpdated');
+								})
+								.fail(function(jqXHR, textStatus, errorThrown) {
+									new Alert('danger', 'Oops!', 'Failed to get assets.').show();
+									console.log(jqXHR.responseText);
+								});
+						})
+						.fail(function(jqXHR, textStatus, errorThrown) {
+							new Alert('danger', 'Oops!', 'Failed to get currencies.').show();
+							console.log(jqXHR.responseText);
+						});
+				})
+				.fail(function(jqXHR, textStatus, errorThrown) {
+					new Alert('danger', 'Oops!', 'Failed to get asset types.').show();
+					console.log(jqXHR.responseText);
+				});
+		},
+		
 		getAssets: function() {
 			return aScope.assetService.getAssets();
+		},
+		
+		/**
+		 * Gets a list of currencies from DB
+		 * @returns {jqXHR} promise with an array of {@link Currency} objects.
+		 */
+		getCurrencies: function() {
+			return aScope.currencyService.getCurrencies();
 		},
 		
 		getAssetTypes: function() {
@@ -35,13 +87,9 @@ It also should have the following private methods:
 		
 		addAsset: function(assetData) {
 			var _this = this;
-			aScope.assetService.createAsset(assetData)
+			return aScope.assetService.createAsset(assetData)
 				.done(function(data) {
-					_this.setChanged();
-					_this.notifyObservers(_this);
-				})
-				.fail(function(jqXHR, textStatus, errorThrown) {
-					console.log(jqXHR.responseText);
+					_this.updateData();
 				});
 		},
 		
@@ -49,20 +97,15 @@ It also should have the following private methods:
 			var _this = this;
 			return aScope.assetService.deleteAsset(id)
 				.done(function(data) {
-					_this.setChanged();
-					_this.notifyObservers(_this);
+					_this.updateData();
 				});
 		},
 		
 		transfer: function(expenseData) {
 			var _this = this;
-			aScope.assetService.transfer(expenseData)
+			return aScope.assetService.transfer(expenseData)
 				.done(function(data) {
-					_this.setChanged();
-					_this.notifyObservers(_this);
-				})
-				.fail(function(jqXHR, textStatus, errorThrown) {
-					console.log(jqXHR.responseText);
+					_this.updateData();
 				});
 		}
 	

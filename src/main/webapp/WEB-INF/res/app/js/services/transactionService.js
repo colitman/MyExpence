@@ -9,6 +9,7 @@
 		getTransactions: function(
 			sender,
 			recipient,
+			type,
 			category,
 			startDate,
 			endDate,
@@ -18,22 +19,27 @@
 			var paramsString = '';
 			
 			if(sender != null) {
-				paramsString += 'sender=' + sender + '&'
+				paramsString += 'sender=' + sender + '&';
 			}
+			
 			if(recipient != null) {
-				paramsString += 'recipient=' + recipient + '&'
+				paramsString += 'recipient=' + recipient + '&';
+			}
+			
+			if(type != null) {
+				paramsString += 'type=' + type + '&';
 			}
 			
 			if(category != null) {
-				paramsString += 'category=' + category + '&'
+				paramsString += 'category=' + category + '&';
 			}
 			
 			if(startDate != null) {
-				paramsString += 'startDate=' + startDate + '&'
+				paramsString += 'startDate=' + startDate + '&';
 			}
 			
 			if(endDate != null) {
-				paramsString += 'endDate=' + endDate + '&'
+				paramsString += 'endDate=' + endDate + '&';
 			}
 			
 			if(useOrForSenderAndRecipient == null) {

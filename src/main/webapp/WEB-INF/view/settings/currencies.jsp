@@ -125,11 +125,9 @@
 		</div>
 
 		<c:import url="/imports/scripts"></c:import>
-		<script src="${app}/res/app/js/services/currencyService.js"></script>
 		<script src="${app}/res/app/js/models/currencies.js"></script>
 		<script src="${app}/res/app/js/views/currencies.js"></script>
 		<script src="${app}/res/app/js/controllers/currencies.js"></script>
-		<script src="${app}/res/app/js/pages/currencies.js"></script>
 
 	</body>
 </html>

@@ -28,6 +28,7 @@ function Expense() {
 function Transaction() {
 	var model = {
 		id:'',
+		type:'',
 		transactionDate:'',
 		sender:'',
 		recipient:'',
@@ -40,13 +41,22 @@ function Transaction() {
 	return model;
 }
 
+/**
+ * Currency object
+ * @returns {{id: string, name: string, code: string, symbol: string, defaultCurrency: string}}
+ * @constructor
+ */
 function Currency() {
 	var model = {
 		id:'',
 		name:'',
 		code:'',
 		symbol:'',
-		defaultCurrency:''
+		defaultCurrency:'',
+		
+		toCurrencyString: function() {
+			return symbol + ' ' + name + ' (' + code + ')';
+		}
 	}
 	
 	Object.seal(model);

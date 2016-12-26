@@ -1,38 +1,33 @@
 "use strict";
 
-/*
-Controller - Observer
-*/
-
-function AssetConfigController(model, undefined){
+(function(aScope, undefined) {
+	var model = aScope.assetModel;
+	var view = aScope.assetView;
 	
-	var assetModel = model;
+	model.subscribe(view);
+	aScope.primaryModel = model;
+	model.updateData();
 	
-	var assetController = {
-		update: function(viewEvent) {
-			if(viewEvent.name === 'c.asset.changed') {
-				
-				var changedAssetForm = viewEvent.data;
-				
-				var assetData = new Asset();
-				assetData.id = $('#id', changedAssetForm).val();
-				assetData.type = $('#type', changedAssetForm).val();
-				assetData.name = $('#name', changedAssetForm).val();
-				assetData.currency = $('#currency', changedAssetForm).val();
-				assetData.amount = $('#amount', changedAssetForm).val();
-				assetData.paymentSystem = $('#paymentSystem', changedAssetForm).val();
-				assetData.bankName = $('#bankName', changedAssetForm).val();
-				assetData.limit = $('#limit', changedAssetForm).val();
-				assetData.showInTotals = $('#showInTotals', changedAssetForm).prop('checked');
-				
-				assetModel.updateAsset(assetData)
-					.fail(function(jqXHR, textStatus, errorThrown) {
-						console.log(jqXHR.responseText);
-					});
-			}
-		}
-	};
-	
-	return assetController;
-	
-};
+	/* Event listeners */
+	$(view)
+		.on('asset:changed', function(event, form) {
+			
+			var assetData = new Asset();
+			assetData.id = $('#id', form).val();
+			assetData.type = $('#type', form).val();
+			assetData.name = $('#name', form).val();
+			assetData.currency = $('#currency', form).val();
+			assetData.amount = new BigNumber($('#amount', form).val()).toNumber();
+			assetData.paymentSystem = $('#paymentSystem', form).val();
+			assetData.bankName = $('#bankName', form).val();
+			var limitValue = $('#limit', form).val();
+			if(limitValue != undefined) assetData.limit = new BigNumber().toNumber();
+			assetData.showInTotals = $('#showInTotals', form).prop('checked');
+			
+			model.updateAsset(assetData)
+				.fail(function(jqXHR, textStatus, errorThrown) {
+					new Alert('danger', 'Oops!', 'Failed to update asset.').show();
+					console.log(jqXHR.responseText);
+				});
+		})
+})($EX);

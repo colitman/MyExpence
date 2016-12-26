@@ -30,7 +30,7 @@
 				
 				<form class="navbar-form navbar-left" id="c-js-add-expense-form">
 					<div class="form-group">
-						<input id="amount" name="amount" type="number" class="form-control" placeholder="Amount">
+						<input id="amount" name="amount" type="number" step="any" class="form-control" placeholder="Amount">
 					</div>
 					<button type="button" class="btn btn-success" id="c-js-add-income-button"><i class="fa fa-plus"></i></button>
 					<button type="button" class="btn btn-danger" id="c-js-add-outgoing-button"><i class="fa fa-minus"></i></button>

@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
+import ua.hobbydev.webapp.expense.EnumUtils.TransactionEnums.*;
 import ua.hobbydev.webapp.expense.EnumUtils.CategoryEnums.*;
 import ua.hobbydev.webapp.expense.api.model.ExpenseViewModel;
 import ua.hobbydev.webapp.expense.api.model.TransactionViewModel;
@@ -62,7 +63,8 @@ public class TransactionsApiController {
 
             Transaction t = new Transaction();
             t.setTransactionDate(Calendar.getInstance(TimeZone.getTimeZone(ZoneOffset.UTC)));
-            t.setAmount(/*CategoryType.INCOME.equals(type)? */expense.getAmount()/*: expense.getAmount().negate()*/);
+            t.setAmount(CategoryType.INCOME.equals(type)? expense.getAmount(): expense.getAmount().negate());
+            t.setType(CategoryType.INCOME.equals(type)? TransactionType.INCOME: TransactionType.OUTGOING);
             t.setMessage(expense.getDescription());
             t.setUser(currentUser);
             t.setCategory(category);
@@ -84,6 +86,7 @@ public class TransactionsApiController {
     @RequestMapping(path = "transactions", method = RequestMethod.GET)
     public ResponseEntity<List<TransactionViewModel>> getTransactions(@RequestParam(required = false) Long sender,
                                                                       @RequestParam(required = false) Long recipient,
+                                                                      @RequestParam(required = false) String type,
                                                                       @RequestParam(required = false) Long category,
                                                                       @RequestParam(required = false) Long startDate,
                                                                       @RequestParam(required = false) Long endDate,
@@ -159,6 +162,15 @@ public class TransactionsApiController {
                 Category relatedCategory = defaultService.get(Category.class, category);
                 stream = stream.filter((t) -> relatedCategory.equals(t.getCategory()));
             } catch (ResourceNotFoundException e) {
+                // TODO add logging
+            }
+        }
+
+        if(type != null) {
+            try {
+                TransactionType txType = TransactionType.valueOf(type);
+                stream = stream.filter((t) -> txType.equals(t.getType()));
+            } catch (IllegalArgumentException e) {
                 // TODO add logging
             }
         }

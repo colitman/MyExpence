@@ -9,10 +9,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import ua.hobbydev.webapp.expense.EnumUtils.TransactionEnums.*;
 import ua.hobbydev.webapp.expense.EnumUtils.AssetEnums.AssetType;
 import ua.hobbydev.webapp.expense.EnumUtils.AssetEnums.PaymentSystemType;
 import ua.hobbydev.webapp.expense.api.model.AssetTypeViewModel;
-import ua.hobbydev.webapp.expense.api.model.AssetViewModel;
+import ua.hobbydev.webapp.expense.api.model.BackendAssetViewModel;
+import ua.hobbydev.webapp.expense.api.model.FrontendAssetViewModel;
 import ua.hobbydev.webapp.expense.api.model.ExpenseViewModel;
 import ua.hobbydev.webapp.expense.business.DefaultServiceInterface;
 import ua.hobbydev.webapp.expense.business.ResourceNotFoundException;
@@ -40,7 +42,7 @@ public class AssetsApiController {
 
     @PreAuthorize("isAuthenticated()")
     @RequestMapping(path="", method = RequestMethod.POST)
-    public ResponseEntity<String> createAsset(@ModelAttribute AssetViewModel newAsset, @CurrentUser User currentUser) {
+    public ResponseEntity<String> createAsset(@ModelAttribute FrontendAssetViewModel newAsset, @CurrentUser User currentUser) {
 
         Currency currency = null;
 
@@ -58,6 +60,7 @@ public class AssetsApiController {
 
             Transaction t = new Transaction();
             t.setUser(currentUser);
+            t.setType(TransactionType.ISSUE);
 
             Calendar date = Calendar.getInstance(TimeZone.getTimeZone(ZoneOffset.UTC));
             t.setTransactionDate(date);
@@ -91,7 +94,7 @@ public class AssetsApiController {
 
     @PreAuthorize("isAuthenticated()")
     @RequestMapping(path="", method = RequestMethod.GET)
-    public ResponseEntity<List<AssetViewModel>> getAssetList(@CurrentUser User currentUser) {
+    public ResponseEntity<List<BackendAssetViewModel>> getAssetList(@CurrentUser User currentUser) {
 
         List<Asset> assets = defaultService.list(Asset.class);
 
@@ -100,34 +103,34 @@ public class AssetsApiController {
                         (asset) -> asset.getUser().equals(currentUser)
                 ).collect(Collectors.toList());
 
-        List<AssetViewModel> viewModels = new ArrayList<AssetViewModel>();
+        List<BackendAssetViewModel> viewModels = new ArrayList<BackendAssetViewModel>();
 
         for(Asset a:userAssets) {
-            viewModels.add(new AssetViewModel(a));
+            viewModels.add(new BackendAssetViewModel(a));
         }
 
-        return new ResponseEntity<List<AssetViewModel>>(viewModels, HttpStatus.OK);
+        return new ResponseEntity<List<BackendAssetViewModel>>(viewModels, HttpStatus.OK);
     }
 
     @PreAuthorize("isAuthenticated()")
     @RequestMapping(path="{id}", method = RequestMethod.GET)
-    public ResponseEntity<AssetViewModel> getAssetById(@PathVariable Long id, @CurrentUser User currentUser) {
+    public ResponseEntity<BackendAssetViewModel> getAssetById(@PathVariable Long id, @CurrentUser User currentUser) {
         Asset asset = null;
-        AssetViewModel assetVm = null;
+        BackendAssetViewModel assetVm = null;
 
         try {
             asset = defaultService.get(Asset.class, id);
 
             if(!asset.getUser().equals(currentUser)) {
-                return new ResponseEntity<AssetViewModel>(HttpStatus.NOT_FOUND);
+                return new ResponseEntity<BackendAssetViewModel>(HttpStatus.NOT_FOUND);
             }
 
-            assetVm = new AssetViewModel(asset);
+            assetVm = new BackendAssetViewModel(asset);
         } catch (ResourceNotFoundException e) {
-            return new ResponseEntity<AssetViewModel>(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<BackendAssetViewModel>(HttpStatus.NOT_FOUND);
         }
 
-        return new ResponseEntity<AssetViewModel>(assetVm, HttpStatus.OK);
+        return new ResponseEntity<BackendAssetViewModel>(assetVm, HttpStatus.OK);
     }
 
     @PreAuthorize("isAuthenticated()")
@@ -139,8 +142,10 @@ public class AssetsApiController {
             if(asset.getUser().equals(currentUser)) {
 
                 Transaction t = new Transaction();
-                t.setAmount(BigDecimal.ZERO);
+                //t.setAmount(BigDecimal.ZERO);
+                t.setAmount(asset.getAmount().negate());
                 t.setUser(currentUser);
+                t.setType(TransactionType.WITHHOLD);
                 t.setTransactionDate(Calendar.getInstance(TimeZone.getTimeZone(ZoneOffset.UTC)));
                 t.setSender(asset);
                 t.setMessage("Asset deleted.");
@@ -158,7 +163,7 @@ public class AssetsApiController {
 
     @PreAuthorize("isAuthenticated()")
     @RequestMapping(path="{id}", method = RequestMethod.PUT)
-    public ResponseEntity<String> updateAssetById(@PathVariable Long id, @ModelAttribute AssetViewModel assetVm, @CurrentUser User currentUser) {
+    public ResponseEntity<String> updateAssetById(@PathVariable Long id, @ModelAttribute FrontendAssetViewModel assetVm, @CurrentUser User currentUser) {
         Asset asset = null;
 
         try {
@@ -178,6 +183,7 @@ public class AssetsApiController {
                 t.setUser(currentUser);
                 t.setTransactionDate(Calendar.getInstance(TimeZone.getTimeZone(ZoneOffset.UTC)));
                 t.setAmount(assetVm.getAmount().subtract(asset.getAmount()));
+                t.setType(t.getAmount().compareTo(BigDecimal.ZERO) < 0? TransactionType.WITHHOLD: TransactionType.ISSUE);
                 t.setRecipient(asset);
                 t.setMessage("Asset amount change.");
 
@@ -245,6 +251,7 @@ public class AssetsApiController {
             t.setUser(currentUser);
             t.setRecipient(recipient);
             t.setSender(sender);
+            t.setType(TransactionType.TRANSFER);
 
             defaultService.update(sender);
             defaultService.update(recipient);
