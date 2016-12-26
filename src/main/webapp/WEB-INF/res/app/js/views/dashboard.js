@@ -18,6 +18,8 @@
 			resetForms();
 			hideModals();
 			updateStatsByCurrencies(subject);
+			updateIncomeTrend(subject);
+			updateOutgoingTrend(subject);
 		}
 	
 	};
@@ -37,9 +39,67 @@
 		
 	};
 	
+	var updateIncomeTrend = function(vm) {
+		var targetSection = $('#c-js-income-trend-section');
+		$('.panel-footer', targetSection).html('');
+		var data = vm.incomeTrend;
+		
+		var trendLines = [];
+		
+		for(var i = 0; i < data.trendLines.length; i++) {
+			var line = data.trendLines[i];
+			var dataSet = new ChartJsUtils().getDefaultLineChartDataset();
+			dataSet.label = line.name;
+			dataSet.data = line.values;
+			trendLines.push(dataSet);
+		}
+		
+		var chartJsCanvas = $(document.createElement('canvas'));
+		$('.panel-footer', targetSection).append(chartJsCanvas);
+		var chartJsChart = new Chart(chartJsCanvas, {
+			type: 'line',
+			data: {
+				labels: data.xAxisLabels,
+				datasets:trendLines
+			}
+		});
+	};
+	
+	var updateOutgoingTrend = function(vm) {
+		var targetSection = $('#c-js-outgoing-trend-section');
+		$('.panel-footer', targetSection).html('');
+		var data = vm.outgoingTrend;
+		
+		var trendLines = [];
+		
+		for(var i = 0; i < data.trendLines.length; i++) {
+			var line = data.trendLines[i];
+			var dataSet = new ChartJsUtils().getDefaultLineChartDataset();
+			dataSet.label = line.name;
+			dataSet.data = line.values;
+			trendLines.push(dataSet);
+		}
+		
+		var chartJsCanvas = $(document.createElement('canvas'));
+		$('.panel-footer', targetSection).append(chartJsCanvas);
+		var chartJsChart = new Chart(chartJsCanvas, {
+			type: 'line',
+			data: {
+				labels: data.xAxisLabels,
+				datasets:trendLines
+			}
+		});
+	};
+	
 	var updateStatsByCurrencies = function(vm) {
 		
 		var targetSection = $('#c-js-stats-by-currencies');
+		$('.c-js-datatable').each(function(index, table) {
+			if ( $.fn.dataTable.isDataTable( table ) ) {
+				$(table).DataTable().destroy();
+			}
+		});
+		targetSection.html('');
 		var statTemplate = $('#c-js-currency-stat-template');
 		
 		var data = vm.statsByCurrency.listData;
@@ -112,6 +172,20 @@
 		});
 		
 		$('.c-js-currency-stat-panel .panel-heading').click(function(event) {
+			event.preventDefault();
+			var targetSelector = $(this).data('target');
+			var target = $(targetSelector);
+			target.collapse('toggle');
+		});
+		
+		$('.c-js-income-trend-panel .panel-heading').click(function(event) {
+			event.preventDefault();
+			var targetSelector = $(this).data('target');
+			var target = $(targetSelector);
+			target.collapse('toggle');
+		});
+		
+		$('.c-js-outgoing-trend-panel .panel-heading').click(function(event) {
 			event.preventDefault();
 			var targetSelector = $(this).data('target');
 			var target = $(targetSelector);

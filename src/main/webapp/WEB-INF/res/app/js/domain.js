@@ -1,5 +1,45 @@
 "use strict";
 
+function ChartJsUtils() {
+	var model = {
+		getDefaultLineChartDataset: function() {
+			var bgColor = randomColor({
+				format: 'rgba',
+				alpha: 0.4
+			});
+			
+			var borderColor = bgColor.replace(',0.4)', ',1)');
+			
+			var o = {
+				label: '',
+				fill: false,
+				lineTension: 0.1,
+				backgroundColor: bgColor, // line BG color
+				borderColor: borderColor, // line FG color
+				borderCapStyle: 'butt',
+				borderDash: [],
+				borderDashOffset: 0.0,
+				borderJoinStyle: 'miter',
+				pointBorderColor: borderColor, // line point color
+				pointBackgroundColor: "#ccc",
+				pointBorderWidth: 1,
+				pointHoverRadius: 5,
+				pointHoverBackgroundColor: borderColor,
+				pointHoverBorderColor: 'rgba(220,220,220,1)',
+				pointHoverBorderWidth: 2,
+				pointRadius: 1,
+				pointHitRadius: 10,
+				data: [],
+				spanGaps: true
+			};
+			return o;
+		}
+	}
+	
+	Object.seal(model);
+	return model;
+}
+
 function DashboardCurrencyStat() {
 	var model = {
 		currency: new Currency(),

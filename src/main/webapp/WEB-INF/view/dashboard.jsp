@@ -29,6 +29,40 @@
 					
 				</section>
 				
+				<section id="c-js-expense-trends" class="row">
+					<section id="c-js-income-trend-section" class="col-md-6">
+						<div class="panel panel-success c-js-income-trend-panel">
+							<div class="panel-heading" data-target="#c-js-income-trend-panel-content">
+								<h3 class="panel-title">Income</h3>
+							</div>
+							<div id="c-js-income-trend-panel-content" class="collapse in">
+								<div class="panel-body">
+									Panel body ...
+								</div>
+								<div class="panel-footer">
+									
+								</div>
+							</div>
+						</div>
+					</section>
+					
+					<section id="c-js-outgoing-trend-section" class="col-md-6">
+						<div class="panel panel-danger c-js-outgoing-trend-panel">
+							<div class="panel-heading" data-target="#c-js-outgoing-trend-panel-content">
+								<h3 class="panel-title">Outgoing</h3>
+							</div>
+							<div id="c-js-outgoing-trend-panel-content" class="collapse in">
+								<div class="panel-body">
+									Panel body ...
+								</div>
+								<div class="panel-footer">
+								
+								</div>
+							</div>
+						</div>
+					</section>
+				</section>
+				
 			</main>
 			
 			<c:import url="/imports/mainFooter"></c:import>
@@ -38,10 +72,9 @@
 		
 		<div class="hidden templates">
 			
-			<div class="panel panel-info c-js-currency-stat-panel" id="c-js-currency-stat-template">
+			<div class="panel panel-primary c-js-currency-stat-panel" id="c-js-currency-stat-template">
 				<div class="panel-heading" data-target="#c-js-stat-details">
 					<h3 class="panel-title">
-						<%--a role="button" href="#c-js-stat-details"></a--%>
 					</h3>
 				</div>
 				<div id="c-js-stat-details" class="panel-collapse collapse" role="tabpanel">

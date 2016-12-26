@@ -14,6 +14,14 @@
 				statsByCurrency: {
 					total:0,
 					listData:[]
+				},
+				
+				incomeTrend: {
+					
+				},
+				
+				outgoingTrend: {
+					
 				}
 			}
 			
@@ -26,15 +34,15 @@
 					);
 					vm.statsByCurrency.total = statsByCurrency.length;
 					vm.statsByCurrency.listData = statsByCurrency;
-					
-					aScope.VM = vm;
-					
-					_this.setChanged();
-					_this.notifyObservers(aScope.VM, 'dashboard:dataUpdated');
 				})
 				.fail(function(jqXHR, textStatus, errorThrown) {
 					new Alert('danger', 'Oops!', 'Failed to get assets.').show();
 					console.log(jqXHR.responseText);
+				})
+				.always(function() {
+					aScope.VM = vm;
+					_this.setChanged();
+					_this.notifyObservers(aScope.VM, 'dashboard:dataUpdated');
 				});
 		}
 	
